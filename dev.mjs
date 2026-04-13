@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const server = new SwiteServer({
   root: path.resolve(__dirname, 'app'),
   publicDir: 'public',
-  port: parseInt(process.env.PORT || '5000', 10),
+  port: parseInt(process.env.PORT || '6001', 10),
   host: '0.0.0.0',
   open: false,
 });
@@ -33,4 +33,4 @@ server.app.use('/node_modules', (req, res, next) => {
 });
 
 await server.start();
-console.log('[alpine-website] running on http://localhost:5000');
+console.log('[swissjs-website] running on http://localhost:6001');
