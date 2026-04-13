@@ -1,0 +1,22 @@
+{
+  "name": "swissjs-website",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kibologic/swissjs-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kibologic/swissjs-website/issues"
+  },
+  "scripts": {
+    "dev": "node dev.mjs",
+    "start": "node dev.mjs"
+  },
+  "dependencies": {
+    "@kibologic/core": "0.1.6",
+    "@kibologic/swite": "latest",
+    "reflect-metadata": "^0.2.2"
+  }
+}

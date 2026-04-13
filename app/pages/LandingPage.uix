@@ -1,0 +1,293 @@
+import { SwissComponent } from '@kibologic/core';
+
+component LandingPage {
+  props = {};
+
+  state { let theme: 'light' | 'dark' = 'light'; }
+  state { let mobileMenuOpen: boolean = false; }
+  state { let activeExample: string = 'component'; }
+
+  mounted() {
+    // Initial theme setup
+    const saved = localStorage.getItem('swiss-theme') as 'light' | 'dark' | null;
+    this.theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', this.theme);
+
+    // Global Styles injection
+    if (!document.getElementById('swiss-global-styles')) {
+      const s = document.createElement('style');
+      s.id = 'swiss-global-styles';
+      s.textContent = `
+        :root {
+          --swiss-blue: #0070f3;
+          --swiss-blue-hover: #006ae6;
+          --swiss-black: #000000;
+          --swiss-white: #ffffff;
+          --swiss-slate-50: #f8fafc;
+          --swiss-slate-100: #f1f5f9;
+          --swiss-slate-200: #e2e8f0;
+          --swiss-slate-400: #94a3b8;
+          --swiss-slate-500: #64748b;
+          --swiss-slate-700: #334155;
+          --swiss-slate-800: #1e293b;
+          --swiss-slate-900: #0f172a;
+          --swiss-slate-950: #020617;
+        }
+
+        [data-theme="light"] {
+          --bg-page: var(--swiss-white);
+          --bg-surface: var(--swiss-slate-50);
+          --bg-inverse: var(--swiss-slate-950);
+          --text-primary: var(--swiss-black);
+          --text-secondary: var(--swiss-slate-700);
+          --text-muted: var(--swiss-slate-500);
+          --border: var(--swiss-slate-200);
+          --code-bg: var(--swiss-slate-900);
+        }
+
+        [data-theme="dark"] {
+          --bg-page: #000000;
+          --bg-surface: #111111;
+          --bg-inverse: var(--swiss-white);
+          --text-primary: var(--swiss-white);
+          --text-secondary: var(--swiss-slate-400);
+          --text-muted: var(--swiss-slate-500);
+          --border: #222222;
+          --code-bg: #0a0a0a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-page); color: var(--text-primary); transition: background 0.3s ease; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 64px; }
+
+        @media (max-width: 860px) {
+          .grid-3, .grid-2 { grid-template-columns: 1fr; gap: 40px; }
+          .desktop-only { display: none !important; }
+        }
+
+        .code-panel {
+          background: var(--code-bg);
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.1);
+          overflow: hidden;
+          font-family: 'JetBrains Mono', 'Menlo', monospace;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .syntax-keyword { color: #ff79c6; }
+        .syntax-string { color: #f1fa8c; }
+        .syntax-type { color: #8be9fd; }
+        .syntax-comment { color: #6272a4; }
+        .syntax-fn { color: #50fa7b; }
+      `;
+      document.head.appendChild(s);
+    }
+  }
+
+  toggleTheme() {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', this.theme);
+    localStorage.setItem('swiss-theme', this.theme);
+  }
+
+  render() {
+    return (
+      <div style="min-height: 100vh; display: flex; flex-direction: column;">
+        
+        {/* ── NAVIGATION ── */}
+        <nav style="height: 64px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-page); z-index: 1000; backdrop-filter: blur(8px); opacity: 0.98;">
+          <div class="container" style="height: 100%; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 32px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; letter-spacing: -1px; font-size: 20px;">
+                <div style="width: 24px; height: 24px; background: var(--swiss-blue); border-radius: 4px;"></div>
+                SwissJS
+              </div>
+              <div class="desktop-only" style="display: flex; gap: 24px;">
+                {['Docs', 'Learn', 'Showcase', 'Ecosystem'].map((link: string) => (
+                  <a key={link} href="#" style="font-size: 14px; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;" onmouseover={(e: any) => e.target.style.color = 'var(--text-primary)'} onmouseout={(e: any) => e.target.style.color = 'var(--text-secondary)'}>{link}</a>
+                ))}
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <button onclick={() => this.toggleTheme()} style="background: none; border: none; cursor: pointer; color: var(--text-secondary); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.2s;" onmouseover={(e: any) => e.currentTarget.style.background = 'var(--bg-surface)'} onmouseout={(e: any) => e.currentTarget.style.background = 'none'}>
+                {this.theme === 'light' ? '🌙' : '☀️'}
+              </button>
+              <a href="https://github.com/kibologic/swissjs-website" target="_blank" style="text-decoration: none; font-size: 14px; font-weight: 600; color: var(--swiss-white); background: var(--swiss-black); padding: 8px 16px; border-radius: 6px; transition: opacity 0.2s;" onmouseover={(e: any) => e.target.style.opacity = '0.8'} onmouseout={(e: any) => e.target.style.opacity = '1'}>Github</a>
+            </div>
+          </div>
+        </nav>
+
+        {/* ── HERO ── */}
+        <section style="padding: 120px 0 80px;">
+          <div class="container" style="text-align: center;">
+            <div style="display: inline-block; padding: 6px 12px; background: var(--swiss-slate-100); border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--swiss-blue); margin-bottom: 24px;">Version 1.2.0 is now live</div>
+            <h1 style="font-size: clamp(40px, 8vw, 72px); font-weight: 900; letter-spacing: -0.04em; line-height: 1; margin-bottom: 24px; color: var(--text-primary);">
+              The framework for<br />
+              <span style="color: var(--swiss-blue);">serious applications.</span>
+            </h1>
+            <p style="font-size: 20px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; line-height: 1.6;">
+              Build faster. Ship smarter. Full control over your architecture with a template-first component model that scales.
+            </p>
+            <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 80px;">
+              <button style="background: var(--swiss-blue); color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover={(e: any) => e.target.style.background = 'var(--swiss-blue-hover)'} onmouseout={(e: any) => e.target.style.background = 'var(--swiss-blue)'}>Get Started</button>
+              <button style="background: transparent; color: var(--text-primary); border: 1px solid var(--border); padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">Learn SwiftJS</button>
+            </div>
+
+            {/* Hybrid Showcase */}
+            <div class="grid-2" style="text-align: left; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; align-items: stretch;">
+              <div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Component Definition</div>
+                <div class="code-panel" style="padding: 24px; height: 100%;">
+                  <div style="white-space: pre; font-size: 13px; line-height: 1.6; color: #fff;">
+                    <span class="syntax-keyword">component</span> Counter {"{"}<br />
+                    {"  "}<span class="syntax-keyword">state</span> {"{"} <span class="syntax-keyword">let</span> count: <span class="syntax-type">number</span> = 0; {"}"}<br /><br />
+                    {"  "}<span class="syntax-fn">render</span>() {"{"}<br />
+                    {"    "}<span class="syntax-keyword">return</span> (<br />
+                    {"      "}&lt;<span class="syntax-keyword">button</span> <span class="syntax-fn">onclick</span>={"{"}() =&gt; count++{"}"}&gt;<br />
+                    {"        "}Count: {"{"}count{"}"}<br />
+                    {"      "}&lt;/<span class="syntax-keyword">button</span>&gt;<br />
+                    {"    "});<br />
+                    {"  "}{"}"}<br />
+                    {"}"}
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; justify-content: center;">
+                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Output Interface</div>
+                <div style="flex: 1; border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--bg-page);">
+                  <div style="text-align: center;">
+                    <div style="background: var(--bg-surface); border: 1px solid var(--border); padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-block;">Count: 42</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">Interactive preview generated by swite</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── PILLARS ── */}
+        <section style="padding: 80px 0; border-top: 1px solid var(--border);">
+          <div class="container">
+            <div class="grid-3">
+              {[
+                { title: 'Optimized', desc: 'No virtual DOM overhead. SwissJS compiles down to high-performance reactive updates.', icon: '⚡' },
+                { title: 'Type Safe', desc: 'First-class TypeScript support throughout the lifecycle, state, and properties.', icon: '🛡️' },
+                { title: 'Zero Compromise', desc: 'Total control over your bundle size and execution flow. Ship only what matters.', icon: '💎' },
+              ].map((p: any) => (
+                <div key={p.title}>
+                  <div style="font-size: 32px; margin-bottom: 20px;">{p.icon}</div>
+                  <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em;">{p.title}</h3>
+                  <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.6;">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── DX SHOWCASE ── */}
+        <section style="padding: 100px 0; background: var(--swiss-slate-950); color: #fff;">
+          <div class="container">
+            <div class="grid-2" style="align-items: center;">
+              <div>
+                <h2 style="font-size: 40px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 24px;">Designed for Flow</h2>
+                <p style="font-size: 18px; color: var(--swiss-slate-400); margin-bottom: 32px; line-height: 1.6;">
+                  Frameworks should stay out of your way. SwissJS is built to feel intuitive, with no boilerplate obstacles. Component files (`.uix`) combine logic and layout into a single unit of truth.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                  {['High reactive state', 'Implicit updates', 'File-based routing support'].map((feat: string) => (
+                    <div key={feat} style="display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500;">
+                      <span style="color: var(--swiss-blue); font-size: 18px;">✓</span> {feat}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div class="code-panel" style="padding: 32px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 24px;">
+                  <div style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></div>
+                  <div style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></div>
+                  <div style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></div>
+                </div>
+                <div style="white-space: pre; font-size: 13px; line-height: 1.6; font-family: monospace;">
+                  <span class="syntax-keyword">export component</span> Settings {"{"}<br />
+                  {"  "}<span class="syntax-keyword">state</span> {"{"} <span class="syntax-keyword">let</span> theme: <span class="syntax-string">'dark' | 'light'</span> = 'dark'; {"}"}<br /><br />
+                  {"  "}<span class="syntax-fn">toggle</span>() {"{"}<br />
+                  {"    "}theme = theme === 'dark' ? 'light' : 'dark';<br />
+                  {"  "}{"}"}<br /><br />
+                  {"  "}<span class="syntax-fn">render</span>() {"{"}<br />
+                  {"    "}<span class="syntax-keyword">return</span> (&lt;<span class="syntax-keyword">div</span> data-theme={"{"}theme{"}"}&gt;...&lt;/<span class="syntax-keyword">div</span>&gt;);<br />
+                  {"  "}{"}"}<br />
+                  {"}"}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── TECHNICAL GRID ── */}
+        <section style="padding: 100px 0;">
+          <div class="container">
+            <div style="text-align: center; margin-bottom: 80px;">
+              <h2 style="font-size: 40px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 16px;">Production Ready.</h2>
+              <p style="font-size: 18px; color: var(--text-secondary);">Everything you need to ship enterprise-grade software.</p>
+            </div>
+            <div class="grid-3">
+              {[
+                { t: 'High Reliability', d: 'Engineered for retail environments where downtime is lost revenue.' },
+                { t: 'Built-in DevServer', d: 'Swite provides hot-reloading and instant module resolution.' },
+                { t: 'Flexible Routing', d: 'Nested, file-based, or programmatic — you choose the logic.' },
+                { t: 'Native Tooling', d: 'Cli tools for scaffolding, testing, and deployment built-in.' },
+                { t: 'Reactive Hooks', d: 'Modern state primitives that react instantly to data changes.' },
+                { t: 'Enterprise Ecosystem', d: 'A first-class citizen of the Kibologic ecosystem.' },
+              ].map((item: any) => (
+                <div key={item.t} style="padding: 24px; border-radius: 12px; border: 1px solid var(--border); transition: transform 0.2s;" onmouseover={(e: any) => e.currentTarget.style.transform = 'translateY(-4px)'} onmouseout={(e: any) => e.currentTarget.style.transform = 'none'}>
+                  <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">{item.t}</h4>
+                  <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">{item.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── FINAL CTA ── */}
+        <section style="padding: 120px 0; border-top: 1px solid var(--border); text-align: center;">
+          <div class="container section-reveal">
+            <h2 style="font-size: 48px; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 32px;">Start building today.</h2>
+            <div style="display: flex; gap: 16px; justify-content: center;">
+              <button style="background: var(--swiss-black); color: #fff; border: none; padding: 16px 36px; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer;">Get Started</button>
+              <button style="background: var(--swiss-blue); color: #fff; border: none; padding: 16px 36px; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer;">Documentation</button>
+            </div>
+          </div>
+        </section>
+
+        {/* ── FOOTER ── */}
+        <footer style="padding: 48px 0; border-top: 1px solid var(--border); background: var(--bg-surface);">
+          <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px;">
+              <div style="display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; color: var(--text-primary);">
+                <div style="width: 20px; height: 20px; background: var(--swiss-blue); border-radius: 4px;"></div>
+                SwissJS
+              </div>
+              <div style="display: flex; gap: 24px; align-items: center;">
+                <a href="https://github.com/kibologic/swissjs-website/issues/new" target="_blank" style="font-size: 13px; color: var(--text-muted); text-decoration: none;">Report a Bug</a>
+                <a href="https://github.com/kibologic/swissjs-website/discussions" target="_blank" style="font-size: 13px; color: var(--text-muted); text-decoration: none;">Suggestions</a>
+                <a href="https://github.com/kibologic/swissjs-website" target="_blank" style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 600;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  Source code
+                </a>
+              </div>
+            </div>
+            <div style="margin-top: 32px; border-top: 1px solid var(--border); padding-top: 24px; font-size: 11px; color: var(--text-muted); text-align: center;">
+              © 2026 Kibologic. All rights reserved. Built with SwissJS.
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+}
