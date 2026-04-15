@@ -1,0 +1,55 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../components/Shell.uix';
+
+component DocsPage {
+  props = {
+    route: string
+  };
+
+  render() {
+    return (
+      <Shell activeRoute={this.route}>
+        {this.route === '#/docs' && (
+          <section>
+            <h1 style="font-size: 40px; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 24px;">Introduction</h1>
+            <p style="font-size: 18px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 32px;">
+              SwissJS is a next-generation UI framework designed for performance-critical applications. By eliminating the virtual DOM, it provides a predictable and deterministic way to build interfaces.
+            </p>
+            <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin-bottom: 48px;">
+               <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px;">Key Value Propositions</h3>
+               <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+                  {['Zero-VDOM Rendering', 'Signal-Based Reactivity', 'Fenestration Isolation', 'Swite Native Integration'].map(item => (
+                    <li key={item} style="display: flex; align-items: center; gap: 12px; font-weight: 600;">
+                      <span style="color: var(--brand-accent);">⚡</span> {item}
+                    </li>
+                  ))}
+               </ul>
+            </div>
+          </section>
+        )}
+
+        {this.route === '#/docs/install' && (
+          <section>
+            <h1 style="font-size: 40px; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 24px;">Installation</h1>
+            <p style="margin-bottom: 24px;">Initialize a new SwissJS project using the official CLI.</p>
+            <div style="background: var(--code-bg); border-radius: 8px; padding: 20px; font-family: monospace; color: #fff; margin-bottom: 24px;">
+              <span style="color: var(--brand-accent);">$</span> npx create-swissjs@latest my-app
+            </div>
+            <p style="margin-bottom: 24px;">Or add it to an existing project:</p>
+            <div style="background: var(--code-bg); border-radius: 8px; padding: 20px; font-family: monospace; color: #fff;">
+              <span style="color: var(--brand-accent);">$</span> npm install @kibologic/core
+            </div>
+          </section>
+        )}
+
+        {!['#/docs', '#/docs/install'].includes(this.route) && (
+          <div style="padding: 100px 0; text-align: center; color: var(--text-muted);">
+            <div style="font-size: 48px; margin-bottom: 24px;">🚧</div>
+            <h2 style="font-size: 24px; font-weight: 800; color: var(--text-primary);">Documentation in Progress</h2>
+            <p>This section is currently being written by the Kibologic engineering team.</p>
+          </div>
+        )}
+      </Shell>
+    );
+  }
+}
