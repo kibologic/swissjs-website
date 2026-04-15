@@ -130,44 +130,43 @@ component LandingPage {
         {/* ── HERO ── */}
         <section style="padding: 120px 0 80px;">
           <div class="container" style="text-align: center;">
-            <div style="display: inline-block; padding: 6px 12px; background: var(--brand-accent-subtle); border-radius: 4px; font-size: 12px; font-weight: 700; color: var(--brand-accent); margin-bottom: 24px; border: 1px solid var(--brand-accent);">v1.2.0-stable</div>
+            <div style="display: inline-block; padding: 6px 14px; background: var(--brand-accent-subtle); border-radius: 4px; font-size: 11px; font-weight: 800; color: var(--brand-accent); margin-bottom: 24px; border: 1px solid var(--brand-accent); letter-spacing: 0.05em;">STATE-TO-DOM SIGNAL ENGINE</div>
             <h1 style="font-size: clamp(32px, 6vw, 64px); font-weight: 900; letter-spacing: -0.05em; line-height: 1.1; margin-bottom: 24px; color: var(--text-primary);">
-              SwissJS Component<br />
-              <span style="color: var(--brand-accent);">Architecture</span>
+              Deterministic UI<br />
+              <span style="color: var(--brand-accent);">Framework Primitives</span>
             </h1>
-            <p style="font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; line-height: 1.6;">
-              A zero-VDOM, template-first UI primitive designed for absolute execution control and predictable state reactivity.
+            <p style="font-size: 16px; color: var(--text-secondary); max-width: 640px; margin: 0 auto 48px; line-height: 1.6;">
+              SwissJS is a zero-VDOM UI engine that maps reactive Proxy traps directly to DOM node mutations via the proprietary Signal Engine.
             </p>
             <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 80px;">
-              <button style="background: var(--brand-accent); color: #fff; border: none; padding: 14px 24px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: inherit;" onmouseover={(e: any) => e.target.style.background = 'var(--brand-accent-hover)'} onmouseout={(e: any) => e.target.style.background = 'var(--brand-accent)'}>Initialize &gt;_</button>
-              <button style="background: transparent; color: var(--text-primary); border: 1px solid var(--border); padding: 14px 24px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;">View System Docs</button>
+              <button style="background: var(--brand-accent); color: #fff; border: none; padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: inherit;" onmouseover={(e: any) => e.target.style.background = 'var(--brand-accent-hover)'} onmouseout={(e: any) => e.target.style.background = 'var(--brand-accent)'}>Initialize Engine &gt;_</button>
+              <button style="background: transparent; color: var(--text-primary); border: 1px solid var(--border); padding: 14px 28px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;">Read Core Spec</button>
             </div>
 
             {/* Hybrid Showcase */}
-            <div class="grid-2" style="text-align: left; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; align-items: stretch;">
+            <div class="grid-2" style="text-align: left; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 40px; align-items: stretch;">
               <div>
-                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Component Definition</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Signal-Based Component</div>
                 <div class="code-panel" style="padding: 24px; height: 100%;">
-                  <div style="white-space: pre; font-size: 13px; line-height: 1.6; color: #fff;">
-                    <span class="syntax-keyword">component</span> Counter {"{"}<br />
-                    {"  "}<span class="syntax-keyword">state</span> {"{"} <span class="syntax-keyword">let</span> count: <span class="syntax-type">number</span> = 0; {"}"}<br /><br />
+                  <div style="white-space: pre; font-size: 12px; line-height: 1.6; color: #fff;">
+                    <span class="syntax-keyword">component</span> LiveFeed {"{"}<br />
+                    {"  "}<span class="syntax-keyword">state</span> {"{"} <span class="syntax-keyword">let</span> status: <span class="syntax-string">'active' | 'idle'</span> = 'idle'; {"}"}<br /><br />
+                    {"  "}<span class="syntax-fn">mounted</span>() {"{"}<br />
+                    {"    "}<span class="syntax-fn">setInterval</span>(() =&gt; status = <span class="syntax-string">'active'</span>, 1000);<br />
+                    {"  "}{"}"}<br /><br />
                     {"  "}<span class="syntax-fn">render</span>() {"{"}<br />
-                    {"    "}<span class="syntax-keyword">return</span> (<br />
-                    {"      "}&lt;<span class="syntax-keyword">button</span> <span class="syntax-fn">onclick</span>={"{"}() =&gt; count++{"}"}&gt;<br />
-                    {"        "}Count: {"{"}count{"}"}<br />
-                    {"      "}&lt;/<span class="syntax-keyword">button</span>&gt;<br />
-                    {"    "});<br />
+                    {"    "}<span class="syntax-keyword">return</span> (&lt;<span class="syntax-keyword">div</span> className={"{"}status{"}"}&gt;Registry Sync&lt;/<span class="syntax-keyword">div</span>&gt;);<br />
                     {"  "}{"}"}<br />
                     {"}"}
                   </div>
                 </div>
               </div>
               <div style="display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Output Interface</div>
+                <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">Deterministic Output</div>
                 <div style="flex: 1; border: 1px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--bg-page);">
                   <div style="text-align: center;">
-                    <div style="background: var(--bg-surface); border: 1px solid var(--border); padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-block;">Count: 42</div>
-                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">Interactive preview generated by swite</div>
+                    <div style="background: var(--brand-accent-subtle); border: 1px solid var(--brand-accent); color: var(--brand-accent); padding: 12px 24px; border-radius: 8px; font-weight: 800; font-family: monospace;">STATUS: ACTIVE</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 12px;">Direct node mutation (0ms reconciliation)</div>
                   </div>
                 </div>
               </div>
@@ -180,12 +179,12 @@ component LandingPage {
           <div class="container">
             <div class="grid-3">
               {[
-                { title: 'Compile-to-DOM Pipeline', desc: 'Bypasses virtual DOM reconciliation entirely, mapping state changes directly to node mutations.', icon: '[1]' },
-                { title: 'Strict Interface Typings', desc: 'First-class TypeScript compiler enforcement throughout the component lifecycle and state properties.', icon: '[2]' },
-                { title: 'Deterministic Execution', desc: '1:1 ratio between state mutations and UI updates. No hidden rendering lifecycles.', icon: '[3]' },
+                { title: 'Signal-to-DOM Engine', desc: 'Eliminates the virtual DOM overhead by mapping Proxy-based state traps directly to native node updates.', icon: '⚡' },
+                { title: 'Fenestration Registry', desc: 'Advanced lifecycle management system providing viewport isolation and automated resource teardowns.', icon: '⊡' },
+                { title: 'Strict AST Boundaries', desc: 'Native enforcement of component schemas via the Swite compiler, ensuring 100% type-safe templates.', icon: '∀' },
               ].map((p: any) => (
                 <div key={p.title}>
-                  <div style="font-size: 16px; margin-bottom: 20px; color: var(--brand-accent); font-weight: 800;">{p.icon}</div>
+                  <div style="font-size: 20px; margin-bottom: 20px; color: var(--brand-accent); font-weight: 800;">{p.icon}</div>
                   <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em;">{p.title}</h3>
                   <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">{p.desc}</p>
                 </div>
@@ -199,12 +198,12 @@ component LandingPage {
           <div class="container">
             <div class="grid-2" style="align-items: center;">
               <div>
-                <h2 style="font-size: 32px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 24px;">Architecture.uix</h2>
+                <h2 style="font-size: 32px; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 24px;">Fenestration.ts</h2>
                 <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.8;">
-                  `.uix` component nodes consolidate structural templates and compilation bindings within extremely strict AST boundaries. Logic and layout compile synchronously.
+                  The Fenestration Registry manages deterministic mount points and isolated execution scopes for complex enterprise dashboards.
                 </p>
                 <div style="display: flex; flex-direction: column; gap: 16px;">
-                  {['Proxy-based state primitives', 'Implicit DOM updates', 'AST synchronous parsing'].map((feat: string) => (
+                  {['Zero-overhead Proxy reactivity', 'Viewport isolation primitives', 'Automated memory safety'].map((feat: string) => (
                     <div key={feat} style="display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500;">
                       <span style="color: var(--brand-accent); font-size: 18px;">&gt;</span> {feat}
                     </div>
@@ -217,16 +216,14 @@ component LandingPage {
                   <div style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></div>
                   <div style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></div>
                 </div>
-                <div style="white-space: pre; font-size: 13px; line-height: 1.6; font-family: monospace;">
-                  <span class="syntax-keyword">export component</span> Settings {"{"}<br />
-                  {"  "}<span class="syntax-keyword">state</span> {"{"} <span class="syntax-keyword">let</span> theme: <span class="syntax-string">'dark' | 'light'</span> = 'dark'; {"}"}<br /><br />
-                  {"  "}<span class="syntax-fn">toggle</span>() {"{"}<br />
-                  {"    "}theme = theme === 'dark' ? 'light' : 'dark';<br />
-                  {"  "}{"}"}<br /><br />
-                  {"  "}<span class="syntax-fn">render</span>() {"{"}<br />
-                  {"    "}<span class="syntax-keyword">return</span> (&lt;<span class="syntax-keyword">div</span> data-theme={"{"}theme{"}"}&gt;...&lt;/<span class="syntax-keyword">div</span>&gt;);<br />
-                  {"  "}{"}"}<br />
-                  {"}"}
+                <div style="white-space: pre; font-size: 12px; line-height: 1.6; font-family: monospace;">
+                   <span class="syntax-keyword">import</span> {"{"} FenestrationRegistry {"}"} <span class="syntax-keyword">from</span> <span class="syntax-string">'@kibologic/core'</span>;<br /><br />
+                   <span class="syntax-keyword">const</span> registry = <span class="syntax-keyword">new</span> <span class="syntax-fn">FenestrationRegistry</span>();<br /><br />
+                   <span class="syntax-comment">// Deterministic viewport mounting</span><br />
+                   <span class="syntax-keyword">await</span> registry.<span class="syntax-fn">register</span>(<span class="syntax-string">'MAIN_OUTLET'</span>, {"{"}<br />
+                   {"  "}isolation: <span class="syntax-keyword">true</span>,<br />
+                   {"  "}teardown: <span class="syntax-fn">()</span> =&gt; <span class="syntax-fn">cleanup</span>()<br />
+                   {"}"});
                 </div>
               </div>
             </div>
@@ -237,17 +234,17 @@ component LandingPage {
         <section style="padding: 100px 0;">
           <div class="container">
             <div style="text-align: center; margin-bottom: 80px;">
-              <h2 style="font-size: 32px; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 16px;">System Properties</h2>
-              <p style="font-size: 16px; color: var(--text-secondary);">Enterprise infrastructural capabilities.</p>
+              <h2 style="font-size: 32px; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 16px;">Deterministic Engine Specs</h2>
+              <p style="font-size: 16px; color: var(--text-secondary);">Enterprise infrastructural primitives backed by the Swite compiler.</p>
             </div>
             <div class="grid-3">
               {[
-                { t: 'Memory Leak Prevention', d: 'Automated teardown heuristics mapping directly to reactive closures.' },
-                { t: 'Swite Daemon Integration', d: 'Native compiler server exposing AST manipulation over WebSocket payloads.' },
-                { t: 'File System Routing (FSR)', d: 'Nested, deterministic, router topologies generated at build time.' },
-                { t: 'AST Toolchains', d: 'Compiler plugins to parse, manipulate, and execute `.uix` node boundaries.' },
-                { t: 'Reactive Hooks', d: 'Top-level proxy traps ensuring strict synchronization.' },
-                { t: 'Kibologic ERP Target', d: 'Verified and enforced as the core primitive backing Alpine.' },
+                { t: 'Memory Integrity Protection', d: 'Automated teardown heuristics mapping directly to reactive Signal closures.' },
+                { t: 'Proxy Trap Invalidation', d: 'Micro-scheduler that batches DOM mutations to prevent frame drops in intensive UIs.' },
+                { t: 'Deterministic Mounting', d: '1:1 ratio between Fenestration registries and physical DOM entry points.' },
+                { t: 'Synchronous AST Parsing', d: 'Direct compilation of .uix boundaries into runtime-ready ESM modules.' },
+                { t: 'Signal Batching', d: 'Native support for atomic updates across complex component hierarchies.' },
+                { t: 'Security Sandboxing', d: 'Execution isolation for sensitive ERP data layers and third-party modules.' },
               ].map((item: any) => (
                 <div key={item.t} style="padding: 24px; border-radius: 4px; border: 1px solid var(--border); transition: transform 0.2s;" onmouseover={(e: any) => e.currentTarget.style.transform = 'translateY(-4px)'} onmouseout={(e: any) => e.currentTarget.style.transform = 'none'}>
                   <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.05em;">{item.t}</h4>
