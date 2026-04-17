@@ -9,7 +9,7 @@ component DocsPage {
   render() {
     return (
       <Shell activeRoute={this.route}>
-        {this.route === '#/docs' && (
+        {this.route === '/docs' && (
           <section>
             <h1 style="font-size: 40px; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 24px;">Introduction</h1>
             <p style="font-size: 18px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 32px;">
@@ -28,7 +28,7 @@ component DocsPage {
           </section>
         )}
 
-        {this.route === '#/docs/install' && (
+        {this.route === '/docs/install' && (
           <section>
             <h1 style="font-size: 40px; font-weight: 900; letter-spacing: -0.05em; margin-bottom: 24px;">Installation</h1>
             <p style="margin-bottom: 24px;">Initialize a new SwissJS project using the official CLI.</p>
@@ -42,7 +42,7 @@ component DocsPage {
           </section>
         )}
 
-        {!['#/docs', '#/docs/install'].includes(this.route) && (
+        {!['/docs', '/docs/install'].includes(this.route) && (
           <div style="padding: 100px 0; text-align: center; color: var(--text-muted);">
             <div style="font-size: 48px; margin-bottom: 24px;">🚧</div>
             <h2 style="font-size: 24px; font-weight: 800; color: var(--text-primary);">Documentation in Progress</h2>

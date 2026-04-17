@@ -38,24 +38,24 @@ component Shell {
       {
         title: 'Getting Started',
         links: [
-          { name: 'Introduction', path: '#/docs' },
-          { name: 'Installation', path: '#/docs/install' },
-          { name: 'Project Structure', path: '#/docs/structure' }
+          { name: 'Introduction', path: '/docs' },
+          { name: 'Installation', path: '/docs/install' },
+          { name: 'Project Structure', path: '/docs/structure' }
         ]
       },
       {
         title: 'Core Concepts',
         links: [
-          { name: 'Rendering Model', path: '#/docs/rendering' },
-          { name: 'Reactivity (Signals)', path: '#/docs/signals' },
-          { name: 'Fenestration', path: '#/docs/fenestration' }
+          { name: 'Rendering Model', path: '/docs/rendering' },
+          { name: 'Reactivity (Signals)', path: '/docs/signals' },
+          { name: 'Fenestration', path: '/docs/fenestration' }
         ]
       },
       {
         title: 'API Reference',
         links: [
-          { name: '@kibologic/core', path: '#/docs/api-core' },
-          { name: '@kibologic/swite', path: '#/docs/api-swite' }
+          { name: '@kibologic/core', path: '/docs/api-core' },
+          { name: '@kibologic/swite', path: '/docs/api-swite' }
         ]
       }
     ];
@@ -65,7 +65,7 @@ component Shell {
         {/* TOP NAV */}
         <nav style="height: 64px; border-bottom: 1px solid var(--border); background: var(--bg-page); position: sticky; top: 0; z-index: 100; display: flex; align-items: center; padding: 0 24px; justify-content: space-between;">
            <div style="display: flex; align-items: center; gap: 40px;">
-              <a href="#/" style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 18px; text-decoration: none; color: var(--text-primary);">
+              <a href="/" style="display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 18px; text-decoration: none; color: var(--text-primary);">
                 <div style="width: 20px; height: 20px; background: var(--brand-accent); border-radius: 4px;"></div>
                 SwissJS
               </a>
