@@ -3,103 +3,109 @@ import { SwissComponent } from '@kibologic/core';
 component LandingPage {
   props = {};
 
-  state { let theme: 'light' | 'dark' = 'light'; }
-  state { let mobileMenuOpen: boolean = false; }
-  state { let activeExample: string = 'component'; }
+  state { let theme: 'light' | 'dark' = 'dark'; }
 
   mounted() {
-    // Initial theme setup
     const saved = localStorage.getItem('swiss-theme') as 'light' | 'dark' | null;
-    this.theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    this.theme = saved || 'dark';
     document.documentElement.setAttribute('data-theme', this.theme);
 
-    // Global Styles injection
-    if (!document.getElementById('swiss-global-styles')) {
+    if (!document.getElementById('swiss-landing-styles')) {
       const s = document.createElement('style');
-      s.id = 'swiss-global-styles';
+      s.id = 'swiss-landing-styles';
       s.textContent = `
         :root {
-          /* Official Alpine ERP Scale */
-          --color-snow-50:   #FAFCFF;
-          --color-snow-100:  #F4F7FB;
-          --color-snow-200:  #E8EFF7;
-          --color-snow-300:  #D6E2EF;
-          --color-sky-50:    #F0F6FF;
-          --color-sky-400:   #4A90D9;
-          --color-sky-500:   #2E72C2;
-          --color-slate-50:  #F7F8FA;
-          --color-slate-100: #ECEEF2;
-          --color-slate-200: #D4D8E0;
-          --color-slate-500: #7A8499;
-          --color-slate-700: #3D4559;
-          --color-slate-900: #1A2035;
-
-          /* Framework Constants */
-          --brand-accent: var(--color-sky-500);
-          --brand-accent-hover: var(--color-sky-400);
-          --brand-accent-subtle: var(--color-sky-50);
-          --color-info: #4A90D9;
-          --color-tip: #50fa7b;
-          --color-warning: #ffb86c;
-          --color-danger: #ff5555;
+          --sj-accent: #2674d9;
+          --sj-accent-strong: #1559ae;
+          --sj-accent-soft: rgba(38, 116, 217, 0.12);
         }
 
         [data-theme="light"] {
-          --bg-page: #FFFFFF;
-          --bg-surface: var(--color-slate-50);
-          --bg-inverse: var(--color-slate-900);
-          --text-primary: var(--color-slate-900);
-          --text-secondary: var(--color-slate-700);
-          --text-muted: var(--color-slate-500);
-          --border: var(--color-slate-200);
-          --code-bg: var(--color-slate-900);
+          --bg-page: #fcfdff;
+          --bg-panel: #f2f5fa;
+          --bg-code: #121721;
+          --text-primary: #152033;
+          --text-secondary: #4d5a70;
+          --text-muted: #7a8599;
+          --border: #d7dfea;
+          --border-strong: #c0cbda;
         }
 
         [data-theme="dark"] {
-          --bg-page: #000000;
-          --bg-surface: #111111;
-          --bg-inverse: #FFFFFF;
-          --text-primary: #FFFFFF;
-          --text-secondary: var(--color-slate-500);
-          --text-muted: var(--color-slate-500);
-          --border: #222222;
-          --code-bg: #0A0A0A;
+          --bg-page: #0b1220;
+          --bg-panel: #131c2d;
+          --bg-code: #0a1020;
+          --text-primary: #f1f5fb;
+          --text-secondary: #bac6d8;
+          --text-muted: #8090a8;
+          --border: #223047;
+          --border-strong: #30415c;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'JetBrains Mono', 'Fira Code', monospace; background: var(--bg-page); color: var(--text-primary); transition: background 0.3s ease; }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 64px; }
-
-        @media (max-width: 860px) {
-          .grid-3, .grid-2 { grid-template-columns: 1fr; gap: 40px; }
-          .desktop-only { display: none !important; }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+          background: var(--bg-page);
+          color: var(--text-primary);
+          font-family: "JetBrains Mono", "Fira Code", monospace;
+          line-height: 1.6;
         }
 
-        .code-panel {
-          background: var(--code-bg);
+        .sj-container { max-width: 1200px; margin: 0 auto; padding: 0 22px; }
+        .sj-link { color: var(--text-secondary); text-decoration: none; }
+        .sj-link:hover { color: var(--text-primary); }
+        .sj-button-primary {
+          background: var(--sj-accent);
+          color: #fff;
+          border: none;
+          border-radius: 999px;
+          padding: 14px 18px;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 800;
+          cursor: pointer;
+          text-decoration: none;
+        }
+        .sj-button-secondary {
+          background: transparent;
+          color: var(--text-primary);
+          border: 1px solid var(--border-strong);
+          border-radius: 999px;
+          padding: 14px 18px;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 800;
+          cursor: pointer;
+          text-decoration: none;
+        }
+        .sj-card {
+          background: var(--bg-panel);
+          border: 1px solid var(--border);
           border-radius: 12px;
-          border: 1px solid rgba(255,255,255,0.1);
-          overflow: hidden;
-          font-family: 'JetBrains Mono', 'Menlo', monospace;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+          padding: 24px;
+        }
+        .sj-inline-code {
+          font-family: inherit;
+          background: var(--bg-panel);
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          padding: 2px 6px;
+          font-size: 0.92em;
+        }
+        .sj-code {
+          background: var(--bg-code);
+          color: #dde7ff;
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 18px 20px;
+          overflow-x: auto;
+          font-size: 13px;
+          line-height: 1.7;
         }
 
-        .syntax-keyword { color: #ff79c6; }
-        .syntax-string { color: #f1fa8c; }
-        .syntax-type { color: #8be9fd; }
-        .syntax-comment { color: #6272a4; }
-        .syntax-fn { color: #50fa7b; }
-
-        /* Callout Primitives */
-        .callout { padding: 16px 20px; border-radius: 8px; margin: 24px 0; border-left: 4px solid; font-size: 14px; line-height: 1.6; }
-        .callout-info { background: rgba(74, 144, 217, 0.05); border-color: #4A90D9; color: var(--text-primary); }
-        .callout-tip { background: rgba(80, 250, 123, 0.05); border-color: #50fa7b; color: var(--text-primary); }
-        .callout-warning { background: rgba(255, 184, 108, 0.05); border-color: #ffb86c; color: var(--text-primary); }
-        .callout-danger { background: rgba(255, 85, 85, 0.05); border-color: #ff5555; color: var(--text-primary); }
+        @media (max-width: 960px) {
+          .sj-hero-grid, .sj-two-col, .sj-three-col { grid-template-columns: 1fr !important; }
+        }
       `;
       document.head.appendChild(s);
     }
@@ -109,226 +115,192 @@ component LandingPage {
     this.theme = this.theme === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', this.theme);
     localStorage.setItem('swiss-theme', this.theme);
+    this.scheduleUpdate?.();
   }
 
   render() {
+    const packages = [
+      '@kibologic/core',
+      '@kibologic/compiler',
+      '@kibologic/router',
+      '@kibologic/components',
+      '@kibologic/security',
+      '@kibologic/utils',
+      '@kibologic/plugin-file-router',
+      '@kibologic/plugin-web-storage'
+    ];
+
+    const concepts = [
+      {
+        title: '.ui and .uix',
+        body: 'SwissJS uses custom source formats. .ui is for TypeScript logic, utilities, and framework source. .uix is the UI-facing TypeScript plus JSX layer.'
+      },
+      {
+        title: 'Runtime',
+        body: 'The core runtime exports SwissApp, component APIs, reactivity, context, renderer, security, devtools bridges, fenestration, and framework-level utilities.'
+      },
+      {
+        title: 'Compiler',
+        body: 'The compiler preprocesses Swiss syntax, processes imports, and transforms JSX for .uix and UI render paths before code reaches the browser.'
+      },
+      {
+        title: 'Packages',
+        body: 'SwissJS is not a single runtime package. It is a package ecosystem with runtime, router, compiler, plugins, components, security, and utilities.'
+      },
+      {
+        title: 'Swite',
+        body: 'SwissJS is developed and served with Swite. The framework and its dev server are designed together, not bolted together after the fact.'
+      },
+      {
+        title: 'Framework Use',
+        body: 'Kibologic applications like Alpine ERP Core consume SwissJS as an application framework, not as a toy component runtime.'
+      }
+    ];
+
     return (
-      <div style="min-height: 100vh; display: flex; flex-direction: column;">
-        
-        {/* ── NAVIGATION ── */}
-        <nav style="height: 64px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-page); z-index: 1000; backdrop-filter: blur(8px); opacity: 0.98;">
-          <div class="container" style="height: 100%; display: flex; align-items: center; justify-content: space-between;">
-            <div style="display: flex; align-items: center; gap: 32px;">
-              <div style="display: flex; align-items: center; gap: 8px; font-weight: 900; letter-spacing: -1px; font-size: 20px;">
-                <div style="width: 24px; height: 24px; background: var(--brand-accent); border-radius: 4px;"></div>
-                SwissJS
-              </div>
-              <div class="desktop-only" style="display: flex; gap: 24px;">
-                {['Docs', 'Learn', 'Showcase', 'Ecosystem'].map((link: string) => (
-                  <a key={link} href="#" style="font-size: 13px; font-weight: 600; color: var(--text-secondary); text-decoration: none; transition: color 0.2s;" onmouseover={(e: any) => e.target.style.color = 'var(--text-primary)'} onmouseout={(e: any) => e.target.style.color = 'var(--text-secondary)'}>{link}</a>
-                ))}
-              </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 16px;">
-              <button onclick={() => this.toggleTheme()} style="background: none; border: none; cursor: pointer; color: var(--text-secondary); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.2s;" onmouseover={(e: any) => e.currentTarget.style.background = 'var(--bg-surface)'} onmouseout={(e: any) => e.currentTarget.style.background = 'none'}>
-                {this.theme === 'light' ? '🌙' : '☀️'}
+      <div style="min-height: 100vh; background: var(--bg-page); color: var(--text-primary);">
+        <nav style="height: 64px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-page); z-index: 50;">
+          <div class="sj-container" style="height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-size: 18px; font-weight: 900;">
+              <span style="width: 18px; height: 18px; background: var(--sj-accent); border-radius: 5px; display: inline-block;"></span>
+              SwissJS
+            </a>
+            <div style="display: flex; align-items: center; gap: 18px;">
+              <a href="/docs" class="sj-link" style="font-size: 12px; font-weight: 700;">Docs</a>
+              <a href="https://github.com/kibologic/swiss-lib" target="_blank" class="sj-link" style="font-size: 12px; font-weight: 700;">GitHub</a>
+              <button
+                type="button"
+                onclick={() => this.toggleTheme()}
+                style="background: none; border: 1px solid var(--border); border-radius: 999px; color: var(--text-secondary); cursor: pointer; font: inherit; padding: 7px 12px; font-size: 11px; font-weight: 800;"
+              >
+                {this.theme === 'light' ? 'DARK' : 'LIGHT'}
               </button>
-              <a href="https://github.com/kibologic/swissjs-website" target="_blank" style="text-decoration: none; font-size: 13px; font-weight: 700; color: var(--bg-page); background: var(--bg-inverse); padding: 8px 16px; border-radius: 6px; transition: opacity 0.2s;" onmouseover={(e: any) => e.target.style.opacity = '0.8'} onmouseout={(e: any) => e.target.style.opacity = '1'}>Github</a>
             </div>
           </div>
         </nav>
 
-        {/* ── HERO ── */}
-        <section style="padding: 120px 0 80px; background: radial-gradient(circle at top right, var(--brand-accent-subtle), transparent 40%);">
-          <div class="container" style="text-align: center;">
-            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--brand-accent-subtle); border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--brand-accent); margin-bottom: 24px; border: 1px solid var(--brand-accent);">
-              <span style="display: inline-block; width: 6px; height: 6px; background: var(--brand-accent); border-radius: 50%; animation: pulse 2s infinite;"></span>
-              VERSION 1.2.4 STABLE
-            </div>
-            <h1 style="font-size: clamp(40px, 8vw, 84px); font-weight: 900; letter-spacing: -0.06em; line-height: 1.0; margin-bottom: 24px; color: var(--text-primary);">
-              The UI framework that<br />
-              <span style="color: var(--brand-accent);">skips the virtual DOM.</span>
-            </h1>
-            <p style="font-size: 18px; color: var(--text-secondary); max-width: 720px; margin: 0 auto 48px; line-height: 1.6; font-weight: 500;">
-              SwissJS eliminates the middleman. Reactive Proxy traps map directly to native DOM node mutations. No reconciliation. No diffing. Just deterministic execution.
-            </p>
-            <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 64px; flex-wrap: wrap;">
-              <button style="background: var(--brand-accent); color: #fff; border: none; padding: 16px 32px; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.2s; font-family: inherit; box-shadow: 0 10px 20px -5px var(--brand-accent);" onmouseover={(e: any) => e.target.style.transform = 'translateY(-2px)'} onmouseout={(e: any) => e.target.style.transform = 'translateY(0)'}>Get Started &gt;_</button>
-              <button style="background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border); padding: 16px 32px; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit;">Playground</button>
-            </div>
-
-            <div style="display: inline-flex; background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px 24px; font-family: monospace; font-size: 14px; position: relative; cursor: pointer;" onclick={(e: any) => { navigator.clipboard.writeText('npm i @kibologic/core'); e.currentTarget.style.borderColor = 'var(--brand-accent)'; setTimeout(() => e.currentTarget.style.borderColor = 'var(--border)', 1000); }}>
-              <span style="color: #6272a4; margin-right: 12px;">$</span>
-              <span style="color: #fff;">npm i @kibologic/core</span>
-              <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 10px; color: var(--text-muted);">📋</span>
-            </div>
-          </div>
-        </section>
-
-        {/* ── CODE COMPARISON ── */}
-        <section style="padding: 100px 0; border-top: 1px solid var(--border);">
-          <div class="container">
-            <div style="text-align: center; margin-bottom: 64px;">
-              <h2 style="font-size: 32px; font-weight: 900; letter-spacing: -0.04em;">The Code Speaks for Itself</h2>
-            </div>
-            <div class="grid-2" style="align-items: stretch;">
-              {/* THE REACT WAY */}
-              <div class="code-panel">
-                <div style="padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 11px; font-weight: 800; color: #ff5555; text-transform: uppercase; letter-spacing: 0.1em;">React Way</span>
-                  <div style="display: flex; gap: 6px;">
-                    <div style="width: 8px; height: 8px; border-radius: 50%; border: 1px solid #ff5555;"></div>
-                  </div>
+        <header style="padding: 78px 0 54px; border-bottom: 1px solid var(--border);">
+          <div class="sj-container">
+            <div class="sj-hero-grid" style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 34px; align-items: start;">
+              <div>
+                <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em;">
+                  Framework
                 </div>
-                <div style="padding: 24px; white-space: pre; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8);">
-                  <span class="syntax-keyword">function</span> <span class="syntax-fn">Counter</span>() {"{"}<br />
-                  {"  "}<span class="syntax-keyword">const</span> [count, setCount] = <span class="syntax-fn">useState</span>(<span class="syntax-type">0</span>);<br /><br />
-                  {"  "}<span class="syntax-keyword">return</span> (<br />
-                  {"    "}&lt;<span class="syntax-keyword">button</span> <span class="syntax-fn">onClick</span>={"{"}() =&gt; <span class="syntax-fn">setCount</span>(count + 1){"}"}&gt;<br />
-                  {"      "}Count: {"{"}count{"}"}<br />
-                  {"    "}&lt;/<span class="syntax-keyword">button</span>&gt;<br />
-                  {"  "});<br />
-                  {"}"}
+                <h1 style="margin: 0 0 18px; font-size: clamp(42px, 7vw, 74px); line-height: 0.95; letter-spacing: -0.06em;">
+                  SwissJS is a framework
+                  <br />
+                  runtime plus compiler
+                  <br />
+                  ecosystem.
+                </h1>
+                <p style="max-width: 760px; margin: 0 0 24px; font-size: 16px; color: var(--text-secondary);">
+                  It is not just a component library. SwissJS includes a runtime, compiler, router, plugins, security layer, devtools surfaces,
+                  custom source formats, and a package ecosystem used by real Kibologic applications.
+                </p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                  <a href="/docs" class="sj-button-primary">Read the framework docs</a>
+                  <a href="/docs/packages" class="sj-button-secondary">See the package map</a>
                 </div>
-                <div style="padding: 12px 24px; background: rgba(255,85,85,0.05); border-top: 1px solid rgba(255,255,255,0.05); font-size: 11px; color: #ffb86c; font-style: italic;">
-                  Re-renders entire function on every click.
+                <div style="font-size: 12px; color: var(--text-muted);">
+                  Source of truth: <code class="sj-inline-code">kibologic/swiss-lib</code>. SwissJS apps are served and developed with <code class="sj-inline-code">Swite</code>.
                 </div>
               </div>
 
-              {/* THE SWISSJS WAY */}
-              <div class="code-panel" style="border-color: var(--brand-accent);">
-                <div style="padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; background: var(--brand-accent-subtle);">
-                  <span style="font-size: 11px; font-weight: 800; color: var(--brand-accent); text-transform: uppercase; letter-spacing: 0.1em;">SwissJS Way</span>
-                  <div style="display: flex; gap: 6px;">
-                    <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--brand-accent);"></div>
-                  </div>
+              <div class="sj-card">
+                <div style="margin-bottom: 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">File model</div>
+                <div class="sj-code" style="margin-bottom: 18px;">
+{`// Counter.uix
+import { SwissComponent } from '@kibologic/core';
+
+component Counter {
+  state { let count = 0; }
+
+  render() {
+    return (
+      <button onclick={() => { count++; }}>
+        Count: {count}
+      </button>
+    );
+  }
+}`}
                 </div>
-                <div style="padding: 24px; white-space: pre; font-size: 13px; line-height: 1.6; color: #fff;">
-                  <span class="syntax-keyword">component</span> Counter {"{"}<br />
-                  {"  "}<span class="syntax-keyword">state</span> {"{"} <span class="syntax-keyword">let</span> count = <span class="syntax-type">0</span>; {"}"}<br /><br />
-                  {"  "}<span class="syntax-fn">render</span>() {"{"}<br />
-                  {"    "}<span class="syntax-keyword">return</span> (<br />
-                  {"      "}&lt;<span class="syntax-keyword">button</span> <span class="syntax-fn">onclick</span>={"{"}() =&gt; count++{"}"}&gt;<br />
-                  {"        "}Count: {"{"}count{"}"}<br />
-                  {"      "}&lt;/<span class="syntax-keyword">button</span>&gt;<br />
-                  {"    "});<br />
-                  {"  "}{"}"}<br />
-                  {"}"}
+                <div style="display: flex; flex-direction: column; gap: 10px; color: var(--text-secondary); font-size: 13px;">
+                  <div><code class="sj-inline-code">.ui</code> for logic, utilities, types, and framework source.</div>
+                  <div><code class="sj-inline-code">.uix</code> for UI-facing TypeScript + JSX component files.</div>
+                  <div>The compiler transforms both through SwissJS-specific syntax and import handling.</div>
                 </div>
-                <div style="padding: 12px 24px; background: var(--brand-accent-subtle); border-top: 1px solid rgba(255,255,255,0.05); font-size: 11px; color: var(--brand-accent); font-weight: 700;">
-                  Zero re-renders. Direct node mutation.
-                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section style="padding: 52px 0; border-bottom: 1px solid var(--border);">
+          <div class="sj-container">
+            <div class="sj-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
+              <div class="sj-card">
+                <div style="margin-bottom: 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">What this site is for</div>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                  This site explains the actual framework model: runtime primitives, file model, compiler path, package surfaces, and how SwissJS is used in Kibologic apps.
+                </p>
+              </div>
+              <div class="sj-card">
+                <div style="margin-bottom: 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">What this site avoids</div>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                  Generic framework hype, invented benchmarks, and empty comparisons. The site is documentation-first and tied to the real codebase.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── PHILOSOPHY SHIFTS ── */}
-        <section style="padding: 100px 0; background: var(--bg-surface);">
-          <div class="container">
-            <div style="text-align: center; margin-bottom: 80px;">
-              <h2 style="font-size: 12px; font-weight: 900; color: var(--brand-accent); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 16px;">The Philosophy</h2>
-              <h3 style="font-size: 42px; font-weight: 900; letter-spacing: -0.05em;">A Shift in Thinking.</h3>
+        <section style="padding: 64px 0; border-bottom: 1px solid var(--border);">
+          <div class="sj-container">
+            <div style="max-width: 760px; margin-bottom: 26px;">
+              <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Framework surface</div>
+              <h2 style="margin: 0 0 10px; font-size: 34px; letter-spacing: -0.05em;">What SwissJS actually includes</h2>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 15px;">
+                These are the framework surfaces visible in swiss-lib right now.
+              </p>
             </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 24px; max-width: 900px; margin: 0 auto;">
-              {[
-                { title: 'No Reconciler', desc: 'React spends CPU cycles diffing virtual trees. SwissJS compiles static and dynamic boundaries at build time, meaning state changes map 1:1 to DOM node updates. No VDOM overhead.' },
-                { title: 'Compiler, not Runtime', desc: 'Swite understands your UIX components before they even hit the browser. It optimizes the mutation paths synchronously, leaving only a feather-weight runtime for proxy traps.' },
-                { title: 'Fenestration, not Portals', desc: 'Building complex ERPs requires isolated execution scopes. The Fenestration Registry creates deterministic viewports with perfect lifecycle teardowns. No memory leaks, ever.' },
-                { title: 'Signals, not Hooks', desc: 'Forget hook rules and dependency arrays. SwissJS state primitives (Signals) follow standard JS logic. If you assign a value, the UI updates. Synchronously.' },
-                { title: 'Strict AST Boundaries', desc: 'UIX is enforced by the compiler. We don\'t allow "loose" components. Every node has a strict contract, ensuring 100% type safety from state to template.' },
-              ].map((pill: any, i: number) => (
-                <div key={pill.title} style="background: var(--bg-page); border: 1px solid var(--border); border-radius: 16px; padding: 40px; display: flex; gap: 40px; align-items: flex-start; transition: transform 0.2s; cursor: default;" onmouseover={(e: any) => e.currentTarget.style.transform = 'translateX(10px)'} onmouseout={(e: any) => e.currentTarget.style.transform = 'none'}>
-                  <div style="font-size: 32px; font-weight: 900; color: var(--border); line-height: 1;">0{i+1}</div>
-                  <div>
-                    <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 12px; color: var(--text-primary);">{pill.title}</h4>
-                    <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.7;">{pill.desc}</p>
-                  </div>
+
+            <div class="sj-three-col" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;">
+              {concepts.map((item) => (
+                <div key={item.title} class="sj-card">
+                  <h3 style="margin: 0 0 10px; font-size: 16px;">{item.title}</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 13px;">{item.body}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── BENCHMARKS ── */}
-        <section style="padding: 100px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-          <div class="container" style="text-align: center;">
-            <div class="grid-3">
-              {[
-                { label: 'Cold Start Time', value: '~38ms', accent: 'var(--brand-accent)' },
-                { label: 'Build Time (1k nodes)', value: '< 0.8s', accent: '#ff79c6' },
-                { label: 'Runtime Weight', value: '4.2kb', accent: '#8be9fd' },
-              ].map((bench: any) => (
-                <div key={bench.label}>
-                  <div style="font-size: 12px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">{bench.label}</div>
-                  <div style={`font-size: 48px; font-weight: 900; color: ${bench.accent}; letter-spacing: -0.05em;`}>{bench.value}</div>
+        <section style="padding: 64px 0;">
+          <div class="sj-container">
+            <div class="sj-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px;">
+              <div>
+                <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Package map</div>
+                <h2 style="margin: 0 0 16px; font-size: 30px; letter-spacing: -0.04em;">SwissJS is a monorepo framework.</h2>
+                <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px;">
+                  The framework repository groups runtime, compiler, router, components, security, utilities, plugins, CLI, CSS tooling, and devtools. That package map matters because application teams consume SwissJS as a system, not as a single runtime import.
+                </p>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                  The current published and in-repo surfaces revolve around core, compiler, router, components, security, utils, and first-party plugins.
+                </p>
+              </div>
+
+              <div class="sj-card">
+                <div style="margin-bottom: 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Primary packages</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  {packages.map((pkg) => (
+                    <div key={pkg} style="font-size: 13px; color: var(--text-secondary);">
+                      <code class="sj-inline-code">{pkg}</code>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── SCOPE SECTION ── */}
-        <section style="padding: 100px 0;">
-          <div class="container">
-            <div class="grid-2" style="background: var(--bg-surface); border-radius: 24px; border: 1px solid var(--border); overflow: hidden; gap: 0;">
-              <div style="padding: 64px; border-right: 1px solid var(--border);">
-                <div style="font-size: 11px; font-weight: 900; color: var(--brand-accent); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 24px;">Who It's For</div>
-                <ul style="list-style: none; display: flex; flex-direction: column; gap: 20px;">
-                  {['Enterprise ERP Dashboards', 'Complex Reactive State Logic', 'High-Performance UI Primitives', 'Teams wanting predictability'].map(item => (
-                    <li key={item} style="display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 600;">
-                      <span style="color: var(--brand-accent);">✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div style="padding: 64px;">
-                <div style="font-size: 11px; font-weight: 900; color: #ff5555; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 24px;">Who It's Not For</div>
-                <ul style="list-style: none; display: flex; flex-direction: column; gap: 20px;">
-                  {['Simple Static Blogs', 'Basic Marketing Sites', 'React Ecosystem Dependents', 'No-compile enthusiasts'].map(item => (
-                    <li key={item} style="display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 600; color: var(--text-muted);">
-                      <span style="color: #ff5555;">✗</span> {item}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>
         </section>
-
-        {/* ── ECOSYSTEM ── */}
-        <section style="padding: 80px 0; background: var(--bg-inverse); color: var(--bg-page);">
-          <div class="container">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px;">
-              <div style="font-size: 18px; font-weight: 900; letter-spacing: -1px;">Ecosystem</div>
-              <div style="display: flex; gap: 48px; flex-wrap: wrap;">
-                {[
-                  { n: 'Swite', d: 'Native DevServer/Compiler' },
-                  { n: 'Alpine ERP', d: 'The reference implementation' },
-                  { n: 'SwissJS Playground', d: 'Browser-based execution' },
-                ].map(item => (
-                  <div key={item.n}>
-                    <div style="font-size: 14px; font-weight: 800; color: #fff;">{item.n}</div>
-                    <div style="font-size: 11px; color: rgba(255,255,255,0.4);">{item.d}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── FOOTER ── */}
-        <footer style="padding: 48px 0; border-top: 1px solid var(--border);">
-          <div class="container" style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted);">
-            <div>© 2026 Kibologic Engineering. MIT License.</div>
-            <div style="display: flex; gap: 24px;">
-              <a href="#" style="color: inherit; text-decoration: none;">GitHub</a>
-              <a href="#" style="color: inherit; text-decoration: none;">Discord</a>
-              <a href="#" style="color: inherit; text-decoration: none;">Status</a>
-            </div>
-          </div>
-        </footer>
       </div>
     );
   }
