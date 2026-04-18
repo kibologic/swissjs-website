@@ -250,23 +250,23 @@ This is the live state for this site.
 
 ## MODULE: Framework Accuracy
 
-- [ ] SwissJS positioning aligned with real codebase
-- [ ] boilerplate claims removed
-- [ ] package ecosystem explained correctly
-- [ ] unsupported claims removed
+- [x] SwissJS positioning aligned with real codebase
+- [x] boilerplate claims removed
+- [x] package ecosystem explained correctly
+- [x] unsupported claims removed
 
 ## MODULE: Information Architecture
 
-- [ ] landing page rewritten for developers
-- [ ] docs surface restructured
-- [ ] navigation aligned to real framework concepts
-- [ ] package map and ecosystem explained
+- [x] landing page rewritten for developers
+- [x] docs surface restructured
+- [x] navigation aligned to real framework concepts
+- [x] package map and ecosystem explained
 
 ## MODULE: Runtime Verification
 
-- [ ] site runs locally via `node dev.mjs`
-- [ ] key routes verified
-- [ ] content audited against `kibologic/swiss-lib`
+- [x] site runs locally via `node dev.mjs`
+- [x] key routes verified
+- [x] content audited against `kibologic/swiss-lib`
 
 ---
 
@@ -323,3 +323,6 @@ If task state changes and this file is not updated, the repo memory is stale.
 * locked workflow rule that every feature branch must PR into `development` and be cleared before the next task
 * PR #1 merged into `development`
 * `feature/directive-setup` cleared locally and remotely after merge
+* rebuilt the SwissJS landing and docs surfaces around the real swiss-lib framework model
+* removed generic framework promo copy and replaced it with runtime, compiler, package, file-model, and Swite integration content
+* verified the rewritten site locally on temporary port `6101`
