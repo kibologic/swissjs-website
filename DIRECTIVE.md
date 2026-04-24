@@ -326,3 +326,8 @@ If task state changes and this file is not updated, the repo memory is stale.
 * rebuilt the SwissJS landing and docs surfaces around the real swiss-lib framework model
 * removed generic framework promo copy and replaced it with runtime, compiler, package, file-model, and Swite integration content
 * verified the rewritten site locally on temporary port `6101`
+
+### 2026-04-24
+
+* styling revamp started (developer-first, less generic)
+* branch: `feature/swissjs-site-style-revamp`
