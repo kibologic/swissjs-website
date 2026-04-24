@@ -3,13 +3,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, readFileSync } from 'node:fs';
 import { SwiteServer } from '@kibologic/swite';
+import { resolvePort } from '../registry/resolve.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const DEFAULT_PORT = resolvePort('swissjs-website', 'frontend_port', 'development', 6001);
+const PORT = parseInt(process.env.PORT || String(DEFAULT_PORT), 10);
 
 const server = new SwiteServer({
   root: path.resolve(__dirname, 'app'),
   publicDir: 'public',
-  port: parseInt(process.env.PORT || '6001', 10),
+  port: PORT,
   host: '0.0.0.0',
   open: false,
 });
@@ -43,4 +47,4 @@ server.app.use((req, res, next) => {
 });
 
 await server.start();
-console.log('[swissjs-website] running on http://localhost:6001');
+console.log(`[swissjs-website] running on http://localhost:${PORT}`);
