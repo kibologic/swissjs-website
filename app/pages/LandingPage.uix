@@ -1,74 +1,307 @@
 import { SwissComponent } from '@kibologic/core';
-import { Shell } from '../components/Shell.uix';
 
 component LandingPage {
   props = {};
 
-  code(lines: string[]) {
-    return (
-      <div class="sj-code">
-        <pre>{lines.join('\n')}</pre>
-      </div>
-    );
+  state { let theme: 'light' | 'dark' = 'dark'; }
+
+  mounted() {
+    const saved = localStorage.getItem('swiss-theme') as 'light' | 'dark' | null;
+    this.theme = saved || 'dark';
+    document.documentElement.setAttribute('data-theme', this.theme);
+
+    if (!document.getElementById('swiss-landing-styles')) {
+      const s = document.createElement('style');
+      s.id = 'swiss-landing-styles';
+      s.textContent = `
+        :root {
+          --sj-accent: #2674d9;
+          --sj-accent-strong: #1559ae;
+          --sj-accent-soft: rgba(38, 116, 217, 0.12);
+        }
+
+        [data-theme="light"] {
+          --bg-page: #fcfdff;
+          --bg-panel: #f2f5fa;
+          --bg-code: #121721;
+          --text-primary: #152033;
+          --text-secondary: #4d5a70;
+          --text-muted: #7a8599;
+          --border: #d7dfea;
+          --border-strong: #c0cbda;
+        }
+
+        [data-theme="dark"] {
+          --bg-page: #0b1220;
+          --bg-panel: #131c2d;
+          --bg-code: #0a1020;
+          --text-primary: #f1f5fb;
+          --text-secondary: #bac6d8;
+          --text-muted: #8090a8;
+          --border: #223047;
+          --border-strong: #30415c;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+          background: var(--bg-page);
+          color: var(--text-primary);
+          font-family: "JetBrains Mono", "Fira Code", monospace;
+          line-height: 1.6;
+        }
+
+        .sj-container { max-width: 1200px; margin: 0 auto; padding: 0 22px; }
+        .sj-link { color: var(--text-secondary); text-decoration: none; }
+        .sj-link:hover { color: var(--text-primary); }
+        .sj-button-primary {
+          background: var(--sj-accent);
+          color: #fff;
+          border: none;
+          border-radius: 999px;
+          padding: 14px 18px;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 800;
+          cursor: pointer;
+          text-decoration: none;
+        }
+        .sj-button-secondary {
+          background: transparent;
+          color: var(--text-primary);
+          border: 1px solid var(--border-strong);
+          border-radius: 999px;
+          padding: 14px 18px;
+          font: inherit;
+          font-size: 13px;
+          font-weight: 800;
+          cursor: pointer;
+          text-decoration: none;
+        }
+        .sj-card {
+          background: var(--bg-panel);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 24px;
+        }
+        .sj-inline-code {
+          font-family: inherit;
+          background: var(--bg-panel);
+          border: 1px solid var(--border);
+          border-radius: 4px;
+          padding: 2px 6px;
+          font-size: 0.92em;
+        }
+        .sj-code {
+          background: var(--bg-code);
+          color: #dde7ff;
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 18px 20px;
+          overflow-x: auto;
+          font-size: 13px;
+          line-height: 1.7;
+        }
+
+        @media (max-width: 960px) {
+          .sj-hero-grid, .sj-two-col, .sj-three-col { grid-template-columns: 1fr !important; }
+        }
+      `;
+      document.head.appendChild(s);
+    }
+  }
+
+  toggleTheme() {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', this.theme);
+    localStorage.setItem('swiss-theme', this.theme);
+    this.scheduleUpdate?.();
   }
 
   render() {
+    const packages = [
+      '@kibologic/core',
+      '@kibologic/compiler',
+      '@kibologic/router',
+      '@kibologic/components',
+      '@kibologic/security',
+      '@kibologic/utils',
+      '@kibologic/plugin-file-router',
+      '@kibologic/plugin-web-storage'
+    ];
+
+    const concepts = [
+      {
+        title: '.ui and .uix',
+        body: 'SwissJS uses custom source formats. .ui is for TypeScript logic, utilities, and framework source. .uix is the UI-facing TypeScript plus JSX layer.'
+      },
+      {
+        title: 'Runtime',
+        body: 'The core runtime exports SwissApp, component APIs, reactivity, context, renderer, security, devtools bridges, fenestration, and framework-level utilities.'
+      },
+      {
+        title: 'Compiler',
+        body: 'The compiler preprocesses Swiss syntax, processes imports, and transforms JSX for .uix and UI render paths before code reaches the browser.'
+      },
+      {
+        title: 'Packages',
+        body: 'SwissJS is not a single runtime package. It is a package ecosystem with runtime, router, compiler, plugins, components, security, and utilities.'
+      },
+      {
+        title: 'Swite',
+        body: 'SwissJS is developed and served with Swite. The framework and its dev server are designed together, not bolted together after the fact.'
+      },
+      {
+        title: 'Framework Use',
+        body: 'Kibologic applications like Alpine ERP Core consume SwissJS as an application framework, not as a toy component runtime.'
+      }
+    ];
+
     return (
-      <Shell activeRoute="/">
-        <div class="sj-hero">
-          <h1 class="sj-h1">SwissJS is a runtime + compiler framework with a real package ecosystem.</h1>
-          <p class="sj-lede">
-            SwissJS is developed in <span class="sj-inline">kibologic/swiss-lib</span> and served in apps via <span class="sj-inline">Swite</span>.
-            The source model is <span class="sj-inline">.ui</span> and <span class="sj-inline">.uix</span>, compiled before execution.
-          </p>
-        </div>
-
-        <div class="sj-content">
-          <div class="sj-grid">
-            <div class="sj-card">
-              <h3>Source files</h3>
-              <p><span class="sj-inline">.ui</span> for TypeScript logic/utilities; <span class="sj-inline">.uix</span> for UI-facing TypeScript + JSX components.</p>
-            </div>
-            <div class="sj-card">
-              <h3>Compiler</h3>
-              <p>Transforms SwissJS formats and JSX into browser-runnable JS. Import processing and framework wiring happens here.</p>
-            </div>
-            <div class="sj-card">
-              <h3>Runtime</h3>
-              <p>Component API, renderer integration, context, reactivity, security surfaces, and app bootstrapping live in runtime packages.</p>
-            </div>
-            <div class="sj-card">
-              <h3>Tooling</h3>
-              <p>Swite is the normal dev/build server surface for SwissJS apps, not an afterthought bundler wrapper.</p>
+      <div style="min-height: 100vh; background: var(--bg-page); color: var(--text-primary);">
+        <nav style="height: 64px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg-page); z-index: 50;">
+          <div class="sj-container" style="height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-size: 18px; font-weight: 900;">
+              <span style="width: 18px; height: 18px; background: var(--sj-accent); border-radius: 5px; display: inline-block;"></span>
+              SwissJS
+            </a>
+            <div style="display: flex; align-items: center; gap: 18px;">
+              <a href="/docs" class="sj-link" style="font-size: 12px; font-weight: 700;">Docs</a>
+              <a href="https://github.com/kibologic/swiss-lib" target="_blank" class="sj-link" style="font-size: 12px; font-weight: 700;">GitHub</a>
+              <button
+                type="button"
+                onclick={() => this.toggleTheme()}
+                style="background: none; border: 1px solid var(--border); border-radius: 999px; color: var(--text-secondary); cursor: pointer; font: inherit; padding: 7px 12px; font-size: 11px; font-weight: 800;"
+              >
+                {this.theme === 'light' ? 'DARK' : 'LIGHT'}
+              </button>
             </div>
           </div>
+        </nav>
 
-          <div style="margin-top: 18px;">
-            {this.code([
-              '// Counter.uix',
-              "import { SwissComponent } from '@kibologic/core';",
-              '',
-              'component Counter {',
-              '  state { let count = 0; }',
-              '',
-              '  render() {',
-              '    return (',
-              '      <button onclick={() => { count++; }}>',
-              '        Count: {count}',
-              '      </button>',
-              '    );',
-              '  }',
-              '}',
-            ])}
-          </div>
+        <header style="padding: 78px 0 54px; border-bottom: 1px solid var(--border);">
+          <div class="sj-container">
+            <div class="sj-hero-grid" style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 34px; align-items: start;">
+              <div>
+                <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em;">
+                  Framework
+                </div>
+                <h1 style="margin: 0 0 18px; font-size: clamp(42px, 7vw, 74px); line-height: 0.95; letter-spacing: -0.06em;">
+                  SwissJS is a framework
+                  <br />
+                  runtime plus compiler
+                  <br />
+                  ecosystem.
+                </h1>
+                <p style="max-width: 760px; margin: 0 0 24px; font-size: 16px; color: var(--text-secondary);">
+                  It is not just a component library. SwissJS includes a runtime, compiler, router, plugins, security layer, devtools surfaces,
+                  custom source formats, and a package ecosystem used by real Kibologic applications.
+                </p>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+                  <a href="/docs" class="sj-button-primary">Read the framework docs</a>
+                  <a href="/docs/packages" class="sj-button-secondary">See the package map</a>
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted);">
+                  Source of truth: <code class="sj-inline-code">kibologic/swiss-lib</code>. SwissJS apps are served and developed with <code class="sj-inline-code">Swite</code>.
+                </div>
+              </div>
 
-          <div class="sj-footer">
-            <div>Start in <a class="sj-link" href="/docs">Docs</a>, then read <a class="sj-link" href="/docs/packages">Packages</a>.</div>
-            <div style="font-family: var(--font-mono);">SwissJS + Swite</div>
+              <div class="sj-card">
+                <div style="margin-bottom: 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">File model</div>
+                <div class="sj-code" style="margin-bottom: 18px;">
+{`// Counter.uix
+import { SwissComponent } from '@kibologic/core';
+
+component Counter {
+  state { let count = 0; }
+
+  render() {
+    return (
+      <button onclick={() => { count++; }}>
+        Count: {count}
+      </button>
+    );
+  }
+}`}
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px; color: var(--text-secondary); font-size: 13px;">
+                  <div><code class="sj-inline-code">.ui</code> for logic, utilities, types, and framework source.</div>
+                  <div><code class="sj-inline-code">.uix</code> for UI-facing TypeScript + JSX component files.</div>
+                  <div>The compiler transforms both through SwissJS-specific syntax and import handling.</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </Shell>
+        </header>
+
+        <section style="padding: 52px 0; border-bottom: 1px solid var(--border);">
+          <div class="sj-container">
+            <div class="sj-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
+              <div class="sj-card">
+                <div style="margin-bottom: 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">What this site is for</div>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                  This site explains the actual framework model: runtime primitives, file model, compiler path, package surfaces, and how SwissJS is used in Kibologic apps.
+                </p>
+              </div>
+              <div class="sj-card">
+                <div style="margin-bottom: 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">What this site avoids</div>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                  Generic framework hype, invented benchmarks, and empty comparisons. The site is documentation-first and tied to the real codebase.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="padding: 64px 0; border-bottom: 1px solid var(--border);">
+          <div class="sj-container">
+            <div style="max-width: 760px; margin-bottom: 26px;">
+              <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Framework surface</div>
+              <h2 style="margin: 0 0 10px; font-size: 34px; letter-spacing: -0.05em;">What SwissJS actually includes</h2>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 15px;">
+                These are the framework surfaces visible in swiss-lib right now.
+              </p>
+            </div>
+
+            <div class="sj-three-col" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;">
+              {concepts.map((item) => (
+                <div key={item.title} class="sj-card">
+                  <h3 style="margin: 0 0 10px; font-size: 16px;">{item.title}</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 13px;">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section style="padding: 64px 0;">
+          <div class="sj-container">
+            <div class="sj-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px;">
+              <div>
+                <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Package map</div>
+                <h2 style="margin: 0 0 16px; font-size: 30px; letter-spacing: -0.04em;">SwissJS is a monorepo framework.</h2>
+                <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px;">
+                  The framework repository groups runtime, compiler, router, components, security, utilities, plugins, CLI, CSS tooling, and devtools. That package map matters because application teams consume SwissJS as a system, not as a single runtime import.
+                </p>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                  The current published and in-repo surfaces revolve around core, compiler, router, components, security, utils, and first-party plugins.
+                </p>
+              </div>
+
+              <div class="sj-card">
+                <div style="margin-bottom: 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Primary packages</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  {packages.map((pkg) => (
+                    <div key={pkg} style="font-size: 13px; color: var(--text-secondary);">
+                      <code class="sj-inline-code">{pkg}</code>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     );
   }
 }
-
