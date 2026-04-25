@@ -329,5 +329,6 @@ If task state changes and this file is not updated, the repo memory is stale.
 
 ### 2026-04-25
 
-* content accuracy pass started (add missing concept pages grounded in swiss-lib; no styling changes)
+* content accuracy pass completed (add missing concept pages grounded in swiss-lib; no styling changes)
 * branch: `feature/swissjs-content-accuracy`
+* PR #7 merged into `development`, branch deleted
