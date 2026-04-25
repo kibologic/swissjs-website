@@ -176,6 +176,58 @@ SwissApp.mount(Counter, document.querySelector('#app')!);`}
     );
   }
 
+  renderSignals() {
+    return this.renderSection(
+      'Signals',
+      'Signals are standalone reactive values in SwissJS core. Reads can be tracked in effect contexts and can optionally be capability-guarded.',
+      [
+        <div class="sj-doc-card" key="signals-1">
+          <h3 style="margin: 0 0 10px; font-size: 16px;">Signal basics</h3>
+          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+            A <code class="sj-inline-code">Signal</code> holds a value and notifies subscribers on change. Updates can be direct assignment or via an updater function.
+          </p>
+        </div>,
+        <div class="sj-code-block" key="signals-code">
+{`import { Signal } from '@kibologic/core';
+
+const count$ = new Signal(0, { name: 'count' });
+count$.subscribe(() => console.log(count$.value));
+
+count$.value = 1;
+count$.update((v) => v + 1);`}
+        </div>
+      ]
+    );
+  }
+
+  renderRouter() {
+    return this.renderSection(
+      'Router',
+      'SwissJS includes a first-party router package with route matching, nested routes, loaders, and SSR-related surfaces.',
+      [
+        <div class="sj-doc-card" key="router-1">
+          <h3 style="margin: 0 0 10px; font-size: 16px;">Route tree + matching</h3>
+          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+            Routes are declared as a tree. Matching returns a list of matches for nested routes; loaders can run for matched routes.
+          </p>
+        </div>,
+        <div class="sj-code-block" key="router-code">
+{`import { createRouter } from '@kibologic/router';
+import { Home } from './pages/Home.uix';
+
+const router = createRouter({
+  mode: 'history',
+  routes: [{ path: '/', component: Home }],
+});
+
+router.beforeEach(async (to, from) => {
+  // return false to block, or return '/login' to redirect
+});`}
+        </div>
+      ]
+    );
+  }
+
   renderApplications() {
     return this.renderSection(
       'Use Cases',
@@ -213,6 +265,8 @@ SwissApp.mount(Counter, document.querySelector('#app')!);`}
     if (this.route === '/docs/files') return this.renderFiles();
     if (this.route === '/docs/runtime') return this.renderRuntime();
     if (this.route === '/docs/compiler') return this.renderCompiler();
+    if (this.route === '/docs/signals') return this.renderSignals();
+    if (this.route === '/docs/router') return this.renderRouter();
     if (this.route === '/docs/packages') return this.renderPackages();
     if (this.route === '/docs/swite') return this.renderSwite();
     if (this.route === '/docs/applications') return this.renderApplications();

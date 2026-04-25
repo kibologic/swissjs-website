@@ -139,7 +139,9 @@ component Shell {
         links: [
           { name: 'File Types', path: '/docs/files', note: '.ui and .uix' },
           { name: 'Runtime', path: '/docs/runtime', note: 'SwissApp, components, context, reactivity' },
-          { name: 'Compiler', path: '/docs/compiler', note: 'Swiss syntax and JSX transforms' }
+          { name: 'Compiler', path: '/docs/compiler', note: 'Swiss syntax and JSX transforms' },
+          { name: 'Signals', path: '/docs/signals', note: 'Standalone reactivity primitives' },
+          { name: 'Router', path: '/docs/router', note: 'Client routing + SSR surfaces' }
         ]
       },
       {
