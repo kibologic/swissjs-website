@@ -332,3 +332,7 @@ If task state changes and this file is not updated, the repo memory is stale.
 * content accuracy pass completed (add missing concept pages grounded in swiss-lib; no styling changes)
 * branch: `feature/swissjs-content-accuracy`
 * PR #7 merged into `development`, branch deleted
+
+### 2026-05-18
+
+* set upstream tracking for `development` branch (`git push -u origin development`) — branch existed locally and on remote but had no tracking configured
