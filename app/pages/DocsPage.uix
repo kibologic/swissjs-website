@@ -78,7 +78,7 @@ component DocsPage {
         </div>,
         <div class="sj-code-block" key="files-code">
 {`// index.ui
-import { SwissApp } from '@kibologic/core';
+import { SwissApp } from '@swissjs/core';
 import { Counter } from './Counter.uix';
 
 SwissApp.mount(Counter, document.querySelector('#app')!);`}
@@ -188,7 +188,7 @@ SwissApp.mount(Counter, document.querySelector('#app')!);`}
           </p>
         </div>,
         <div class="sj-code-block" key="signals-code">
-{`import { Signal } from '@kibologic/core';
+{`import { Signal } from '@swissjs/core';
 
 const count$ = new Signal(0, { name: 'count' });
 count$.subscribe(() => console.log(count$.value));
@@ -212,7 +212,7 @@ count$.update((v) => v + 1);`}
           </p>
         </div>,
         <div class="sj-code-block" key="router-code">
-{`import { createRouter } from '@kibologic/router';
+{`import { createRouter } from '@swissjs/router';
 import { Home } from './pages/Home.uix';
 
 const router = createRouter({
@@ -233,12 +233,12 @@ router.beforeEach(async (to, from) => {
       'Use Cases',
       'SwissJS is used inside Kibologic application repos, not only in isolated demos.',
       [
-        <div class="sj-doc-card" key="apps-1">
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            Alpine ERP Core is one of the clearest references. It uses SwissJS for the frontend application layer and Swite as the local server surface.
+        <div class=”sj-doc-card” key=”apps-1”>
+          <p style=”margin: 0; color: var(--text-secondary); font-size: 14px;”>
+            Alpine ERP Core is one of the clearest references. It is <strong>public on GitHub</strong> at <code class=”sj-inline-code”>kibologic/alpine-erp-core</code> and uses SwissJS for the frontend application layer with Swite as the local server surface.
           </p>
         </div>,
-        <div class="sj-doc-note" key="apps-2">
+        <div class=”sj-doc-note” key=”apps-2”>
           The correct framing for SwissJS is “framework used in real Kibologic applications,” not “concept site with generic UI claims.”
         </div>
       ]
