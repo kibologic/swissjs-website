@@ -1,0 +1,47 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component UIXFilesPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/uix-files">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">.uix Component Files</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              <code class="sj-inline-code">.uix</code> files define SwissJS components. Each file contains one component and the imports it needs. This is where the vast majority of your application code lives.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">File structure</h2>
+              <div class="sj-code-block">{"// 1. Imports (SwissComponent is always required)\nimport { SwissComponent } from '@kibologic/core';\nimport { OtherComponent } from './OtherComponent.uix';\n\n// 2. Component declaration\ncomponent MyComponent {\n\n  // 3. Props (optional)\n  props = { value: string; };\n\n  // 4. State block (optional)\n  state { let count: number = 0; }\n\n  // 5. Lifecycle hooks (optional)\n  mounted() { /* ... */ }\n  updated() { /* ... */ }\n  destroyed() { /* ... */ }\n\n  // 6. Helper methods (optional, prefix with _)\n  _formatValue(): string {\n    return this.props.value.trim();\n  }\n\n  // 7. render() — required, must return JSX\n  render() {\n    return (\n      <div>{this._formatValue()}</div>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">One component per file</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                Each <code class="sj-inline-code">.uix</code> file exports exactly one component. The component name must match the file name (PascalCase). The SwissJS compiler uses the file name to resolve imports.
+              </p>
+              <div class="sj-doc-note">
+                <strong>File:</strong> <code class="sj-inline-code">UserCard.uix</code><br />
+                <strong>Component:</strong> <code class="sj-inline-code">component UserCard</code><br />
+                <strong>Import:</strong> <code class="sj-inline-code">{"import { UserCard } from './UserCard.uix';"}</code>
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">TypeScript support</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                <code class="sj-inline-code">.uix</code> files support full TypeScript. Type annotations in props, state, and method signatures are compiled and erased at build time. The only restriction: no <code class="sj-inline-code">{"Set<T>"}</code> or complex generic expressions at module level — place those inside methods.
+              </p>
+              <div class="sj-code-block">{"component DataList {\n  props = {\n    items: Array<{ id: number; label: string }>;\n    onSelect: (id: number) => void;\n  };\n\n  _getIds(): number[] {\n    // generics inside methods are fine\n    return this.props.items.map((item: { id: number; label: string }) => item.id);\n  }\n\n  render() {\n    return (\n      <ul>\n        {this.props.items.map(item => (\n          <li key={String(item.id)} onclick={() => this.props.onSelect(item.id)}>\n            {item.label}\n          </li>\n        ))}\n      </ul>\n    );\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

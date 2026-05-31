@@ -1,0 +1,54 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component DeploymentGuidePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/deployment">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Deployment</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS builds to a static bundle — HTML, JS, and CSS files in <code class="sj-inline-code">dist/</code>. Deploy to any static host, CDN, or serve with a reverse proxy in front of your API.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Build</h2>
+              <div class="sj-code-block">{"pnpm build\n# Output: dist/\n#   index.html\n#   main.js          (compiled, tree-shaken, minified)\n#   main.css         (if using @swissjs/css)\n#   assets/          (copied from public/)"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Platform guides</h2>
+              {[
+                { name: 'Vercel', steps: ['Add vercel.json with rewrites for SPA routing', 'Set output directory to dist', 'Push — Vercel detects the build command from package.json'] },
+                { name: 'Netlify', steps: ['Add _redirects file to public/: /* /index.html 200', 'Set publish directory to dist', 'Set build command to pnpm build'] },
+                { name: 'Nginx (self-hosted)', steps: ['Copy dist/ to /var/www/html', 'Add try_files $uri $uri/ /index.html to the server block', 'Proxy /api to your backend process'] },
+                { name: 'Cloudflare Pages', steps: ['Set build command: pnpm build', 'Set output directory: dist', 'Enable SPA mode in Pages settings'] },
+              ].map(platform => (
+                <div key={platform.name} class="sj-doc-card" style="padding: 16px; margin-bottom: 12px;">
+                  <h3 style="margin: 0 0 10px; font-size: 14px; font-weight: 800;">{platform.name}</h3>
+                  <ol style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px;">
+                    {platform.steps.map((step, i) => (
+                      <li key={String(i)} style="font-size: 13px; color: var(--text-secondary);">{step}</li>
+                    ))}
+                  </ol>
+                </div>
+              ))}
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">SPA routing — the critical step</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                SwissJS uses client-side routing. Every URL must return <code class="sj-inline-code">index.html</code> — the JS then reads the URL and renders the correct page. Without this rewrite, refreshing any route other than <code class="sj-inline-code">/</code> returns a 404.
+              </p>
+              <div class="sj-code-block">{"# Nginx server block\nlocation / {\n  try_files $uri $uri/ /index.html;\n}\n\n# Separate block for API — proxy to backend\nlocation /api {\n  proxy_pass http://localhost:8000;\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

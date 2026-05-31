@@ -1,0 +1,42 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component AuthGuidePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/auth">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Authentication</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS handles authentication at the application layer — not in the framework. This guide shows the standard pattern: a global auth Signal, protected route guards, and session persistence.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Global auth state</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Define an auth store in a shared file. Any component can import and read it.</p>
+              <div class="sj-code-block">{"// app/stores/auth.ui\nimport { Signal } from '@kibologic/core';\n\nexport const session$ = new Signal<{\n  userId: string;\n  email: string;\n  role: string;\n} | null>(null);\n\nexport async function login(email: string, password: string): Promise<void> {\n  const res = await fetch('/api/auth/login', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ email, password }),\n    credentials: 'include',\n  });\n  if (!res.ok) throw new Error('Invalid credentials');\n  session$.value = await res.json();\n}\n\nexport async function logout(): Promise<void> {\n  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });\n  session$.value = null;\n}\n\nexport async function restoreSession(): Promise<void> {\n  try {\n    const res = await fetch('/api/auth/me', { credentials: 'include' });\n    if (res.ok) session$.value = await res.json();\n  } catch { /* not logged in */ }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Protected route guard</h2>
+              <div class="sj-code-block">{"import { session$ } from './stores/auth.ui';\n\n// In Router render():\nif (r.startsWith('/dashboard')) {\n  if (!session$.value) {\n    // redirect to login\n    history.replaceState(null, '', '/login');\n    route$.value = '/login';\n    return <LoginPage />;\n  }\n  return <DashboardPage />;\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Login form component</h2>
+              <div class="sj-code-block">{"import { login } from '../stores/auth.ui';\n\ncomponent LoginPage {\n  state {\n    let email: string = '';\n    let password: string = '';\n    let error: string = '';\n    let loading: boolean = false;\n  }\n\n  async _submit(e: any) {\n    e.preventDefault();\n    this.loading = true;\n    this.error = '';\n    try {\n      await login(this.email, this.password);\n    } catch (err: any) {\n      this.error = err.message;\n    } finally {\n      this.loading = false;\n    }\n  }\n\n  render() {\n    return (\n      <form onsubmit={(e: any) => this._submit(e)} style=\"max-width:360px;margin:80px auto;display:flex;flex-direction:column;gap:12px;\">\n        <h1 style=\"margin:0 0 8px;\">Sign in</h1>\n        {this.error && <p style=\"color:red;margin:0;\">{this.error}</p>}\n        <input type=\"email\" placeholder=\"Email\" value={this.email}\n          oninput={(e: any) => { this.email = e.target.value; }}\n          style=\"padding:10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-panel);color:var(--text-primary);\" />\n        <input type=\"password\" placeholder=\"Password\" value={this.password}\n          oninput={(e: any) => { this.password = e.target.value; }}\n          style=\"padding:10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-panel);color:var(--text-primary);\" />\n        <button type=\"submit\" disabled={this.loading}\n          style=\"padding:10px;background:var(--sj-accent);color:#fff;border:none;border-radius:6px;font:inherit;cursor:pointer;font-weight:700;\">\n          {this.loading ? 'Signing in...' : 'Sign in'}\n        </button>\n      </form>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-note">
+              Use <code class="sj-inline-code">credentials: 'include'</code> on every fetch call when your API uses httpOnly cookies for session tokens. Never store JWT tokens in localStorage.
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

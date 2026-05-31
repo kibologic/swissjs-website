@@ -1,0 +1,52 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component APICompilerRef {
+  render() {
+    return (
+      <Shell activeRoute="/docs/api/compiler">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">API Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">@swissjs/compiler</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              The SwissJS compiler transforms <code class="sj-inline-code">.ui</code> and <code class="sj-inline-code">.uix</code> files into standard JavaScript. It handles the <code class="sj-inline-code">component</code> keyword, JSX, the <code class="sj-inline-code">state</code> block, and import rewriting.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">What the compiler does</h2>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                {[
+                  { step: '1. component → class', detail: 'Transforms component Foo {} into class Foo extends SwissComponent {}' },
+                  { step: '2. state block → reactive props', detail: 'Compiles let x: T = v into getter/setter pairs wired to the reactivity system' },
+                  { step: '3. JSX → createElement', detail: 'Transforms JSX syntax to createElement calls (same as React JSX transform)' },
+                  { step: '4. Import rewriting', detail: 'Rewrites bare specifiers to CDN URLs or node_modules paths for browser loading' },
+                  { step: '5. TypeScript erasure', detail: 'Strips type annotations via the TypeScript compiler API' },
+                ].map(row => (
+                  <div key={row.step} style="padding: 12px 14px; background: var(--bg-page); border: 1px solid var(--border); border-radius: 6px;">
+                    <div style="font-size: 12px; font-weight: 800; color: var(--sj-accent); margin-bottom: 4px;">{row.step}</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">{row.detail}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Compiled output example</h2>
+              <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">Input (.uix):</p>
+              <div class="sj-code-block">{"component Counter {\n  state { let count: number = 0; }\n  render() {\n    return <button onclick={() => this.count++}>{this.count}</button>;\n  }\n}"}</div>
+              <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">Output (compiled JS):</p>
+              <div class="sj-code-block">{"class Counter extends SwissComponent {\n  get count() { return this._state.count; }\n  set count(v) { this._state.count = v; this.scheduleUpdate(); }\n  constructor() { super(); this._state = { count: 0 }; }\n  render() {\n    return createElement('button', { onclick: () => this.count++ }, this.count);\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-warning">
+              Never use <code class="sj-inline-code">{"Set<T>"}</code> generics or function declarations at module level in <code class="sj-inline-code">.uix</code> files — the compiler's regex-based transforms will misparse them. Place all complex TypeScript inside component methods.
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

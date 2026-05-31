@@ -73,6 +73,7 @@ component Shell {
           overflow-x: auto;
           font-size: 13px;
           line-height: 1.7;
+          white-space: pre;
         }
         .sj-doc-card {
           background: var(--bg-panel);
@@ -86,7 +87,24 @@ component Shell {
           padding: 16px 18px;
           border-radius: 0 8px 8px 0;
           color: var(--text-secondary);
+          font-size: 14px;
         }
+        .sj-doc-warning {
+          border-left: 4px solid #f59e0b;
+          background: rgba(245, 158, 11, 0.1);
+          padding: 16px 18px;
+          border-radius: 0 8px 8px 0;
+          color: var(--text-secondary);
+          font-size: 14px;
+        }
+        .sj-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .sj-table th {
+          text-align: left; padding: 10px 14px;
+          background: var(--bg-panel); border-bottom: 2px solid var(--border);
+          color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        .sj-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+        .sj-table tr:last-child td { border-bottom: none; }
 
         @media (max-width: 980px) {
           .sj-shell-frame { display: block !important; }
@@ -111,67 +129,108 @@ component Shell {
     this.scheduleUpdate?.();
   }
 
-  renderLink(link: { name: string; path: string; note?: string }) {
+  renderLink(link: { name: string; path: string }) {
     const active = this.props.activeRoute === link.path;
     return (
       <a
         href={link.path}
         class={active ? 'sj-shell-link sj-shell-link-active' : 'sj-shell-link'}
-        style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 12px;"
+        style="display: block; font-size: 12px; font-weight: 600; padding: 4px 0; margin-bottom: 2px;"
       >
         {link.name}
-        {link.note ? <span style="display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px;">{link.note}</span> : null}
       </a>
     );
   }
 
   render() {
     const sections = [
-      {
-        title: 'Overview',
-        links: [
-          { name: 'Introduction', path: '/docs', note: 'What SwissJS is' },
-          { name: 'Framework Model', path: '/docs/model', note: 'Runtime plus compiler' }
-        ]
-      },
-      {
-        title: 'Core Concepts',
-        links: [
-          { name: 'File Types', path: '/docs/files', note: '.ui and .uix' },
-          { name: 'Runtime', path: '/docs/runtime', note: 'SwissApp, components, context, reactivity' },
-          { name: 'Compiler', path: '/docs/compiler', note: 'Swiss syntax and JSX transforms' },
-          { name: 'Signals', path: '/docs/signals', note: 'Standalone reactivity primitives' },
-          { name: 'Router', path: '/docs/router', note: 'Client routing + SSR surfaces' }
-        ]
-      },
-      {
-        title: 'Ecosystem',
-        links: [
-          { name: 'Packages', path: '/docs/packages', note: 'Core, router, plugins, security, utils' },
-          { name: 'Swite Integration', path: '/docs/swite', note: 'How apps are served and built' },
-          { name: 'Use Cases', path: '/docs/applications', note: 'How Kibologic uses SwissJS' }
-        ]
-      }
+      { title: 'Getting Started', links: [
+        { name: 'Introduction', path: '/docs' },
+        { name: 'Installation', path: '/docs/getting-started/installation' },
+        { name: 'Quick Start', path: '/docs/getting-started/quickstart' },
+        { name: 'Project Structure', path: '/docs/getting-started/project-structure' },
+        { name: 'Configuration', path: '/docs/getting-started/configuration' },
+      ]},
+      { title: 'Core Concepts', links: [
+        { name: 'Pages', path: '/docs/core/pages' },
+        { name: 'Layouts', path: '/docs/core/layouts' },
+        { name: 'Components', path: '/docs/core/components' },
+        { name: 'State & Reactivity', path: '/docs/core/state' },
+        { name: 'Rendering', path: '/docs/core/rendering' },
+        { name: 'Lifecycle', path: '/docs/core/lifecycle' },
+      ]},
+      { title: 'Language Reference', links: [
+        { name: '.ui Entry Files', path: '/docs/language/ui-files' },
+        { name: '.uix Component Files', path: '/docs/language/uix-files' },
+        { name: 'Component Syntax', path: '/docs/language/component-syntax' },
+        { name: 'Props', path: '/docs/language/props' },
+        { name: 'State Block', path: '/docs/language/state-block' },
+        { name: 'Computed Values', path: '/docs/language/computed' },
+        { name: 'Lifecycle Hooks', path: '/docs/language/lifecycle-hooks' },
+      ]},
+      { title: 'Guides', links: [
+        { name: 'Authentication', path: '/docs/guides/auth' },
+        { name: 'Database & Backends', path: '/docs/guides/database' },
+        { name: 'Forms & Validation', path: '/docs/guides/forms' },
+        { name: 'Testing', path: '/docs/guides/testing' },
+        { name: 'Performance', path: '/docs/guides/performance' },
+        { name: 'Deployment', path: '/docs/guides/deployment' },
+        { name: 'SEO', path: '/docs/guides/seo' },
+        { name: 'Caching', path: '/docs/guides/caching' },
+      ]},
+      { title: 'API Reference', links: [
+        { name: '@swissjs/core', path: '/docs/api/core' },
+        { name: '@swissjs/router', path: '/docs/api/router' },
+        { name: '@swissjs/css', path: '/docs/api/css' },
+        { name: '@swissjs/security', path: '/docs/api/security' },
+        { name: '@swissjs/compiler', path: '/docs/api/compiler' },
+        { name: 'Plugins', path: '/docs/api/plugins' },
+      ]},
+      { title: 'CLI', links: [
+        { name: 'CLI Overview', path: '/docs/cli/overview' },
+        { name: 'create-swissjs', path: '/docs/cli/create-swissjs' },
+        { name: 'Swite Commands', path: '/docs/cli/swite-commands' },
+        { name: 'Config Reference', path: '/docs/cli/config' },
+      ]},
+      { title: 'Migration', links: [
+        { name: 'From React', path: '/docs/migration/react' },
+        { name: 'From Next.js', path: '/docs/migration/nextjs' },
+        { name: 'From Nuxt', path: '/docs/migration/nuxt' },
+      ]},
+      { title: 'Ecosystem', links: [
+        { name: 'Editor Setup', path: '/docs/ecosystem/editor-setup' },
+        { name: 'Benchmarks', path: '/docs/ecosystem/benchmarks' },
+        { name: 'Showcase', path: '/docs/ecosystem/showcase' },
+        { name: 'Roadmap', path: '/docs/ecosystem/roadmap' },
+        { name: 'Community', path: '/docs/ecosystem/community' },
+      ]},
+      { title: 'Comparisons', links: [
+        { name: 'vs Next.js', path: '/docs/comparisons/vs-nextjs' },
+        { name: 'vs Nuxt', path: '/docs/comparisons/vs-nuxt' },
+        { name: 'vs Svelte', path: '/docs/comparisons/vs-svelte' },
+        { name: 'vs Solid', path: '/docs/comparisons/vs-solid' },
+      ]},
     ];
 
     return (
       <div style="min-height: 100vh; background: var(--bg-page); color: var(--text-primary);">
-        <nav style="height: 64px; border-bottom: 1px solid var(--border); background: var(--bg-page); position: sticky; top: 0; z-index: 50;">
+        <nav style="height: 56px; border-bottom: 1px solid var(--border); background: var(--bg-page); position: sticky; top: 0; z-index: 50;">
           <div style="max-width: 1360px; margin: 0 auto; padding: 0 20px; height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 24px;">
               <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-size: 18px; font-weight: 900;">
                 <span style="width: 18px; height: 18px; background: var(--sj-accent); border-radius: 5px; display: inline-block;"></span>
                 SwissJS
               </a>
-              <div style="font-size: 12px; color: var(--text-muted);">framework runtime, compiler, and package ecosystem</div>
+              <a href="/docs" class="sj-shell-link" style="font-size: 12px; font-weight: 700;">Docs</a>
+              <a href="/docs/ecosystem/benchmarks" class="sj-shell-link" style="font-size: 12px; font-weight: 700;">Benchmarks</a>
+              <a href="/docs/ecosystem/showcase" class="sj-shell-link" style="font-size: 12px; font-weight: 700;">Showcase</a>
             </div>
             <div style="display: flex; align-items: center; gap: 18px;">
-              <a href="/docs" class="sj-shell-link" style="font-size: 12px; font-weight: 700;">Docs</a>
               <a href="https://github.com/kibologic/swiss-lib" target="_blank" class="sj-shell-link" style="font-size: 12px; font-weight: 700;">GitHub</a>
               <button
                 type="button"
                 onclick={() => this.toggleTheme()}
-                style="background: none; border: 1px solid var(--border); border-radius: 999px; color: var(--text-secondary); cursor: pointer; font: inherit; padding: 7px 12px; font-size: 11px; font-weight: 800;"
+                style="background: none; border: 1px solid var(--border); border-radius: 999px; color: var(--text-secondary); cursor: pointer; font: inherit; padding: 6px 12px; font-size: 11px; font-weight: 800;"
               >
                 {this.theme === 'light' ? 'DARK' : 'LIGHT'}
               </button>
@@ -180,11 +239,10 @@ component Shell {
         </nav>
 
         <div class="sj-shell-frame" style="display: flex; max-width: 1360px; margin: 0 auto; width: 100%;">
-          <aside class="sj-shell-sidebar" style="width: 300px; border-right: 1px solid var(--border); padding: 28px 20px 48px; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto;">
-            <div style="margin-bottom: 22px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">Framework Guide</div>
+          <aside class="sj-shell-sidebar" style="width: 260px; border-right: 1px solid var(--border); padding: 24px 16px 48px; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; flex-shrink: 0;">
             {sections.map((section) => (
-              <section key={section.title} style="margin-bottom: 34px;">
-                <h4 style="margin: 0 0 14px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">{section.title}</h4>
+              <section key={section.title} style="margin-bottom: 28px;">
+                <h4 style="margin: 0 0 10px; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 800;">{section.title}</h4>
                 {section.links.map((link) => this.renderLink(link))}
               </section>
             ))}

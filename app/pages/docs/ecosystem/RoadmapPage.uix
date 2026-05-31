@@ -1,0 +1,71 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component RoadmapPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/ecosystem/roadmap">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Ecosystem</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Roadmap</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              What's planned for SwissJS and the Kibologic ecosystem. Items marked shipped are available in the current release.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            {[
+              {
+                phase: 'v0.2 — Current', status: 'shipped',
+                items: [
+                  { done: true, item: '@swissjs/core — component system, Signal, lifecycle' },
+                  { done: true, item: '@swissjs/compiler — .uix/.ui transform pipeline' },
+                  { done: true, item: '@swissjs/swite (Swite) — dev server + HMR + build' },
+                  { done: true, item: '@kibologic/plugin-file-router' },
+                  { done: true, item: 'create-swissjs scaffolding CLI' },
+                  { done: true, item: 'Alpine ERP Core (75% — public on GitHub)' },
+                ]
+              },
+              {
+                phase: 'v0.3 — Planned Q3 2026', status: 'planned',
+                items: [
+                  { done: false, item: 'VS Code extension — syntax highlighting, snippets, goto-def' },
+                  { done: false, item: 'swissjs-playground — browser-based REPL' },
+                  { done: false, item: '@swissjs/ssr — server-side rendering adapter' },
+                  { done: false, item: '@swissjs/testing — component testing utilities' },
+                  { done: false, item: 'Alpine ERP Core 100% completion' },
+                ]
+              },
+              {
+                phase: 'v1.0 — Planned Q4 2026', status: 'future',
+                items: [
+                  { done: false, item: 'Stable public API — no breaking changes' },
+                  { done: false, item: '@kibologic/alpine-ui published to npm' },
+                  { done: false, item: 'Linguist grammar merged — .uix syntax highlighting on GitHub' },
+                  { done: false, item: 'Swite plugin ecosystem (React, Vue, MDX adapters)' },
+                  { done: false, item: 'SwissJS Playground at play.swissjs.org' },
+                ]
+              },
+            ].map(phase => (
+              <div key={phase.phase} class="sj-doc-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                  <h2 style="margin:0;font-size:18px;font-weight:800;">{phase.phase}</h2>
+                  <span style={'padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800;background:' + (phase.status === 'shipped' ? '#16a34a22;color:#16a34a' : phase.status === 'planned' ? '#2563eb22;color:#2563eb' : '#6b728022;color:#6b7280')}>{phase.status}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  {phase.items.map(item => (
+                    <div key={item.item} style="display:flex;gap:10px;font-size:13px;color:var(--text-secondary);align-items:center;">
+                      <span style={'font-size:14px;' + (item.done ? 'color:#16a34a;' : 'color:var(--border-strong);')}>{item.done ? '✓' : '○'}</span>
+                      {item.item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

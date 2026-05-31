@@ -1,0 +1,55 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component VsNuxtPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/comparisons/vs-nuxt">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Comparisons</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">SwissJS vs Nuxt</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Nuxt is a Vue meta-framework with SSR and a large ecosystem. SwissJS is a lightweight TypeScript-first client framework with no Vue dependency.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 28px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Feature comparison</h2>
+              <table class="sj-table">
+                <thead><tr><th>Feature</th><th>SwissJS</th><th>Nuxt 3</th></tr></thead>
+                <tbody>
+                  {[
+                    { f: 'Base language', s: 'Custom .uix TypeScript', n: 'Vue SFC (.vue)' },
+                    { f: 'Rendering', s: 'CSR only', n: 'SSR, SSG, CSR, Edge rendering' },
+                    { f: 'Reactivity', s: 'Fine-grained signal-based', n: 'Vue 3 Proxy-based reactivity' },
+                    { f: 'State management', s: 'Signal (built-in)', n: 'useState + Pinia' },
+                    { f: 'Runtime size', s: '4.2 kB', n: '~35 kB (Vue runtime)' },
+                    { f: 'Auto-imports', s: 'None — explicit imports', n: 'Auto-imports components and composables' },
+                    { f: 'Server utilities', s: 'None (separate backend)', n: 'Nitro server engine' },
+                    { f: 'TypeScript', s: 'Native in .uix files', n: 'Via lang="ts" in SFC' },
+                  ].map(row => (
+                    <tr key={row.f}>
+                      <td style="color:var(--text-secondary);">{row.f}</td>
+                      <td style="color:#22c55e;font-size:12px;">{row.s}</td>
+                      <td style="color:var(--text-muted);font-size:12px;">{row.n}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Template syntax comparison</h2>
+              <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">Nuxt (Vue SFC):</p>
+              <div class="sj-code-block">{"<template>\n  <div>\n    <button @click=\"count++\">{{ count }}</button>\n    <p v-if=\"count > 5\">High count!</p>\n    <ul>\n      <li v-for=\"item in items\" :key=\"item.id\">{{ item.name }}</li>\n    </ul>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nconst count = ref(0);\nconst items = ref<Item[]>([]);\n</script>"}</div>
+              <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">SwissJS (.uix):</p>
+              <div class="sj-code-block">{"component MyComp {\n  state { let count: number = 0; let items: any[] = []; }\n\n  render() {\n    return (\n      <div>\n        <button onclick={() => { this.count++; }}>{this.count}</button>\n        {this.count > 5 && <p>High count!</p>}\n        <ul>\n          {this.items.map((item: any) => (\n            <li key={item.id}>{item.name}</li>\n          ))}\n        </ul>\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

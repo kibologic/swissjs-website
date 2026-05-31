@@ -1,0 +1,61 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CoreRenderingPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/core/rendering">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Core Concepts</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Rendering</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS renders components to the DOM using a fine-grained reactivity model — not a virtual DOM. Only the specific DOM nodes that depend on changed state are updated.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">How rendering works</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                When a component mounts, SwissJS evaluates its <code class="sj-inline-code">render()</code> method and tracks which reactive values were accessed. When any of those values change, only the affected output is re-evaluated — not the entire tree.
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                {[
+                  '1. Component mounts → render() runs → DOM nodes created',
+                  '2. User action mutates this.someState',
+                  '3. SwissJS marks the affected component dirty',
+                  '4. render() runs again for that component only',
+                  '5. DOM is patched in-place — minimal DOM operations',
+                ].map(step => (
+                  <div key={step} style="padding: 10px 14px; background: var(--bg-page); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text-secondary);">{step}</div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Conditional rendering</h2>
+              <div class="sj-code-block">{"// Inline ternary\n{this.loading ? <Spinner /> : <Content />}\n\n// Short-circuit (renders nothing when false)\n{this.error && <ErrorBanner message={this.error} />}\n\n// null renders nothing\n{this.showBanner ? <Banner /> : null}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">List rendering</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Use <code class="sj-inline-code">.map()</code> to render lists. Always provide a <code class="sj-inline-code">key</code> prop for efficient reconciliation.</p>
+              <div class="sj-code-block">{"render() {\n  return (\n    <ul>\n      {this.items.map((item: any) => (\n        <li key={item.id} style=\"padding: 8px 0;\">\n          {item.name}\n        </li>\n      ))}\n    </ul>\n  );\n}"}</div>
+              <div class="sj-doc-warning" style="margin-top: 14px;">
+                Without <code class="sj-inline-code">key</code>, SwissJS cannot identify which list items changed. This causes full list re-renders on any mutation.
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">No virtual DOM</h2>
+              <p style="margin: 0 0 0; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                SwissJS does not use a virtual DOM diffing algorithm. Reactivity is tracked at the expression level. This means there is no overhead from diffing large component trees — updates are surgical. It also means you cannot use patterns that depend on vDOM reconciliation (e.g. key-based animation tricks from React).
+              </p>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

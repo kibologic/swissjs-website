@@ -1,0 +1,68 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component VsSveltePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/comparisons/vs-svelte">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Comparisons</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">SwissJS vs Svelte</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Svelte and SwissJS share the philosophy of compilation over runtime. Both produce minimal bundles. The key differences are in syntax, TypeScript integration, and component model.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 28px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Feature comparison</h2>
+              <table class="sj-table">
+                <thead><tr><th>Feature</th><th>SwissJS</th><th>Svelte 5</th></tr></thead>
+                <tbody>
+                  {[
+                    { f: 'File format', s: '.uix (TypeScript + JSX)', n: '.svelte (SFC with template)' },
+                    { f: 'Reactivity primitive', s: 'state block + Signal', n: 'Runes ($state, $derived, $effect)' },
+                    { f: 'JSX', s: 'Yes — standard JSX', n: 'No — template syntax' },
+                    { f: 'TypeScript', s: 'First-class in .uix', n: 'Via <script lang="ts">' },
+                    { f: 'Runtime size', s: '4.2 kB', n: '5.6 kB' },
+                    { f: 'Build tool', s: 'Swite (purpose-built)', n: 'Vite + vite-plugin-svelte' },
+                    { f: 'SSR', s: 'No (CSR only)', n: 'Yes via SvelteKit' },
+                    { f: 'Animation', s: 'CSS transitions (manual)', n: 'Built-in transition/animate directives' },
+                    { f: 'Component testing', s: 'Playwright recommended', n: '@testing-library/svelte' },
+                  ].map(row => (
+                    <tr key={row.f}>
+                      <td style="color:var(--text-secondary);">{row.f}</td>
+                      <td style="color:#22c55e;font-size:12px;">{row.s}</td>
+                      <td style="color:var(--text-muted);font-size:12px;">{row.n}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Why choose SwissJS over Svelte</h2>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                {[
+                  'You want pure JSX syntax instead of a template language with special directives',
+                  'You want TypeScript as the primary language without a lang="ts" attribute',
+                  'Your team comes from React — the JSX mental model transfers directly',
+                  'You need SwissJS-specific features: component as keyword, state block, Swite toolchain',
+                ].map((item, i) => (
+                  <div key={String(i)} style="display:flex;gap:8px;font-size:13px;color:var(--text-secondary);">
+                    <span style="color:#22c55e;font-weight:800;">✓</span>{item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-note">
+              Both frameworks compile to highly optimised output with tiny runtimes. The choice often comes down to template syntax preference: JSX (SwissJS) vs template directives (Svelte).
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}
