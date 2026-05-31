@@ -6,274 +6,213 @@ component DocsPage {
     route: string
   };
 
-  renderSection(title: string, summary: string, body: unknown) {
-    return (
-      <section>
-        <div style="margin-bottom: 24px;">
-          <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">SwissJS Reference</div>
-          <h1 style="margin: 0 0 10px; font-size: 42px; letter-spacing: -0.05em;">{title}</h1>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 15px; max-width: 820px;">{summary}</p>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 18px;">{body}</div>
-      </section>
-    );
-  }
-
-  renderOverview() {
-    return this.renderSection(
-      'Introduction',
-      'SwissJS is a framework monorepo. Its core package exposes runtime primitives, but the framework also includes a compiler, router, plugins, components, security, utilities, and devtools surfaces.',
-      [
-        <div class="sj-doc-card" key="overview-1">
-          <h3 style="margin: 0 0 10px; font-size: 16px;">Runtime plus compiler</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            SwissJS is not only a runtime API. Its compiler transforms <code class="sj-inline-code">.ui</code> and <code class="sj-inline-code">.uix</code>,
-            and the runtime then provides component, context, reactivity, rendering, security, and devtools surfaces.
-          </p>
-        </div>,
-        <div class="sj-doc-note" key="overview-2">
-          The framework is developed and served with Swite. That relationship is part of the normal SwissJS development model.
-        </div>
-      ]
-    );
-  }
-
-  renderModel() {
-    return this.renderSection(
-      'Framework Model',
-      'SwissJS applications sit on top of a coordinated stack: source files, compiler transforms, runtime primitives, and the Swite development/build surface.',
-      [
-        <div class="sj-doc-card" key="model-1">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Core runtime</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            The runtime exports <code class="sj-inline-code">SwissApp</code>, component APIs, virtual DOM, hooks, runtime services, renderer integration, reactivity, security, devtools bridges, fenestration, and framework utilities.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="model-2">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Package ecosystem</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            Runtime concerns are deliberately split into packages instead of forcing everything into one entrypoint. That package shape is part of how SwissJS should be understood.
-          </p>
-        </div>
-      ]
-    );
-  }
-
-  renderFiles() {
-    return this.renderSection(
-      'File Types',
-      'SwissJS uses two primary source formats: .ui and .uix.',
-      [
-        <div class="sj-doc-card" key="files-ui">
-          <h3 style="margin: 0 0 8px; font-size: 16px;"><code class="sj-inline-code">.ui</code></h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            TypeScript logic, utilities, types, and framework-oriented code. In practice, SwissJS also supports render paths that pass through the JSX transform pipeline for UI-bearing cases.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="files-uix">
-          <h3 style="margin: 0 0 8px; font-size: 16px;"><code class="sj-inline-code">.uix</code></h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            TypeScript plus JSX for UI components. This is the SwissJS equivalent of a framework-specific component source file, and it is transformed by the compiler before execution.
-          </p>
-        </div>,
-        <div class="sj-code-block" key="files-code">
-{`// index.ui
-import { SwissApp } from '@swissjs/core';
-import { Counter } from './Counter.uix';
-
-SwissApp.mount(Counter, document.querySelector('#app')!);`}
-        </div>
-      ]
-    );
-  }
-
-  renderRuntime() {
-    return this.renderSection(
-      'Runtime',
-      'The current core runtime exports much more than a mount function.',
-      [
-        <div class="sj-doc-card" key="runtime-1">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Primary runtime surfaces</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            <code class="sj-inline-code">SwissApp</code>, component APIs, plugins, virtual DOM, hooks, renderer integration, reactivity, security, error handling, devtools, fenestration, and utility helpers are all exported from core.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="runtime-2">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Context</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            SwissJS provides a built-in context system through <code class="sj-inline-code">SwissContext</code> so shared state can move through the tree without hand-wiring it into every component boundary.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="runtime-3">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Reactivity</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            Reactivity is a first-class runtime surface in core, not an add-on package hidden behind the framework.
-          </p>
-        </div>
-      ]
-    );
-  }
-
-  renderCompiler() {
-    return this.renderSection(
-      'Compiler',
-      'The compiler transforms SwissJS source before it reaches the browser.',
-      [
-        <div class="sj-doc-card" key="compiler-1">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Swiss syntax preprocessing</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            The compiler preprocesses Swiss syntax for <code class="sj-inline-code">.ui</code> and <code class="sj-inline-code">.uix</code>, strips JSDoc when needed, and processes imports before later transforms run.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="compiler-2">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">JSX transformation</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            <code class="sj-inline-code">.uix</code> files go through the JSX transform path, and the compiler uses esbuild with a SwissJS-aware import injection path for createElement and Fragment usage.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="compiler-3">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">TypeScript output</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            The compiler also includes TypeScript-to-JavaScript output support for build pipelines, so the framework’s custom source formats can still fit into a complete application build story.
-          </p>
-        </div>
-      ]
-    );
-  }
-
-  renderPackages() {
-    return this.renderSection(
-      'Packages',
-      'The framework repo groups multiple first-party packages.',
-      [
-        <div class="sj-doc-card" key="packages-1">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Primary package set</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            Core, compiler, router, components, security, utils, file-router plugin, and web-storage plugin are the main current surfaces reflected in the repo and directive strategy.
-          </p>
-        </div>,
-        <div class="sj-doc-card" key="packages-2">
-          <h3 style="margin: 0 0 8px; font-size: 16px;">Why this matters</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            The site should help framework users understand which package owns which concern instead of pretending the framework is a single opaque import.
-          </p>
-        </div>
-      ]
-    );
-  }
-
-  renderSwite() {
-    return this.renderSection(
-      'Swite Integration',
-      'SwissJS development assumes Swite as the dev server and build/runtime tooling layer.',
-      [
-        <div class="sj-doc-card" key="swite-1">
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            The swiss-lib README explicitly points framework users to Swite as the development server and build tool. That means Swite is part of the normal SwissJS workflow, not a separate optional marketing sibling.
-          </p>
-        </div>
-      ]
-    );
-  }
-
-  renderSignals() {
-    return this.renderSection(
-      'Signals',
-      'Signals are standalone reactive values in SwissJS core. Reads can be tracked in effect contexts and can optionally be capability-guarded.',
-      [
-        <div class="sj-doc-card" key="signals-1">
-          <h3 style="margin: 0 0 10px; font-size: 16px;">Signal basics</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            A <code class="sj-inline-code">Signal</code> holds a value and notifies subscribers on change. Updates can be direct assignment or via an updater function.
-          </p>
-        </div>,
-        <div class="sj-code-block" key="signals-code">
-{`import { Signal } from '@swissjs/core';
-
-const count$ = new Signal(0, { name: 'count' });
-count$.subscribe(() => console.log(count$.value));
-
-count$.value = 1;
-count$.update((v) => v + 1);`}
-        </div>
-      ]
-    );
-  }
-
-  renderRouter() {
-    return this.renderSection(
-      'Router',
-      'SwissJS includes a first-party router package with route matching, nested routes, loaders, and SSR-related surfaces.',
-      [
-        <div class="sj-doc-card" key="router-1">
-          <h3 style="margin: 0 0 10px; font-size: 16px;">Route tree + matching</h3>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
-            Routes are declared as a tree. Matching returns a list of matches for nested routes; loaders can run for matched routes.
-          </p>
-        </div>,
-        <div class="sj-code-block" key="router-code">
-{`import { createRouter } from '@swissjs/router';
-import { Home } from './pages/Home.uix';
-
-const router = createRouter({
-  mode: 'history',
-  routes: [{ path: '/', component: Home }],
-});
-
-router.beforeEach(async (to, from) => {
-  // return false to block, or return '/login' to redirect
-});`}
-        </div>
-      ]
-    );
-  }
-
-  renderApplications() {
-    return this.renderSection(
-      'Use Cases',
-      'SwissJS is used inside Kibologic application repos, not only in isolated demos.',
-      [
-        <div class=”sj-doc-card” key=”apps-1”>
-          <p style=”margin: 0; color: var(--text-secondary); font-size: 14px;”>
-            Alpine ERP Core is one of the clearest references. It is <strong>public on GitHub</strong> at <code class=”sj-inline-code”>kibologic/alpine-erp-core</code> and uses SwissJS for the frontend application layer with Swite as the local server surface.
-          </p>
-        </div>,
-        <div class=”sj-doc-note” key=”apps-2”>
-          The correct framing for SwissJS is “framework used in real Kibologic applications,” not “concept site with generic UI claims.”
-        </div>
-      ]
-    );
-  }
-
-  renderNotFound() {
-    return (
-      <section>
-        <div style="margin-bottom: 24px;">
-          <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">SwissJS Reference</div>
-          <h1 style="margin: 0 0 10px; font-size: 42px; letter-spacing: -0.05em;">Route not documented yet</h1>
-          <p style="margin: 0; color: var(--text-secondary); font-size: 15px; max-width: 760px;">
-            This route is outside the current SwissJS reference set. Use the sidebar to move through the sections grounded in swiss-lib.
-          </p>
-        </div>
-      </section>
-    );
-  }
-
-  renderContent() {
-    if (this.route === '/docs' || this.route === '/docs/') return this.renderOverview();
-    if (this.route === '/docs/model') return this.renderModel();
-    if (this.route === '/docs/files') return this.renderFiles();
-    if (this.route === '/docs/runtime') return this.renderRuntime();
-    if (this.route === '/docs/compiler') return this.renderCompiler();
-    if (this.route === '/docs/signals') return this.renderSignals();
-    if (this.route === '/docs/router') return this.renderRouter();
-    if (this.route === '/docs/packages') return this.renderPackages();
-    if (this.route === '/docs/swite') return this.renderSwite();
-    if (this.route === '/docs/applications') return this.renderApplications();
-    return this.renderNotFound();
-  }
-
   render() {
-    return <Shell activeRoute={this.route}>{this.renderContent()}</Shell>;
+    const r = this.props.route || '/docs';
+
+    const hd = (s: string) => <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">{s}</div>;
+    const h1 = (s: string) => <h1 style="margin: 0 0 10px; font-size: 42px; letter-spacing: -0.05em;">{s}</h1>;
+    const sm = (s: string) => <p style="margin: 0; color: var(--text-secondary); font-size: 15px; max-width: 820px;">{s}</p>;
+
+    return (
+      <Shell activeRoute={r}>
+        <section>
+          <div style="margin-bottom: 24px;">
+            {hd('SwissJS Reference')}
+            {(r === '/docs' || r === '/docs/') ? h1('Introduction') :
+             r === '/docs/model' ? h1('Framework Model') :
+             r === '/docs/files' ? h1('File Types') :
+             r === '/docs/runtime' ? h1('Runtime') :
+             r === '/docs/compiler' ? h1('Compiler') :
+             r === '/docs/signals' ? h1('Signals') :
+             r === '/docs/router' ? h1('Router') :
+             r === '/docs/packages' ? h1('Packages') :
+             r === '/docs/swite' ? h1('Swite Integration') :
+             r === '/docs/applications' ? h1('Use Cases') :
+             h1('Route not documented yet')}
+            {(r === '/docs' || r === '/docs/') ? sm('SwissJS is a framework monorepo. Its core package exposes runtime primitives, but the framework also includes a compiler, router, plugins, components, security, utilities, and devtools surfaces.') :
+             r === '/docs/model' ? sm('SwissJS applications sit on top of a coordinated stack: source files, compiler transforms, runtime primitives, and the Swite development/build surface.') :
+             r === '/docs/files' ? sm('SwissJS uses two primary source formats: .ui and .uix.') :
+             r === '/docs/runtime' ? sm('The current core runtime exports much more than a mount function.') :
+             r === '/docs/compiler' ? sm('The compiler transforms SwissJS source before it reaches the browser.') :
+             r === '/docs/signals' ? sm('Signals are standalone reactive values in SwissJS core. Reads can be tracked in effect contexts and can optionally be capability-guarded.') :
+             r === '/docs/router' ? sm('SwissJS includes a first-party router package with route matching, nested routes, loaders, and SSR-related surfaces.') :
+             r === '/docs/packages' ? sm('The framework repo groups multiple first-party packages.') :
+             r === '/docs/swite' ? sm('SwissJS development assumes Swite as the dev server and build/runtime tooling layer.') :
+             r === '/docs/applications' ? sm('SwissJS is used inside Kibologic application repos, not only in isolated demos.') :
+             sm('This route is outside the current SwissJS reference set. Use the sidebar to navigate.')}
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 18px;">
+
+            {(r === '/docs' || r === '/docs/') ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 10px; font-size: 16px;">Runtime plus compiler</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    SwissJS is not only a runtime API. Its compiler transforms <code class="sj-inline-code">.ui</code> and <code class="sj-inline-code">.uix</code>,
+                    and the runtime then provides component, context, reactivity, rendering, security, and devtools surfaces.
+                  </p>
+                </div>
+                <div class="sj-doc-note">
+                  The framework is developed and served with Swite. That relationship is part of the normal SwissJS development model.
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/model' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Core runtime</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    The runtime exports <code class="sj-inline-code">SwissApp</code>, component APIs, virtual DOM, hooks, runtime services, renderer integration, reactivity, security, devtools bridges, fenestration, and framework utilities.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Package ecosystem</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    Runtime concerns are deliberately split into packages instead of forcing everything into one entrypoint. That package shape is part of how SwissJS should be understood.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/files' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;"><code class="sj-inline-code">.ui</code></h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    TypeScript logic, utilities, types, and framework-oriented code. Also supports render paths through the JSX transform pipeline for UI-bearing cases.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;"><code class="sj-inline-code">.uix</code></h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    TypeScript plus JSX for UI components. This is the SwissJS equivalent of a framework-specific component source file, transformed by the compiler before execution.
+                  </p>
+                </div>
+                <div class="sj-code-block">
+                  {"// index.ui\nimport { SwissApp } from '@swissjs/core';\nimport { Counter } from './Counter.uix';\n\nSwissApp.mount(Counter, document.querySelector('#app')!);"}
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/runtime' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Primary runtime surfaces</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    <code class="sj-inline-code">SwissApp</code>, component APIs, plugins, virtual DOM, hooks, renderer integration, reactivity, security, error handling, devtools, fenestration, and utility helpers are all exported from core.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Context</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    SwissJS provides a built-in context system through <code class="sj-inline-code">SwissContext</code> so shared state can move through the tree without hand-wiring into every component boundary.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Reactivity</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    Reactivity is a first-class runtime surface in core, not an add-on package hidden behind the framework.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/compiler' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Swiss syntax preprocessing</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    The compiler preprocesses Swiss syntax for <code class="sj-inline-code">.ui</code> and <code class="sj-inline-code">.uix</code>, strips JSDoc when needed, and processes imports before later transforms run.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">JSX transformation</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    <code class="sj-inline-code">.uix</code> files go through the JSX transform path. The compiler uses esbuild with a SwissJS-aware import injection path for createElement and Fragment usage.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">TypeScript output</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    TypeScript-to-JavaScript output support is included for build pipelines, so the framework's custom source formats fit into a complete application build story.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/signals' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 10px; font-size: 16px;">Signal basics</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    A <code class="sj-inline-code">Signal</code> holds a value and notifies subscribers on change. Updates can be direct assignment or via an updater function.
+                  </p>
+                </div>
+                <div class="sj-code-block">
+                  {"import { Signal } from '@swissjs/core';\n\nconst count$ = new Signal(0, { name: 'count' });\ncount$.subscribe(() => console.log(count$.value));\n\ncount$.value = 1;\ncount$.update((v) => v + 1);"}
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/router' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 10px; font-size: 16px;">Route tree + matching</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    Routes are declared as a tree. Matching returns a list of matches for nested routes; loaders can run for matched routes.
+                  </p>
+                </div>
+                <div class="sj-code-block">
+                  {"import { createRouter } from '@swissjs/router';\nimport { Home } from './pages/Home.uix';\n\nconst router = createRouter({\n  mode: 'history',\n  routes: [{ path: '/', component: Home }],\n});\n\nrouter.beforeEach(async (to, from) => {\n  // return false to block, or return '/login' to redirect\n});"}
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/packages' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Primary package set</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    Core, compiler, router, components, security, utils, file-router plugin, and web-storage plugin are the main current surfaces in the repo and directive strategy.
+                  </p>
+                </div>
+                <div class="sj-doc-card">
+                  <h3 style="margin: 0 0 8px; font-size: 16px;">Why this matters</h3>
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    The site helps framework users understand which package owns which concern instead of pretending the framework is a single opaque import.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/swite' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    The swiss-lib README explicitly points framework users to Swite as the development server and build tool. Swite is part of the normal SwissJS workflow, not a separate optional marketing sibling.
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {r === '/docs/applications' ? (
+              <div style="display: contents;">
+                <div class="sj-doc-card">
+                  <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">
+                    Alpine ERP Core is one of the clearest references. It is <strong>public on GitHub</strong> at <code class="sj-inline-code">kibologic/alpine-erp-core</code> and uses SwissJS for the frontend application layer with Swite as the local server surface.
+                  </p>
+                </div>
+                <div class="sj-doc-note">
+                  The correct framing for SwissJS is "framework used in real Kibologic applications," not "concept site with generic UI claims."
+                </div>
+              </div>
+            ) : null}
+
+          </div>
+        </section>
+      </Shell>
+    );
   }
 }
