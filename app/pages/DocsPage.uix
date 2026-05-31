@@ -91,7 +91,7 @@ component DocsPage {
                   </p>
                 </div>
                 <div class="sj-code-block">
-                  {"// index.ui\nimport { SwissApp } from '@swissjs/core';\nimport { Counter } from './Counter.uix';\n\nSwissApp.mount(Counter, document.querySelector('#app')!);"}
+                  {"// index.ui\nimport { SwissApp } from '@swissjs"}{"/core';\nimport { Counter } from './Counter.uix';\n\nSwissApp.mount(Counter, document.querySelector('#app')!);"}
                 </div>
               </div>
             ) : null}
@@ -151,7 +151,7 @@ component DocsPage {
                   </p>
                 </div>
                 <div class="sj-code-block">
-                  {"import { Signal } from '@swissjs/core';\n\nconst count$ = new Signal(0, { name: 'count' });\ncount$.subscribe(() => console.log(count$.value));\n\ncount$.value = 1;\ncount$.update((v) => v + 1);"}
+                  {"import { Signal } from '@swissjs"}{"/core';\n\nconst count$ = new Signal(0, { name: 'count' });\ncount$.subscribe(() => console.log(count$.value));\n\ncount$.value = 1;\ncount$.update((v) => v + 1);"}
                 </div>
               </div>
             ) : null}
@@ -165,7 +165,7 @@ component DocsPage {
                   </p>
                 </div>
                 <div class="sj-code-block">
-                  {"import { createRouter } from '@swissjs/router';\nimport { Home } from './pages/Home.uix';\n\nconst router = createRouter({\n  mode: 'history',\n  routes: [{ path: '/', component: Home }],\n});\n\nrouter.beforeEach(async (to, from) => {\n  // return false to block, or return '/login' to redirect\n});"}
+                  {"import { createRouter } from '@swissjs"}{"/router';\nimport { Home } from './pages/Home.uix';\n\nconst router = createRouter({\n  mode: 'history',\n  routes: [{ path: '/', component: Home }],\n});\n\nrouter.beforeEach(async (to, from) => {\n  // return false to block, or return '/login' to redirect\n});"}
                 </div>
               </div>
             ) : null}
