@@ -6,10 +6,12 @@ import { SwiteServer } from '@kibologic/swite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const PORT = parseInt(process.env.PORT || '6001', 10);
+
 const server = new SwiteServer({
   root: path.resolve(__dirname, 'app'),
   publicDir: 'public',
-  port: parseInt(process.env.PORT || '6001', 10),
+  port: PORT,
   host: '0.0.0.0',
   open: false,
 });
@@ -43,4 +45,4 @@ server.app.use((req, res, next) => {
 });
 
 await server.start();
-console.log('[swissjs-website] running on http://localhost:6001');
+console.log(`[swissjs-website] running on http://localhost:${PORT}`);
