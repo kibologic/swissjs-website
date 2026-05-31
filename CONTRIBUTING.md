@@ -19,3 +19,9 @@ We're excited that you're interested in contributing to the SwissJS platform web
 
 - All code must pass current SwissJS compilation standards.
 - Ensure all new components are tested for both **Light** and **Dark** mode compatibility.
+
+## Package Names
+
+The correct public package names for SwissJS are `@swissjs/core`, `@swissjs/router`, `@swissjs/compiler`, etc. All documentation and code examples shown to users must use the `@swissjs/` namespace.
+
+Note: the site's own source files import from `@kibologic/core` for legacy build compatibility — this is intentional and should not be changed. However, any new documentation content, code snippets, or references visible to end users must always use the `@swissjs/` package prefix.

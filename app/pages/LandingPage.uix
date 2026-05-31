@@ -120,14 +120,14 @@ component LandingPage {
 
   render() {
     const packages = [
-      '@kibologic/core',
-      '@kibologic/compiler',
-      '@kibologic/router',
-      '@kibologic/components',
-      '@kibologic/security',
-      '@kibologic/utils',
-      '@kibologic/plugin-file-router',
-      '@kibologic/plugin-web-storage'
+      '@swissjs/core',
+      '@swissjs/compiler',
+      '@swissjs/router',
+      '@swissjs/components',
+      '@swissjs/security',
+      '@swissjs/utils',
+      '@swissjs/plugin-file-router',
+      '@swissjs/plugin-web-storage'
     ];
 
     const concepts = [
@@ -210,7 +210,7 @@ component LandingPage {
                 <div style="margin-bottom: 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">File model</div>
                 <div class="sj-code" style="margin-bottom: 18px;">
 {`// Counter.uix
-import { SwissComponent } from '@kibologic/core';
+import { SwissComponent } from '@swissjs/core';
 
 component Counter {
   state { let count = 0; }

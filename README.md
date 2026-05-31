@@ -27,7 +27,7 @@ To run the site locally for development:
 
 ## Architecture
 
-This site is built using SwissJS (`@kibologic/core`) and bundled with **Swite**. It serves as a living example of framework-level design and high-precision UI implementation.
+This site is built with **SwissJS** (`@swissjs/core`) and bundled with **Swite**. It serves as a living example of framework-level design and high-precision UI implementation. The docs cover the full SwissJS framework from [`kibologic/swiss-lib`](https://github.com/kibologic/swiss-lib), including runtime, compiler, router, signals, and the package ecosystem.
 
 ## Contributions
 
