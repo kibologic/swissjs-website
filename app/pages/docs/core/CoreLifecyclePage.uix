@@ -1,0 +1,52 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CoreLifecyclePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/core/lifecycle">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Core Concepts</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Lifecycle</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS components have a small, predictable lifecycle. Three hooks cover the vast majority of use cases.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Lifecycle hooks</h2>
+              <table class="sj-table">
+                <thead><tr><th>Hook</th><th>When it runs</th><th>Common uses</th></tr></thead>
+                <tbody>
+                  {[
+                    { hook: 'mounted()', when: 'After first render, component is in the DOM', use: 'Fetch data, set up subscriptions, read DOM refs' },
+                    { hook: 'updated()', when: 'After every re-render caused by state change', use: 'Sync external state, scroll position adjustments' },
+                    { hook: 'destroyed()', when: 'Before component is removed from the DOM', use: 'Teardown subscriptions, timers, WebSocket connections' },
+                  ].map(row => (
+                    <tr key={row.hook}>
+                      <td><code class="sj-inline-code">{row.hook}</code></td>
+                      <td style="color: var(--text-secondary);">{row.when}</td>
+                      <td style="color: var(--text-muted);">{row.use}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Using mounted for data fetching</h2>
+              <div class="sj-code-block">{"component UserProfile {\n  props = { userId: string };\n  state {\n    let user: any = null;\n    let error: string = '';\n  }\n\n  async mounted() {\n    try {\n      const res = await fetch('/api/users/' + this.props.userId);\n      if (!res.ok) throw new Error('Not found');\n      this.user = await res.json();\n    } catch (e: any) {\n      this.error = e.message;\n    }\n  }\n\n  render() {\n    if (this.error) return <p style=\"color:red;\">{this.error}</p>;\n    if (!this.user) return <p>Loading...</p>;\n    return <h1>{this.user.name}</h1>;\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Cleanup with destroyed</h2>
+              <div class="sj-code-block">{"component LiveFeed {\n  state { let messages: string[] = []; }\n  _ws: WebSocket | null = null;\n\n  mounted() {\n    this._ws = new WebSocket('wss://api.example.com/feed');\n    this._ws.onmessage = (e: any) => {\n      this.messages = [...this.messages, e.data];\n    };\n  }\n\n  destroyed() {\n    this._ws?.close();\n  }\n\n  render() {\n    return (\n      <div>\n        {this.messages.map((m: string, i: number) => (\n          <p key={String(i)}>{m}</p>\n        ))}\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

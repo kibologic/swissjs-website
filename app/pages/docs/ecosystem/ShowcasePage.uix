@@ -1,0 +1,59 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component ShowcasePage {
+  _projects(): any[] {
+    return [
+      { name: 'Alpine ERP', desc: 'Full enterprise resource planning system. 51+ .uix files covering procurement, HR, finance, inventory, and reporting modules.', url: 'https://github.com/kibologic/alpine-erp-core', tag: 'Enterprise', author: 'Kibologic' },
+      { name: 'SwissJS Website', desc: 'The documentation site you are reading right now. Built with SwissJS + Swite, featuring a full docs site, dark mode, and client-side routing.', url: 'https://github.com/kibologic/swissjs-website', tag: 'Docs', author: 'Kibologic' },
+      { name: 'Swite Website', desc: 'Marketing and documentation site for the Swite build tool.', url: 'https://github.com/kibologic/swite-website', tag: 'Marketing', author: 'Kibologic' },
+      { name: 'ERP Dashboard Example', desc: 'Full ERP dashboard with KPI cards, data tables, sidebar navigation, and user management.', url: 'https://github.com/kibologic/examples/tree/main/erp-dashboard', tag: 'Example', author: 'Kibologic' },
+      { name: 'CRM Example', desc: 'Customer relationship management app with contacts list, deals kanban, and activity feed.', url: 'https://github.com/kibologic/examples/tree/main/crm', tag: 'Example', author: 'Kibologic' },
+      { name: 'SaaS Landing', desc: 'Marketing landing page with hero, features, pricing, and testimonials sections.', url: 'https://github.com/kibologic/examples/tree/main/saas-landing', tag: 'Example', author: 'Kibologic' },
+    ];
+  }
+
+  _tagColor(tag: string): string {
+    const colors: Record<string, string> = {
+      Enterprise: '#7c3aed',
+      Docs: '#2563eb',
+      Marketing: '#059669',
+      Example: '#d97706',
+    };
+    return colors[tag] || '#6b7280';
+  }
+
+  render() {
+    const projects = this._projects();
+    return (
+      <Shell activeRoute="/docs/ecosystem/showcase">
+        <div style="max-width: 900px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Ecosystem</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Showcase</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Real applications built with SwissJS. From enterprise ERP systems to marketing sites.
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            {projects.map(p => (
+              <a key={p.name} href={p.url} target="_blank" style="text-decoration:none;display:block;background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color 0.15s;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+                  <h3 style="margin:0;font-size:15px;font-weight:800;color:var(--text-primary);">{p.name}</h3>
+                  <span style={'background:' + this._tagColor(p.tag) + '22;color:' + this._tagColor(p.tag) + ';border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700;white-space:nowrap;margin-left:8px;'}>{p.tag}</span>
+                </div>
+                <p style="margin:0 0 12px;font-size:13px;color:var(--text-secondary);line-height:1.6;">{p.desc}</p>
+                <p style="margin:0;font-size:11px;color:var(--text-muted);">by {p.author}</p>
+              </a>
+            ))}
+          </div>
+
+          <div class="sj-doc-note" style="margin-top: 32px;">
+            Built something with SwissJS? Open a PR to add it to this page at <code class="sj-inline-code">github.com/kibologic/swissjs-website</code>.
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

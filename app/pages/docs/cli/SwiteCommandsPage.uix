@@ -1,0 +1,53 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component SwiteCommandsPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/cli/swite-commands">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">CLI</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Swite Commands</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Swite is the SwissJS build tool. It compiles, serves, and bundles your application. Swite is configured via <code class="sj-inline-code">dev.mjs</code> — not a separate config file.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">createServer API</h2>
+              <div class="sj-code-block">{"import { createServer } from '@kibologic/swite';\n\nconst server = await createServer({\n  root: './app',       // source directory\n  port: 5000,          // dev server port\n  entry: 'main.ui',    // entry file\n  plugins: [],         // Swite plugins\n  https: false,        // TLS\n  open: false,         // open browser on start\n});\n\nawait server.listen();\nconsole.log('Dev server running at http://localhost:5000');"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Build mode</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Detect the <code class="sj-inline-code">--build</code> flag to switch between dev and production mode:</p>
+              <div class="sj-code-block">{"const isBuild = process.argv.includes('--build');\n\nif (isBuild) {\n  const { build } = await import('@kibologic/swite');\n  await build({\n    root: './app',\n    entry: 'main.ui',\n    outDir: 'dist',\n    minify: true,\n    sourcemap: false,\n  });\n  console.log('Build complete → dist/');\n} else {\n  const server = await createServer({ root: './app', port: 5000 });\n  await server.listen();\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Build output</h2>
+              <table class="sj-table">
+                <thead><tr><th>File</th><th>Description</th></tr></thead>
+                <tbody>
+                  {[
+                    { f: 'dist/index.html', d: 'HTML shell with injected script tag pointing to hashed bundle' },
+                    { f: 'dist/assets/main.[hash].js', d: 'Compiled, tree-shaken, minified JavaScript bundle' },
+                    { f: 'dist/assets/main.[hash].css', d: 'Extracted CSS (if applicable)' },
+                    { f: 'dist/**/*', d: 'Static assets copied verbatim from app/public/' },
+                  ].map(row => (
+                    <tr key={row.f}>
+                      <td><code class="sj-inline-code" style="font-size:11px;">{row.f}</code></td>
+                      <td style="color:var(--text-secondary);">{row.d}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

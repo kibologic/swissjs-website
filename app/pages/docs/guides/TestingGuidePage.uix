@@ -1,0 +1,40 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component TestingGuidePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/testing">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Testing</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS applications are tested at three levels: unit tests for logic functions, component tests for interactive behaviour, and end-to-end tests for full user flows.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Unit testing with Vitest</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Pure logic (validation, formatting, store functions) is best tested with Vitest. No browser required.</p>
+              <div class="sj-code-block">{"# Install\npnpm add -D vitest\n\n# vitest.config.ts\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { environment: 'node' } });"}</div>
+              <div class="sj-code-block" style="margin-top: 12px;">{"// tests/validate.test.ts\nimport { describe, it, expect } from 'vitest';\n\nfunction validateEmail(email: string): boolean {\n  return email.includes('@') && email.includes('.');\n}\n\ndescribe('validateEmail', () => {\n  it('accepts valid emails', () => {\n    expect(validateEmail('alice@example.com')).toBe(true);\n  });\n  it('rejects missing @', () => {\n    expect(validateEmail('notanemail')).toBe(false);\n  });\n});"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">E2E testing with Playwright</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Playwright drives a real browser against your dev server. This is the most valuable test type for SwissJS apps.</p>
+              <div class="sj-code-block">{"# Install\npnpm add -D @playwright/test\nnpx playwright install\n\n# playwright.config.ts\nimport { defineConfig } from '@playwright/test';\nexport default defineConfig({\n  testDir: './e2e',\n  use: { baseURL: 'http://localhost:5000' },\n  webServer: { command: 'pnpm dev', url: 'http://localhost:5000', reuseExistingServer: true },\n});"}</div>
+              <div class="sj-code-block" style="margin-top: 12px;">{"// e2e/counter.spec.ts\nimport { test, expect } from '@playwright/test';\n\ntest('counter increments on click', async ({ page }) => {\n  await page.goto('/counter');\n  await expect(page.locator('h1')).toContainText('Count: 0');\n  await page.click('button:text(\"Increment\")');\n  await expect(page.locator('h1')).toContainText('Count: 1');\n});"}</div>
+            </div>
+
+            <div class="sj-doc-note">
+              SwissJS does not have a component testing utility like React Testing Library. The recommended approach is Playwright for behaviour tests and Vitest for pure logic.
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

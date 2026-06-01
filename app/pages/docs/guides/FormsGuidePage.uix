@@ -1,0 +1,31 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component FormsGuidePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/forms">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Forms & Validation</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS uses controlled inputs — form state lives in the component's <code class="sj-inline-code">state</code> block and is bound to input values. Validation is plain TypeScript.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Controlled inputs</h2>
+              <div class="sj-code-block">{"component ContactForm {\n  state {\n    let name: string = '';\n    let email: string = '';\n    let message: string = '';\n    let errors: any = {};\n    let submitted: boolean = false;\n  }\n\n  _validate(): boolean {\n    const errs: any = {};\n    if (!this.name.trim()) errs.name = 'Name is required';\n    if (!this.email.includes('@')) errs.email = 'Valid email required';\n    if (this.message.length < 10) errs.message = 'Message too short';\n    this.errors = errs;\n    return Object.keys(errs).length === 0;\n  }\n\n  async _submit(e: any) {\n    e.preventDefault();\n    if (!this._validate()) return;\n    await fetch('/api/contact', {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({ name: this.name, email: this.email, message: this.message }),\n    });\n    this.submitted = true;\n  }\n\n  render() {\n    if (this.submitted) return <p style=\"color:green;\">Message sent!</p>;\n    return (\n      <form onsubmit={(e: any) => this._submit(e)} style=\"display:flex;flex-direction:column;gap:16px;max-width:480px;\">\n        <div>\n          <label style=\"font-size:12px;font-weight:700;color:var(--text-muted);\">Name</label>\n          <input value={this.name} oninput={(e: any) => { this.name = e.target.value; }}\n            style=\"display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-panel);color:var(--text-primary);margin-top:4px;\" />\n          {this.errors.name && <p style=\"color:red;font-size:12px;margin:4px 0 0;\">{this.errors.name}</p>}\n        </div>\n        <div>\n          <label style=\"font-size:12px;font-weight:700;color:var(--text-muted);\">Email</label>\n          <input type=\"email\" value={this.email} oninput={(e: any) => { this.email = e.target.value; }}\n            style=\"display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-panel);color:var(--text-primary);margin-top:4px;\" />\n          {this.errors.email && <p style=\"color:red;font-size:12px;margin:4px 0 0;\">{this.errors.email}</p>}\n        </div>\n        <div>\n          <label style=\"font-size:12px;font-weight:700;color:var(--text-muted);\">Message</label>\n          <textarea value={this.message} oninput={(e: any) => { this.message = e.target.value; }} rows={5}\n            style=\"display:block;width:100%;padding:10px;border:1px solid var(--border);border-radius:6px;background:var(--bg-panel);color:var(--text-primary);margin-top:4px;font:inherit;resize:vertical;\"></textarea>\n          {this.errors.message && <p style=\"color:red;font-size:12px;margin:4px 0 0;\">{this.errors.message}</p>}\n        </div>\n        <button type=\"submit\" style=\"padding:10px 24px;background:var(--sj-accent);color:#fff;border:none;border-radius:6px;font:inherit;font-weight:700;cursor:pointer;\">Send</button>\n      </form>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-note">
+              For complex multi-step forms or schema-driven validation, integrate Zod: define a schema, call <code class="sj-inline-code">schema.safeParse(formData)</code> in your <code class="sj-inline-code">_validate()</code> method, and map <code class="sj-inline-code">error.issues</code> to the <code class="sj-inline-code">errors</code> state object.
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

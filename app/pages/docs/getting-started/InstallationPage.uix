@@ -1,0 +1,91 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component InstallationPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/getting-started/installation">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Getting Started</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em; color: var(--text-primary);">Installation</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Get SwissJS installed and running in under two minutes. SwissJS requires Node.js 18 or later.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary);">Quick Create</h2>
+              <p style="margin: 0 0 16px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                The fastest way to start is with <code class="sj-inline-code">create-swissjs</code>, the official scaffolding tool.
+                It creates a fully wired project with dev server, routing, and sample components.
+              </p>
+              <div class="sj-code-block">{"npm create swissjs@latest my-app\ncd my-app\npnpm install\npnpm dev"}</div>
+              <p style="margin: 16px 0 0; color: var(--text-secondary); font-size: 14px;">
+                Your app is now running at <code class="sj-inline-code">http://localhost:5000</code>.
+              </p>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary);">Manual Installation</h2>
+              <p style="margin: 0 0 16px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                To add SwissJS to an existing project or set it up manually:
+              </p>
+              <div class="sj-code-block">{"pnpm add @kibologic/core @kibologic/swite @kibologic/compiler"}</div>
+              <p style="margin: 16px 0 8px; color: var(--text-secondary); font-size: 14px;">Optional packages for routing and storage:</p>
+              <div class="sj-code-block">{"pnpm add @kibologic/plugin-file-router @kibologic/plugin-web-storage"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary);">Prerequisites</h2>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                {[
+                  { name: 'Node.js', version: '18.0.0 or later', note: 'ESM support required' },
+                  { name: 'pnpm', version: '8.0.0 or later', note: 'Recommended (npm and yarn also work)' },
+                  { name: 'TypeScript', version: '5.0 or later', note: 'Included in SwissJS projects' },
+                ].map(req => (
+                  <div key={req.name} style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-page); border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); min-width: 100px;">{req.name}</div>
+                    <code class="sj-inline-code">{req.version}</code>
+                    <div style="font-size: 12px; color: var(--text-muted);">{req.note}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary);">Package Overview</h2>
+              <p style="margin: 0 0 16px; color: var(--text-secondary); font-size: 14px;">
+                SwissJS is a monorepo framework. Here are the core packages:
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                {[
+                  { pkg: '@swissjs/core', desc: 'Runtime — component system, reactivity, rendering, lifecycle' },
+                  { pkg: '@swissjs/compiler', desc: 'Compiler — transforms .ui and .uix files to JavaScript' },
+                  { pkg: '@swissjs/swite', desc: 'Dev server and build tool (Swite)' },
+                  { pkg: '@swissjs/router', desc: 'Client-side and file-based routing' },
+                  { pkg: '@swissjs/css', desc: 'CSS-in-JS system with design tokens' },
+                  { pkg: '@swissjs/security', desc: 'Auth, CSRF, input validation utilities' },
+                  { pkg: '@swissjs/plugin-file-router', desc: 'Automatic routes from folder structure' },
+                  { pkg: '@swissjs/plugin-web-storage', desc: 'Reactive localStorage and sessionStorage' },
+                ].map(p => (
+                  <div key={p.pkg} style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                    <code class="sj-inline-code" style="min-width: 260px;">{p.pkg}</code>
+                    <span style="font-size: 13px; color: var(--text-secondary);">{p.desc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-note">
+              SwissJS ships as ESM-only. Your project must have <code class="sj-inline-code">"type": "module"</code> in package.json.
+            </div>
+
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

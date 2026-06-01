@@ -1,0 +1,45 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CoreLayoutsPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/core/layouts">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Core Concepts</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Layouts</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Layouts are structural wrapper components that provide a consistent chrome — navigation, sidebars, footers — around page content. They compose via <code class="sj-inline-code">this.children</code>.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Creating a layout</h2>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\nimport { Navbar } from '../components/Navbar.uix';\nimport { Footer } from '../components/Footer.uix';\n\ncomponent AppLayout {\n  props = { title: string };\n\n  render() {\n    return (\n      <div style=\"min-height: 100vh; display: flex; flex-direction: column;\">\n        <Navbar title={this.props.title} />\n        <main style=\"flex: 1; padding: 24px;\">\n          {this.children}\n        </main>\n        <Footer />\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Using <code class="sj-inline-code">this.children</code></h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                <code class="sj-inline-code">this.children</code> is the JSX equivalent of a slot — it renders whatever JSX was passed between the component's opening and closing tags.
+              </p>
+              <div class="sj-code-block">{"// In a page:\n<AppLayout title=\"Dashboard\">\n  <DashboardContent />\n  <ActivityFeed />\n</AppLayout>"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Nested layouts</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Layouts can wrap other layouts. A common pattern is a root layout (topbar + footer) wrapping a section layout (sidebar + content area).</p>
+              <div class="sj-code-block">{"// SectionLayout wraps AppLayout\ncomponent SectionLayout {\n  props = { title: string; sidebarContent: any };\n\n  render() {\n    return (\n      <AppLayout title={this.props.title}>\n        <div style=\"display: flex; gap: 24px;\">\n          <aside style=\"width: 260px;\">{this.props.sidebarContent}</aside>\n          <main style=\"flex: 1;\">{this.children}</main>\n        </div>\n      </AppLayout>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-note">
+              Layouts are just components. There is no special layout API — the pattern is convention, not framework machinery.
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

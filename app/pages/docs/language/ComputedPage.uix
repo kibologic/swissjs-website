@@ -1,0 +1,36 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component ComputedPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/computed">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Computed Values</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Computed values are derived from state. In SwissJS, they are implemented as getter methods called inside <code class="sj-inline-code">render()</code> — no special keyword required.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Computed as method calls</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Define a helper method prefixed with <code class="sj-inline-code">_</code> that derives a value from state or props. Call it in <code class="sj-inline-code">render()</code>.</p>
+              <div class="sj-code-block">{"component CartSummary {\n  props = { items: Array<{ price: number; qty: number }> };\n\n  _total(): number {\n    return this.props.items.reduce(\n      (sum: number, item: { price: number; qty: number }) =>\n        sum + item.price * item.qty,\n      0\n    );\n  }\n\n  _itemCount(): number {\n    return this.props.items.reduce(\n      (n: number, item: { qty: number }) => n + item.qty,\n      0\n    );\n  }\n\n  render() {\n    const total = this._total();\n    const count = this._itemCount();\n    return (\n      <div>\n        <p>{count} items — total: {'$' + total.toFixed(2)}</p>\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Memoization</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                For expensive computations, cache the result in state and only recompute on demand. This avoids re-running heavy logic on every render.
+              </p>
+              <div class="sj-code-block">{"component ReportPage {\n  state {\n    let rawData: any[] = [];\n    let _cachedStats: any = null;\n  }\n\n  _stats(): any {\n    if (this._cachedStats) return this._cachedStats;\n    // expensive computation\n    const stats = this.rawData.reduce((acc: any, row: any) => {\n      acc.total = (acc.total || 0) + row.amount;\n      return acc;\n    }, {});\n    this._cachedStats = stats;\n    return stats;\n  }\n\n  _onDataUpdate(data: any[]) {\n    this.rawData = data;\n    this._cachedStats = null; // bust cache\n  }\n\n  render() {\n    const stats = this._stats();\n    return <p>Total: {stats.total}</p>;\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

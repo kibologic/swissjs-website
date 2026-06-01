@@ -1,0 +1,42 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component SEOGuidePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/seo">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">SEO</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS renders client-side by default. For SEO-critical pages, use the <code class="sj-inline-code">document.title</code> and meta tag pattern, or pre-render with Swite's static build mode.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Dynamic page titles</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Update <code class="sj-inline-code">document.title</code> in <code class="sj-inline-code">mounted()</code> for each page component:</p>
+              <div class="sj-code-block">{"component ProductPage {\n  props = { slug: string };\n  state { let product: any = null; }\n\n  async mounted() {\n    this.product = await fetch('/api/products/' + this.props.slug).then(r => r.json());\n    if (this.product) {\n      document.title = this.product.name + ' — My Store';\n    }\n  }\n\n  render() {\n    if (!this.product) return <p>Loading...</p>;\n    return <h1>{this.product.name}</h1>;\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Meta tags helper</h2>
+              <div class="sj-code-block">{"// app/utils/meta.ui\nexport function setMeta(opts: {\n  title: string;\n  description?: string;\n  image?: string;\n  canonical?: string;\n}) {\n  document.title = opts.title;\n\n  function upsert(name: string, content: string, attr = 'name') {\n    let el = document.querySelector('meta[' + attr + '=\"' + name + '\"]') as HTMLMetaElement | null;\n    if (!el) {\n      el = document.createElement('meta');\n      el.setAttribute(attr, name);\n      document.head.appendChild(el);\n    }\n    el.content = content;\n  }\n\n  if (opts.description) {\n    upsert('description', opts.description);\n    upsert('og:description', opts.description, 'property');\n  }\n  upsert('og:title', opts.title, 'property');\n  if (opts.image) upsert('og:image', opts.image, 'property');\n  if (opts.canonical) {\n    let link = document.querySelector('link[rel=canonical]') as HTMLLinkElement | null;\n    if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }\n    link.href = opts.canonical;\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Pre-rendering (static generation)</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                For content sites (blogs, marketing pages, docs), pre-render with Swite's static adapter. Each route is rendered to a static HTML file at build time — full SEO, no JS required for initial content.
+              </p>
+              <div class="sj-code-block">{"import { createStaticAdapter } from '@kibologic/swite/static';\n\n// In dev.mjs build config:\nawait createStaticAdapter({\n  routes: ['/', '/about', '/pricing'],\n  outDir: 'dist',\n});"}</div>
+              <div class="sj-doc-note" style="margin-top: 12px;">Static generation is best for pages with known URLs at build time. For dynamic routes (e.g. <code class="sj-inline-code">/product/:slug</code>), use a CDN-based ISR strategy or server-side rendering via a Node.js server.</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

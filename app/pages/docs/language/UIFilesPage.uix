@@ -1,0 +1,54 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component UIFilesPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/ui-files">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">.ui Entry Files</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              <code class="sj-inline-code">.ui</code> files are imperative bootstrap scripts. They run once at startup to initialise the application — mount the root component, set up global signals, and register event listeners.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">What .ui files can contain</h2>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                {[
+                  { item: 'import statements', note: 'Required for all external modules and .uix components' },
+                  { item: 'Signal declarations', note: 'Module-level reactive values shared across components' },
+                  { item: 'Event listener setup', note: 'popstate, click intercept, keyboard shortcuts' },
+                  { item: 'component declarations', note: 'The root Router/App component only — inline, not in .uix' },
+                  { item: 'mount() call', note: 'Attaches the root component to the DOM element' },
+                ].map(row => (
+                  <div key={row.item} style="display: flex; gap: 12px; align-items: flex-start; padding: 10px 14px; background: var(--bg-page); border: 1px solid var(--border); border-radius: 6px;">
+                    <code class="sj-inline-code" style="min-width: 180px; flex-shrink: 0;">{row.item}</code>
+                    <span style="font-size: 13px; color: var(--text-secondary);">{row.note}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Minimal main.ui</h2>
+              <div class="sj-code-block">{"import { mount, SwissComponent, createElement, Fragment } from '@kibologic/core';\nimport { HomePage } from './pages/HomePage.uix';\n\nglobalThis.createElement = createElement;\nglobalThis.Fragment = Fragment;\n\ncomponent App {\n  render() {\n    return <HomePage />;\n  }\n}\n\nmount(App, document.getElementById('app'));"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Signal-driven router in main.ui</h2>
+              <div class="sj-code-block">{"import { mount, Signal, SwissComponent, createElement, Fragment } from '@kibologic/core';\nimport { HomePage } from './pages/HomePage.uix';\nimport { AboutPage } from './pages/AboutPage.uix';\n\nglobalThis.createElement = createElement;\nglobalThis.Fragment = Fragment;\n\nconst route$ = new Signal(window.location.pathname);\n\nwindow.addEventListener('popstate', () => {\n  route$.value = window.location.pathname;\n});\n\ncomponent Router {\n  render() {\n    const r = route$.value;\n    if (r === '/') return <HomePage />;\n    if (r === '/about') return <AboutPage />;\n    return <HomePage />;\n  }\n}\n\nmount(Router, document.getElementById('app'));"}</div>
+            </div>
+
+            <div class="sj-doc-warning">
+              <strong>Do not</strong> put reusable component definitions in <code class="sj-inline-code">main.ui</code>. The root Router component is the only component that belongs there. All other components go in <code class="sj-inline-code">.uix</code> files.
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

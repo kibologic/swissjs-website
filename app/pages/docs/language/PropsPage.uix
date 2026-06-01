@@ -1,0 +1,45 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component PropsPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/props">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Props</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Props are the typed interface between a parent component and its children. They flow down the component tree and are read-only inside the component that receives them.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Declaring props</h2>
+              <div class="sj-code-block">{"component Avatar {\n  props = {\n    name: string;          // required\n    imageUrl?: string;     // optional\n    size?: number;         // optional with default\n    onClick?: () => void;  // optional callback\n  };\n\n  render() {\n    const sz = this.props.size ?? 40;\n    return (\n      <div\n        onclick={() => this.props.onClick?.()}\n        style={'width:' + sz + 'px;height:' + sz + 'px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;color:#fff;font-size:' + Math.floor(sz * 0.4) + 'px;font-weight:700;cursor:pointer;'}\n      >\n        {this.props.name.slice(0, 2).toUpperCase()}\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Passing props</h2>
+              <div class="sj-code-block">{"// Passing all prop types\n<Avatar name=\"Alice Chen\" size={48} onClick={() => console.log('clicked')} />\n\n// Optional props can be omitted\n<Avatar name=\"Bob Smith\" />\n\n// Dynamic props\n<Avatar name={user.name} imageUrl={user.avatar} size={this.compact ? 32 : 48} />"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">children prop</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Content passed between opening and closing tags is available as <code class="sj-inline-code">this.children</code>.</p>
+              <div class="sj-code-block">{"component Card {\n  props = { title: string };\n\n  render() {\n    return (\n      <div style=\"border:1px solid var(--border);border-radius:8px;padding:20px;\">\n        <h3 style=\"margin:0 0 16px;\">{this.props.title}</h3>\n        {this.children}\n      </div>\n    );\n  }\n}\n\n// Usage:\n<Card title=\"Summary\">\n  <p>This content becomes this.children</p>\n  <Button label=\"Action\" />\n</Card>"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Props are read-only</h2>
+              <p style="margin: 0 0 0; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                Never mutate <code class="sj-inline-code">this.props</code> directly. If a child needs to change parent state, accept a callback prop (<code class="sj-inline-code">onChange: (value: T) => void</code>) and call it. The parent owns its state; the child only reports events.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}
