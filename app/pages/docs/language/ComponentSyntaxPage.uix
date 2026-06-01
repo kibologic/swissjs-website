@@ -1,0 +1,45 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component ComponentSyntaxPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/component-syntax">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Component Syntax</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS uses a custom component syntax compiled by the Swiss compiler. It looks like a class but compiles to a lightweight runtime object with reactive wiring.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Declaration</h2>
+              <div class="sj-code-block">{"// ✅ Correct\ncomponent MyButton { ... }\n\n// ❌ Wrong — no export keyword\nexport component MyButton { ... }\n\n// ❌ Wrong — not a class\nclass MyButton extends SwissComponent { ... }\n\n// ❌ Wrong — no default export\nexport default component MyButton { ... }"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Props declaration</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Props are declared as a typed object literal. Access them via <code class="sj-inline-code">this.props.propName</code>.</p>
+              <div class="sj-code-block">{"component Badge {\n  props = {\n    label: string;\n    variant: 'success' | 'warning' | 'error';\n    count?: number;  // optional prop\n  };\n\n  render() {\n    const colors: Record<string, string> = {\n      success: '#16a34a',\n      warning: '#d97706',\n      error: '#dc2626',\n    };\n    return (\n      <span style={'background:' + colors[this.props.variant] + ';color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;'}>\n        {this.props.label}\n        {this.props.count != null ? ' (' + this.props.count + ')' : ''}\n      </span>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Event handling</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Use inline arrow functions for event handlers. The handler has access to <code class="sj-inline-code">this</code> (the component instance).</p>
+              <div class="sj-code-block">{"component Form {\n  state { let value: string = ''; let submitted: boolean = false; }\n\n  _handleSubmit(e: any) {\n    e.preventDefault();\n    this.submitted = true;\n  }\n\n  render() {\n    return (\n      <form onsubmit={(e: any) => this._handleSubmit(e)}>\n        <input\n          type=\"text\"\n          value={this.value}\n          oninput={(e: any) => { this.value = e.target.value; }}\n        />\n        <button type=\"submit\">Submit</button>\n        {this.submitted && <p>Submitted: {this.value}</p>}\n      </form>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">SVG Icons</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Inline <code class="sj-inline-code">{"<svg>"}</code> tags are invisible in SwissJS. Always use <code class="sj-inline-code">{"<img>"}</code> with a data URI instead:</p>
+              <div class="sj-code-block">{"_svgDataUrl(path: string): string {\n  const svg = '<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">'\n    + '<path d=\"' + path + '\" /></svg>';\n  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);\n}\n\nrender() {\n  const iconPath = 'M12 5v14M5 12l7 7 7-7';\n  return <img src={this._svgDataUrl(iconPath)} style=\"width:16px;height:16px;\" />;\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

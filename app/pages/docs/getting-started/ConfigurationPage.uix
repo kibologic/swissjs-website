@@ -1,0 +1,69 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component ConfigurationPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/getting-started/configuration">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Getting Started</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em; color: var(--text-primary);">Configuration</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS projects are configured through <code class="sj-inline-code">package.json</code> and the <code class="sj-inline-code">dev.mjs</code> dev server file. There is no separate config file format — everything is explicit JavaScript.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">package.json</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">The minimum required <code class="sj-inline-code">package.json</code> for a SwissJS project:</p>
+              <div class="sj-code-block">{'{\n  "name": "my-app",\n  "type": "module",\n  "scripts": {\n    "dev": "node dev.mjs",\n    "build": "node dev.mjs --build"\n  },\n  "dependencies": {\n    "@kibologic/core": "0.1.6",\n    "@kibologic/swite": "0.2.31",\n    "@kibologic/compiler": "0.1.3",\n    "@kibologic/plugin-file-router": "1.0.2"\n  }\n}'}</div>
+              <div class="sj-doc-note" style="margin-top: 14px;">
+                <code class="sj-inline-code">"type": "module"</code> is required. SwissJS is ESM-only.
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">dev.mjs — dev server</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">The dev server is configured by creating a Swite instance in <code class="sj-inline-code">dev.mjs</code>:</p>
+              <div class="sj-code-block">{"import { createServer } from '@kibologic/swite';\nimport { fileRouter } from '@kibologic/plugin-file-router';\n\nconst server = await createServer({\n  root: './app',\n  port: 5000,\n  entry: 'main.ui',\n  plugins: [fileRouter()],\n});\n\nawait server.listen();"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Server options</h2>
+              <table class="sj-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {[
+                    { opt: 'root', type: 'string', def: '"./app"', desc: 'Source directory containing main.ui and assets' },
+                    { opt: 'port', type: 'number', def: '5000', desc: 'Port for the dev server' },
+                    { opt: 'entry', type: 'string', def: '"main.ui"', desc: 'Entry file relative to root' },
+                    { opt: 'plugins', type: 'Plugin[]', def: '[]', desc: 'Swite plugins to load' },
+                    { opt: 'https', type: 'boolean', def: 'false', desc: 'Enable HTTPS with a self-signed cert' },
+                    { opt: 'open', type: 'boolean', def: 'false', desc: 'Open browser on start' },
+                  ].map(row => (
+                    <tr key={row.opt}>
+                      <td><code class="sj-inline-code">{row.opt}</code></td>
+                      <td style="color: var(--text-muted);">{row.type}</td>
+                      <td><code class="sj-inline-code">{row.def}</code></td>
+                      <td style="color: var(--text-secondary);">{row.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Environment variables</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">SwissJS reads environment variables from the shell environment. A <code class="sj-inline-code">.env</code> file is loaded automatically when you use <code class="sj-inline-code">set -a; source .env; set +a</code> before starting the server, or by passing a dotenv loader in your <code class="sj-inline-code">dev.mjs</code>.</p>
+              <div class="sj-code-block">{"// Accessing env vars at build time\nconst apiBase = import.meta.env.VITE_API_BASE ?? '/api';"}</div>
+            </div>
+
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

@@ -1,0 +1,44 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component APIRouterRef {
+  render() {
+    return (
+      <Shell activeRoute="/docs/api/router">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">API Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">@swissjs/router</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              The optional SwissJS router package. Provides a Signal-driven client router with named routes, params, and programmatic navigation.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Setup</h2>
+              <div class="sj-code-block">{"pnpm add @kibologic/plugin-file-router\n\n// In dev.mjs:\nimport { fileRouter } from '@kibologic/plugin-file-router';\nconst server = await createServer({\n  plugins: [fileRouter()],\n});"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Manual router pattern</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Without the file-router plugin, implement routing manually in <code class="sj-inline-code">main.ui</code> using a route Signal:</p>
+              <div class="sj-code-block">{"const route$ = new Signal(window.location.pathname);\n\nwindow.addEventListener('popstate', () => {\n  route$.value = window.location.pathname;\n});\n\ndocument.addEventListener('click', (e: any) => {\n  const a = e.target.closest('a');\n  if (a && a.href.startsWith(window.location.origin)\n    && !a.target && !e.metaKey) {\n    e.preventDefault();\n    const path = a.getAttribute('href');\n    history.pushState(null, '', path);\n    route$.value = path;\n    window.scrollTo(0, 0);\n  }\n});"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Programmatic navigation</h2>
+              <div class="sj-code-block">{"// Navigate from a component after an action\nasync _save() {\n  await api.post('/items', this.form);\n  // navigate to list page\n  history.pushState(null, '', '/items');\n  route$.value = '/items';\n  window.scrollTo(0, 0);\n}"}</div>
+              <div class="sj-doc-note" style="margin-top: 12px;">Export <code class="sj-inline-code">route$</code> from <code class="sj-inline-code">main.ui</code> so components can trigger navigation directly, or create a <code class="sj-inline-code">navigate(path)</code> helper in a shared store.</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Route params</h2>
+              <div class="sj-code-block">{"// Extract params from path string\nif (r.startsWith('/user/')) {\n  const userId = r.slice('/user/'.length).split('/')[0];\n  return <UserPage userId={userId} />;\n}\n\n// Or with a minimal parser\nfunction matchPath(pattern: string, path: string): Record<string, string> | null {\n  const pp = pattern.split('/');\n  const sp = path.split('/');\n  if (pp.length !== sp.length) return null;\n  const params: Record<string, string> = {};\n  for (let i = 0; i < pp.length; i++) {\n    if (pp[i].startsWith(':')) params[pp[i].slice(1)] = sp[i];\n    else if (pp[i] !== sp[i]) return null;\n  }\n  return params;\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

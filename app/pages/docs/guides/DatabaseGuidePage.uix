@@ -1,0 +1,55 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component DatabaseGuidePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/database">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Database & Backends</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS is a frontend framework. It communicates with backends via HTTP. This guide covers data fetching patterns, API wrappers, and working with REST and GraphQL backends.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">API client pattern</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Create a typed API client module that all components import from. This keeps fetch logic out of components.</p>
+              <div class="sj-code-block">{"// app/api/client.ui\nconst BASE = '/api/v1';\n\nasync function request<T>(path: string, opts: RequestInit = {}): Promise<T> {\n  const res = await fetch(BASE + path, {\n    ...opts,\n    headers: { 'Content-Type': 'application/json', ...opts.headers },\n    credentials: 'include',\n  });\n  if (!res.ok) {\n    const err = await res.json().catch(() => ({ message: res.statusText }));\n    throw new Error(err.message);\n  }\n  return res.json() as Promise<T>;\n}\n\nexport const api = {\n  get:    <T>(path: string) => request<T>(path),\n  post:   <T>(path: string, body: unknown) => request<T>(path, { method: 'POST', body: JSON.stringify(body) }),\n  put:    <T>(path: string, body: unknown) => request<T>(path, { method: 'PUT', body: JSON.stringify(body) }),\n  delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),\n};"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Fetch in mounted</h2>
+              <div class="sj-code-block">{"import { api } from '../api/client.ui';\n\ncomponent ProjectList {\n  state {\n    let projects: any[] = [];\n    let loading: boolean = true;\n    let error: string = '';\n  }\n\n  async mounted() {\n    try {\n      this.projects = await api.get<any[]>('/projects');\n    } catch (e: any) {\n      this.error = e.message;\n    } finally {\n      this.loading = false;\n    }\n  }\n\n  async _delete(id: string) {\n    await api.delete('/projects/' + id);\n    this.projects = this.projects.filter((p: any) => p.id !== id);\n  }\n\n  render() {\n    if (this.loading) return <p>Loading...</p>;\n    if (this.error) return <p style=\"color:red;\">{this.error}</p>;\n    return (\n      <ul>\n        {this.projects.map((p: any) => (\n          <li key={p.id} style=\"display:flex;justify-content:space-between;padding:8px 0;\">\n            <span>{p.name}</span>\n            <button onclick={() => this._delete(p.id)}>Delete</button>\n          </li>\n        ))}\n      </ul>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Recommended backends</h2>
+              <table class="sj-table">
+                <thead><tr><th>Backend</th><th>Language</th><th>Best for</th></tr></thead>
+                <tbody>
+                  {[
+                    { b: 'Hono', l: 'TypeScript', u: 'Lightweight APIs, edge-ready, full TS types' },
+                    { b: 'FastAPI', l: 'Python', u: 'ML inference, async Python APIs, auto OpenAPI docs' },
+                    { b: 'gbil', l: 'Python', u: 'Kibologic production stack — 9 modules, Alpine ERP backend' },
+                    { b: 'Elysia', l: 'TypeScript (Bun)', u: 'High-perf Bun runtime, schema validation built-in' },
+                    { b: 'Express', l: 'TypeScript', u: 'Ecosystem-compatible, highest npm package compat' },
+                  ].map(row => (
+                    <tr key={row.b}>
+                      <td style="font-weight:700;">{row.b}</td>
+                      <td style="color:var(--text-muted);">{row.l}</td>
+                      <td style="color:var(--text-secondary);">{row.u}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

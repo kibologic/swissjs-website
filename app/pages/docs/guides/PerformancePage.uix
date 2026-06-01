@@ -1,0 +1,45 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component PerformancePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/guides/performance">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Guides</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Performance</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS's fine-grained reactivity avoids most performance problems by default. This guide covers the remaining scenarios where you need to optimize.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Keys in lists</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Always use stable, unique <code class="sj-inline-code">key</code> props on list items. SwissJS uses keys to patch only changed items rather than re-rendering the full list.</p>
+              <div class="sj-code-block">{"// ✅ Stable key from data id\n{this.items.map((item: any) => <Row key={item.id} data={item} />)}\n\n// ❌ Index as key — breaks when items reorder\n{this.items.map((item: any, i: number) => <Row key={String(i)} data={item} />)}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Avoid inline object creation in JSX</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Creating new objects inside render creates a new reference every render, forcing child re-renders. Extract them to component state or props.</p>
+              <div class="sj-code-block">{"// ❌ New object every render\n<Chart config={{ labels: this.labels, data: this.data }} />\n\n// ✅ Stable reference\n_chartConfig() {\n  return { labels: this.labels, data: this.data };\n}\nrender() {\n  return <Chart config={this._chartConfig()} />;\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Debounce user input</h2>
+              <div class="sj-code-block">{"component SearchInput {\n  state { let query: string = ''; }\n  _timer: number | null = null;\n\n  _onInput(value: string) {\n    this.query = value;\n    if (this._timer !== null) window.clearTimeout(this._timer);\n    this._timer = window.setTimeout(() => this._search(value), 300);\n  }\n\n  async _search(q: string) { /* fetch */ }\n\n  render() {\n    return (\n      <input\n        value={this.query}\n        oninput={(e: any) => this._onInput(e.target.value)}\n        placeholder=\"Search...\"\n      />\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Lazy-load large components</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Import heavy components only when they are needed using dynamic import in <code class="sj-inline-code">mounted()</code>.</p>
+              <div class="sj-code-block">{"component ReportsPage {\n  state { let ChartComponent: any = null; }\n\n  async mounted() {\n    const mod = await import('../components/HeavyChart.uix');\n    this.ChartComponent = mod.HeavyChart;\n  }\n\n  render() {\n    if (!this.ChartComponent) return <p>Loading chart...</p>;\n    const Chart = this.ChartComponent;\n    return <Chart data={this.data} />;\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

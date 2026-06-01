@@ -1,0 +1,47 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component APISecurityRef {
+  render() {
+    return (
+      <Shell activeRoute="/docs/api/security">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">API Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">@swissjs/security</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Security utilities for SwissJS applications. Provides input sanitisation, CSRF token helpers, and XSS-safe HTML rendering.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">XSS prevention</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                SwissJS JSX renders string expressions as text nodes by default — they are never interpreted as HTML. This means <code class="sj-inline-code">{"{'<script>alert(1)</script>'}"}</code> renders as literal text, not executable HTML.
+              </p>
+              <div class="sj-doc-note">
+                The only way to inject raw HTML is via <code class="sj-inline-code">innerHTML</code> in an imperative mounted() call. Never pass untrusted content through innerHTML.
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">CSRF protection</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">For session-cookie-based APIs, read the CSRF token from a meta tag and include it in mutation requests:</p>
+              <div class="sj-code-block">{"// Read token set by your server in index.html\nfunction getCsrfToken(): string {\n  return (document.querySelector('meta[name=csrf-token]') as HTMLMetaElement)?.content ?? '';\n}\n\n// Include in fetch calls\nawait fetch('/api/action', {\n  method: 'POST',\n  headers: {\n    'Content-Type': 'application/json',\n    'X-CSRF-Token': getCsrfToken(),\n  },\n  body: JSON.stringify(payload),\n  credentials: 'include',\n});"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Content Security Policy</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">For Swite-built apps, set a strict CSP in your server response headers:</p>
+              <div class="sj-code-block">{"Content-Security-Policy:\n  default-src 'self';\n  script-src 'self';\n  style-src 'self' 'unsafe-inline';\n  connect-src 'self' https://api.yourdomain.com;\n  img-src 'self' data: https:;"}</div>
+              <div class="sj-doc-warning" style="margin-top: 12px;">
+                <code class="sj-inline-code">unsafe-inline</code> for styles is required because SwissJS components inject style tags dynamically at runtime. Script-src can remain strict.
+              </div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

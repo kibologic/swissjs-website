@@ -1,0 +1,73 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component MigrationReactPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/migration/react">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Migration</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">From React</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Coming from React? This guide maps every React concept to its SwissJS equivalent. Most patterns translate directly — the main shift is from hooks to component methods and from virtual DOM to fine-grained reactivity.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Concept mapping</h2>
+              <table class="sj-table">
+                <thead><tr><th>React</th><th>SwissJS</th></tr></thead>
+                <tbody>
+                  {[
+                    { r: 'function Component() { return <jsx />; }', s: 'component X { render() { return <jsx />; } }' },
+                    { r: 'const [v, setV] = useState(0)', s: 'state { let v: number = 0; }  then  this.v = 1' },
+                    { r: 'useEffect(() => {}, [])', s: 'mounted() { ... }' },
+                    { r: 'useEffect(() => () => cleanup(), [])', s: 'mounted() + destroyed()' },
+                    { r: 'useMemo(() => compute(), [dep])', s: '_compute() { return compute(); } called in render()' },
+                    { r: 'useRef(null)', s: 'this._ref: HTMLElement | null = null  assigned in mounted()' },
+                    { r: 'React.createContext / useContext', s: 'Signal at module level — import it in any component' },
+                    { r: 'props.children', s: 'this.children' },
+                    { r: 'key={id}', s: 'key={id}  (same)' },
+                  ].map(row => (
+                    <tr key={row.r}>
+                      <td><code class="sj-inline-code" style="font-size:11px;">{row.r}</code></td>
+                      <td><code class="sj-inline-code" style="font-size:11px;">{row.s}</code></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Side-by-side: stateful component</h2>
+              <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">React:</p>
+              <div class="sj-code-block">{"function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <button onClick={() => setCount(c => c + 1)}>\n      Count: {count}\n    </button>\n  );\n}"}</div>
+              <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">SwissJS:</p>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomponent Counter {\n  state { let count: number = 0; }\n\n  render() {\n    return (\n      <button onclick={() => { this.count++; }}>\n        Count: {this.count}\n      </button>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Key differences</h2>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                {[
+                  { diff: 'No hooks', detail: 'useState → state block, useEffect → mounted/destroyed, useMemo → method calls in render()' },
+                  { diff: 'No virtual DOM', detail: 'SwissJS tracks reactive access at the property level. No reconciler overhead.' },
+                  { diff: 'No Fragment shorthand', detail: 'Use <div> or explicit <Fragment> (import Fragment from @kibologic/core)' },
+                  { diff: 'Event names are lowercase', detail: 'onclick not onClick, onsubmit not onSubmit — native DOM event names' },
+                  { diff: 'No JSX pragma needed', detail: 'Assign globalThis.createElement = createElement once in main.ui' },
+                ].map(row => (
+                  <div key={row.diff} style="padding:10px 14px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;">
+                    <div style="font-size:12px;font-weight:800;color:var(--sj-accent);margin-bottom:4px;">{row.diff}</div>
+                    <div style="font-size:13px;color:var(--text-secondary);">{row.detail}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

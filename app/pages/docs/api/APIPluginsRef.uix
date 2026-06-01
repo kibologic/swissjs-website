@@ -1,0 +1,54 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component APIPluginsRef {
+  render() {
+    return (
+      <Shell activeRoute="/docs/api/plugins">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">API Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Plugins</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS plugins extend the Swite dev server and build pipeline. Official plugins cover file-based routing, web storage, and more.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Official plugins</h2>
+              <table class="sj-table">
+                <thead><tr><th>Package</th><th>Purpose</th></tr></thead>
+                <tbody>
+                  {[
+                    { pkg: '@kibologic/plugin-file-router', desc: 'Auto-generates routes from the pages/ directory structure' },
+                    { pkg: '@kibologic/plugin-web-storage', desc: 'Reactive wrappers around localStorage and sessionStorage' },
+                    { pkg: '@kibologic/plugin-pwa', desc: 'Service worker generation for PWA support' },
+                    { pkg: '@kibologic/plugin-i18n', desc: 'Internationalisation — JSON translation files + reactive locale switching' },
+                  ].map(row => (
+                    <tr key={row.pkg}>
+                      <td><code class="sj-inline-code" style="font-size:11px;">{row.pkg}</code></td>
+                      <td style="color:var(--text-secondary);">{row.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Writing a plugin</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">A Swite plugin is a function that returns a plugin object with hooks:</p>
+              <div class="sj-code-block">{"export function myPlugin(opts = {}) {\n  return {\n    name: 'my-plugin',\n\n    // Transform file contents before serving\n    transform(code: string, id: string) {\n      if (!id.endsWith('.uix')) return null;\n      return code.replace(/MY_MACRO/g, JSON.stringify(opts));\n    },\n\n    // Add routes to the dev server\n    configureServer(server: any) {\n      server.middlewares.use('/my-route', (req: any, res: any) => {\n        res.end(JSON.stringify({ status: 'ok' }));\n      });\n    },\n  };\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">@kibologic/plugin-file-router</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Maps the <code class="sj-inline-code">pages/</code> directory to routes automatically. <code class="sj-inline-code">pages/foo/BarPage.uix</code> becomes the route <code class="sj-inline-code">/foo/bar</code>.</p>
+              <div class="sj-code-block">{"import { fileRouter } from '@kibologic/plugin-file-router';\n\nconst server = await createServer({\n  plugins: [\n    fileRouter({\n      pagesDir: './app/pages',\n      // Map FooPage.uix → /foo\n      routeFromFilename: (name: string) => '/' + name.replace(/Page$/, '').toLowerCase(),\n    }),\n  ],\n});"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

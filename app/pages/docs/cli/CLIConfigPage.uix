@@ -1,0 +1,79 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CLIConfigPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/cli/config">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">CLI</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Config Reference</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Complete reference for all Swite <code class="sj-inline-code">createServer</code> and <code class="sj-inline-code">build</code> configuration options.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">createServer options</h2>
+              <table class="sj-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {[
+                    { o: 'root', t: 'string', d: '"./app"', desc: 'Source root directory' },
+                    { o: 'port', t: 'number', d: '5000', desc: 'HTTP port' },
+                    { o: 'host', t: 'string', d: '"localhost"', desc: 'Hostname to bind' },
+                    { o: 'entry', t: 'string', d: '"main.ui"', desc: 'App entry file (relative to root)' },
+                    { o: 'plugins', t: 'Plugin[]', d: '[]', desc: 'Swite plugin instances' },
+                    { o: 'https', t: 'boolean', d: 'false', desc: 'Enable HTTPS with self-signed cert' },
+                    { o: 'open', t: 'boolean', d: 'false', desc: 'Open browser when server starts' },
+                    { o: 'cors', t: 'boolean', d: 'false', desc: 'Allow cross-origin requests' },
+                    { o: 'proxy', t: 'Record<string,string>', d: '{}', desc: 'Proxy paths to backend servers' },
+                  ].map(row => (
+                    <tr key={row.o}>
+                      <td><code class="sj-inline-code">{row.o}</code></td>
+                      <td style="color:var(--text-muted);">{row.t}</td>
+                      <td><code class="sj-inline-code">{row.d}</code></td>
+                      <td style="color:var(--text-secondary);">{row.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">build options</h2>
+              <table class="sj-table">
+                <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+                <tbody>
+                  {[
+                    { o: 'root', t: 'string', d: '"./app"', desc: 'Source root directory' },
+                    { o: 'entry', t: 'string', d: '"main.ui"', desc: 'Entry file' },
+                    { o: 'outDir', t: 'string', d: '"dist"', desc: 'Output directory' },
+                    { o: 'minify', t: 'boolean', d: 'true', desc: 'Minify JS output' },
+                    { o: 'sourcemap', t: 'boolean', d: 'false', desc: 'Generate source maps' },
+                    { o: 'target', t: 'string', d: '"es2020"', desc: 'JavaScript target version' },
+                    { o: 'plugins', t: 'Plugin[]', d: '[]', desc: 'Swite plugins for build transforms' },
+                  ].map(row => (
+                    <tr key={row.o}>
+                      <td><code class="sj-inline-code">{row.o}</code></td>
+                      <td style="color:var(--text-muted);">{row.t}</td>
+                      <td><code class="sj-inline-code">{row.d}</code></td>
+                      <td style="color:var(--text-secondary);">{row.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">API proxy example</h2>
+              <div class="sj-code-block">{"const server = await createServer({\n  root: './app',\n  port: 5000,\n  proxy: {\n    '/api': 'http://localhost:8000',  // forward to backend\n    '/ws': 'ws://localhost:8000',     // WebSocket proxy\n  },\n});"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

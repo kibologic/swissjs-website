@@ -1,0 +1,53 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CLIOverviewPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/cli/overview">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">CLI</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">CLI Overview</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              SwissJS tooling consists of two CLI tools: <code class="sj-inline-code">create-swissjs</code> for scaffolding new projects, and <code class="sj-inline-code">swite</code> for serving and building.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Tool overview</h2>
+              <table class="sj-table">
+                <thead><tr><th>Tool</th><th>Package</th><th>Purpose</th></tr></thead>
+                <tbody>
+                  {[
+                    { tool: 'create-swissjs', pkg: 'create-swissjs (npm create)', purpose: 'Scaffold a new SwissJS project from a template' },
+                    { tool: 'swite dev', pkg: '@kibologic/swite', purpose: 'Start the HMR dev server' },
+                    { tool: 'swite build', pkg: '@kibologic/swite', purpose: 'Produce a production bundle in dist/' },
+                    { tool: 'swite preview', pkg: '@kibologic/swite', purpose: 'Preview the production build locally' },
+                  ].map(row => (
+                    <tr key={row.tool}>
+                      <td><code class="sj-inline-code">{row.tool}</code></td>
+                      <td style="color:var(--text-muted);">{row.pkg}</td>
+                      <td style="color:var(--text-secondary);">{row.purpose}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Quick reference</h2>
+              <div class="sj-code-block">{"# Create a new project\nnpm create swissjs@latest my-app\n\n# Start dev server\ncd my-app && pnpm dev\n# → runs: node dev.mjs\n\n# Build for production\npnpm build\n# → runs: node dev.mjs --build\n\n# Preview production build\nnpx swite preview --dir dist --port 4000"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Custom scripts in package.json</h2>
+              <div class="sj-code-block">{'{\n  "scripts": {\n    "dev": "node dev.mjs",\n    "build": "node dev.mjs --build",\n    "preview": "npx swite preview --dir dist",\n    "typecheck": "tsc --noEmit",\n    "test": "vitest run",\n    "test:e2e": "playwright test"\n  }\n}'}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

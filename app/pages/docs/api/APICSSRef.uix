@@ -1,0 +1,42 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component APICSSRef {
+  render() {
+    return (
+      <Shell activeRoute="/docs/api/css">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">API Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">@swissjs/css</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              The SwissJS CSS system. Provides design tokens, a utility class generator, and a CSS-in-JS injection helper.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Inline styles (primary approach)</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                Most SwissJS components use inline <code class="sj-inline-code">style</code> attributes with CSS variable tokens. This is the recommended approach for component libraries.
+              </p>
+              <div class="sj-code-block">{"// CSS variables injected in mounted() via a style tag\nconst tokens = `\n  --color-primary: #2563eb;\n  --color-surface: #f9fafb;\n  --radius-md: 8px;\n  --space-4: 16px;\n`;\n\n// Then use in JSX:\n<div style=\"background: var(--color-surface); border-radius: var(--radius-md); padding: var(--space-4);\">"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Global style injection</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Inject global styles from a component's <code class="sj-inline-code">mounted()</code> hook using a guard to prevent duplicate injection:</p>
+              <div class="sj-code-block">{"mounted() {\n  if (!document.getElementById('my-app-styles')) {\n    const s = document.createElement('style');\n    s.id = 'my-app-styles';\n    s.textContent = `\n      *, *::before, *::after { box-sizing: border-box; }\n      body { margin: 0; font-family: system-ui, sans-serif; }\n      :root {\n        --primary: #2563eb;\n        --surface: #f9fafb;\n      }\n    `;\n    document.head.appendChild(s);\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Dynamic class strings</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Build class strings conditionally using template literals or a helper:</p>
+              <div class="sj-code-block">{"_cx(...classes: (string | boolean | undefined)[]): string {\n  return classes.filter(Boolean).join(' ');\n}\n\nrender() {\n  return (\n    <button\n      class={this._cx(\n        'btn',\n        this.props.primary && 'btn-primary',\n        this.props.disabled && 'btn-disabled',\n      )}\n    >\n      {this.props.label}\n    </button>\n  );\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

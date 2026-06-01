@@ -1,0 +1,61 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component QuickStartPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/getting-started/quickstart">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Getting Started</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em; color: var(--text-primary);">Quick Start</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Build your first SwissJS application in five minutes. This guide takes you from zero to a running app with routing and components.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Step 1 — Scaffold the project</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Run the create-swissjs scaffolder. It writes a fully wired project with dev server, routing, and starter components.</p>
+              <div class="sj-code-block">{"npm create swissjs@latest my-app\ncd my-app\npnpm install"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Step 2 — Start the dev server</h2>
+              <div class="sj-code-block">{"pnpm dev"}</div>
+              <p style="margin: 14px 0 0; color: var(--text-secondary); font-size: 14px;">Open <code class="sj-inline-code">http://localhost:5000</code>. The dev server supports HMR — edits to <code class="sj-inline-code">.uix</code> files reload the browser instantly.</p>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Step 3 — Your first component</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Create <code class="sj-inline-code">app/pages/CounterPage.uix</code>:</p>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomponent CounterPage {\n  state { let count: number = 0; }\n\n  render() {\n    return (\n      <div style=\"padding: 40px;\">\n        <h1>Count: {this.count}</h1>\n        <button onclick={() => this.count++}>Increment</button>\n        <button onclick={() => this.count--}>Decrement</button>\n      </div>\n    );\n  }\n}"}</div>
+              <div class="sj-doc-note" style="margin-top: 16px;">The <code class="sj-inline-code">state</code> block is compiled to reactive properties. Mutating <code class="sj-inline-code">this.count</code> directly triggers a re-render — no setter required.</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Step 4 — Wire it to a route</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">In <code class="sj-inline-code">app/main.ui</code>, import your component and add a route condition:</p>
+              <div class="sj-code-block">{"import { CounterPage } from './pages/CounterPage.uix';\n\n// inside Router render():\nif (r === '/counter') return <CounterPage />;"}</div>
+              <p style="margin: 14px 0 0; color: var(--text-secondary); font-size: 14px;">Navigate to <code class="sj-inline-code">http://localhost:5000/counter</code> and your component renders.</p>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Step 5 — Build for production</h2>
+              <div class="sj-code-block">{"pnpm build"}</div>
+              <p style="margin: 14px 0 0; color: var(--text-secondary); font-size: 14px;">Swite compiles <code class="sj-inline-code">.ui</code> and <code class="sj-inline-code">.uix</code> files, tree-shakes, and outputs a static bundle to <code class="sj-inline-code">dist/</code>.</p>
+            </div>
+
+            <div style="display: flex; gap: 16px; padding-top: 8px;">
+              <a href="/docs/getting-started/project-structure" style="display: inline-flex; align-items: center; gap: 6px; background: var(--sj-accent); color: #fff; text-decoration: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 700;">Project Structure →</a>
+              <a href="/docs/core/components" style="display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); color: var(--text-secondary); text-decoration: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 700;">Core Concepts →</a>
+            </div>
+
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

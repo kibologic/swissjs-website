@@ -1,0 +1,45 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CorePagesPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/core/pages">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Core Concepts</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Pages</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Pages are the top-level components that map to routes. Each page is a <code class="sj-inline-code">.uix</code> file that renders the content for a specific URL path.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Anatomy of a page</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">A page is a component that wraps a layout and renders content. By convention, page files are named <code class="sj-inline-code">XxxPage.uix</code>.</p>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\nimport { AppLayout } from '../layouts/AppLayout.uix';\n\ncomponent DashboardPage {\n  render() {\n    return (\n      <AppLayout title=\"Dashboard\">\n        <h1>Welcome back</h1>\n        <p>Here is your activity summary.</p>\n      </AppLayout>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Routing to pages</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                SwissJS uses a manual router defined in <code class="sj-inline-code">main.ui</code>. There is no magic file-system routing unless you opt into the <code class="sj-inline-code">@kibologic/plugin-file-router</code> plugin.
+              </p>
+              <div class="sj-code-block">{"// In main.ui Router component:\nif (r === '/') return <HomePage />;\nif (r === '/dashboard') return <DashboardPage />;\nif (r.startsWith('/user/')) return <UserPage id={r.slice(6)} />;"}</div>
+              <div class="sj-doc-note" style="margin-top: 14px;">
+                Dynamic route parameters are extracted manually from the path string. Use <code class="sj-inline-code">r.slice()</code> or a URL parser.
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Page-level state</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Pages can hold their own reactive state. State is local to the component instance and does not persist across navigations unless stored in a global signal.</p>
+              <div class="sj-code-block">{"component ProductsPage {\n  state {\n    let items: any[] = [];\n    let loading: boolean = true;\n  }\n\n  async mounted() {\n    const res = await fetch('/api/products');\n    this.items = await res.json();\n    this.loading = false;\n  }\n\n  render() {\n    if (this.loading) return <p>Loading...</p>;\n    return (\n      <div>\n        {this.items.map((item: any) => (\n          <p key={item.id}>{item.name}</p>\n        ))}\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}
