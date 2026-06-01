@@ -1,0 +1,67 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component MigrationNuxtPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/migration/nuxt">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Migration</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">From Nuxt</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Coming from Nuxt? The main shift is from Vue's Options API / Composition API to SwissJS's component syntax, and from Nuxt's server rendering to a client-first approach.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Concept mapping</h2>
+              <table class="sj-table">
+                <thead><tr><th>Nuxt / Vue</th><th>SwissJS</th></tr></thead>
+                <tbody>
+                  {[
+                    { v: 'defineComponent + setup()', s: 'component X { state { } render() { } }' },
+                    { v: 'ref(0) / reactive({})', s: 'state { let x: number = 0; }' },
+                    { v: 'computed(() => v * 2)', s: '_doubled() { return this.v * 2; }' },
+                    { v: 'onMounted(() => {})', s: 'mounted() { }' },
+                    { v: 'onUnmounted(() => {})', s: 'destroyed() { }' },
+                    { v: 'watch(v, () => {})', s: 'updated() { } or subscribe in mounted()' },
+                    { v: 'useAsyncData / useFetch', s: 'async mounted() { this.data = await fetch(...).then(r => r.json()); }' },
+                    { v: 'Pinia store', s: 'Signal at module level + exported action functions' },
+                    { v: '<slot />', s: 'this.children' },
+                  ].map(row => (
+                    <tr key={row.v}>
+                      <td style="color:var(--text-secondary);font-size:12px;">{row.v}</td>
+                      <td style="color:var(--text-secondary);font-size:12px;">{row.s}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Template syntax differences</h2>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                {[
+                  { from: 'v-if="condition"', to: '{condition && <Element />} or ternary' },
+                  { from: 'v-for="item in items"', to: '{items.map(item => <El key={item.id} />)}' },
+                  { from: 'v-model="value"', to: 'value={this.val} + oninput={(e) => { this.val = e.target.value; }}' },
+                  { from: '@click="handler"', to: 'onclick={() => this.handler()}' },
+                  { from: ':class="{ active: isActive }"', to: 'class={isActive ? "active" : ""}' },
+                  { from: '<NuxtLink to="/path">', to: '<a href="/path"> (intercepted by main.ui)' },
+                ].map(row => (
+                  <div key={row.from} style="display:flex;gap:8px;align-items:flex-start;padding:8px 12px;background:var(--bg-page);border:1px solid var(--border);border-radius:6px;">
+                    <code class="sj-inline-code" style="font-size:11px;min-width:220px;flex-shrink:0;">{row.from}</code>
+                    <span style="font-size:12px;color:var(--text-muted);">→</span>
+                    <code class="sj-inline-code" style="font-size:11px;">{row.to}</code>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

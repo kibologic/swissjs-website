@@ -1,0 +1,49 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component LifecycleHooksPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/lifecycle-hooks">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Lifecycle Hooks</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Lifecycle hooks let you run code at specific points in a component's existence: after mount, after each update, or before destruction.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Hook reference</h2>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                {[
+                  { name: 'mounted()', sig: 'mounted(): void | Promise<void>', desc: 'Runs after the component is added to the DOM. Safe to read layout, access refs, start async operations, and subscribe to signals.' },
+                  { name: 'updated()', sig: 'updated(): void', desc: 'Runs after every re-render triggered by state or prop changes. Useful for syncing third-party libraries with new DOM state.' },
+                  { name: 'destroyed()', sig: 'destroyed(): void', desc: 'Runs before the component is removed from the DOM. Cancel timers, close connections, unsubscribe from events.' },
+                ].map(hook => (
+                  <div key={hook.name} class="sj-doc-card" style="padding: 16px;">
+                    <div style="margin-bottom: 8px;"><code class="sj-inline-code" style="font-size: 14px;">{hook.sig}</code></div>
+                    <p style="margin: 0; font-size: 13px; color: var(--text-secondary); line-height: 1.6;">{hook.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Async mounted</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;"><code class="sj-inline-code">mounted()</code> can be <code class="sj-inline-code">async</code>. The component renders immediately (showing loading state) while the async operation resolves.</p>
+              <div class="sj-code-block">{"component InvoiceList {\n  state {\n    let invoices: any[] = [];\n    let loading: boolean = true;\n    let error: string = '';\n  }\n\n  async mounted() {\n    try {\n      const res = await fetch('/api/invoices');\n      if (!res.ok) throw new Error('Failed to fetch');\n      this.invoices = await res.json();\n    } catch (e: any) {\n      this.error = e.message;\n    } finally {\n      this.loading = false;\n    }\n  }\n\n  render() {\n    if (this.loading) return <p>Loading invoices...</p>;\n    if (this.error) return <p style=\"color:red;\">{this.error}</p>;\n    return <div>{this.invoices.length + ' invoices'}</div>;\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Timer cleanup with destroyed</h2>
+              <div class="sj-code-block">{"component Clock {\n  state { let time: string = ''; }\n  _timerId: number | null = null;\n\n  mounted() {\n    const tick = () => {\n      this.time = new Date().toLocaleTimeString();\n    };\n    tick();\n    this._timerId = window.setInterval(tick, 1000);\n  }\n\n  destroyed() {\n    if (this._timerId !== null) {\n      window.clearInterval(this._timerId);\n    }\n  }\n\n  render() {\n    return <div style=\"font-variant-numeric: tabular-nums;\">{this.time}</div>;\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

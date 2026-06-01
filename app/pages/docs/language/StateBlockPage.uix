@@ -1,0 +1,56 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component StateBlockPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/language/state-block">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Language Reference</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">State Block</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              The <code class="sj-inline-code">state</code> block declares reactive variables local to a component. Each variable becomes a property on <code class="sj-inline-code">this</code>. Mutating it triggers a re-render.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Syntax</h2>
+              <div class="sj-code-block">{"component SearchBox {\n  state {\n    let query: string = '';\n    let results: any[] = [];\n    let loading: boolean = false;\n    let error: string = '';\n  }\n\n  async _search(q: string) {\n    this.loading = true;\n    try {\n      const res = await fetch('/api/search?q=' + encodeURIComponent(q));\n      this.results = await res.json();\n    } catch {\n      this.error = 'Search failed';\n    } finally {\n      this.loading = false;\n    }\n  }\n\n  render() {\n    return (\n      <div>\n        <input\n          value={this.query}\n          oninput={(e: any) => {\n            this.query = e.target.value;\n            this._search(this.query);\n          }}\n        />\n        {this.loading && <p>Searching...</p>}\n        {this.results.map((r: any) => <p key={r.id}>{r.title}</p>)}\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Supported types</h2>
+              <table class="sj-table">
+                <thead><tr><th>Type</th><th>Example</th><th>Notes</th></tr></thead>
+                <tbody>
+                  {[
+                    { type: 'string', ex: "let name: string = '';", note: 'Any string value' },
+                    { type: 'number', ex: 'let count: number = 0;', note: 'Integer or float' },
+                    { type: 'boolean', ex: 'let open: boolean = false;', note: 'true / false' },
+                    { type: 'any[]', ex: 'let items: any[] = [];', note: 'Arrays — assign a new array to trigger update' },
+                    { type: 'any', ex: 'let data: any = null;', note: 'Untyped — use when shape is unknown' },
+                    { type: 'literal union', ex: "let mode: 'a'|'b' = 'a';", note: 'String literal union types' },
+                  ].map(row => (
+                    <tr key={row.type}>
+                      <td><code class="sj-inline-code">{row.type}</code></td>
+                      <td><code class="sj-inline-code" style="font-size: 11px;">{row.ex}</code></td>
+                      <td style="color: var(--text-muted);">{row.note}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Mutating arrays and objects</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">SwissJS tracks assignment, not deep mutation. When mutating arrays or objects, assign a new value to trigger reactivity:</p>
+              <div class="sj-code-block">{"// ✅ Correct — assignment triggers re-render\nthis.items = [...this.items, newItem];\nthis.items = this.items.filter((i: any) => i.id !== id);\nthis.user = { ...this.user, name: 'New Name' };\n\n// ❌ Wrong — mutation in place does NOT trigger re-render\nthis.items.push(newItem);\nthis.user.name = 'New Name';"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

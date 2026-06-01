@@ -1,0 +1,79 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component ProjectStructurePage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/getting-started/project-structure">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Getting Started</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em; color: var(--text-primary);">Project Structure</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Every SwissJS project follows a consistent layout. Understanding it helps you navigate your codebase and know where each piece belongs.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Default scaffold layout</h2>
+              <div class="sj-code-block">{"my-app/\n├── app/\n│   ├── components/          # Shared UI components (.uix)\n│   ├── pages/               # Page components (.uix)\n│   ├── public/              # Static assets (index.html, images)\n│   └── main.ui              # Entry point — mounts the root component\n├── dev.mjs                  # Dev server launcher\n├── package.json\n└── node_modules/"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">The entry point: <code class="sj-inline-code">main.ui</code></h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                <code class="sj-inline-code">main.ui</code> is the application bootstrap file. It runs once — it imports framework primitives, sets up global signals (e.g. routing), and calls <code class="sj-inline-code">mount()</code> to attach the root component to the DOM.
+              </p>
+              <div class="sj-doc-note">
+                <code class="sj-inline-code">.ui</code> files are not component files. They are imperative bootstrap scripts. Component declarations go in <code class="sj-inline-code">.uix</code> files.
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Pages vs Components</h2>
+              <table class="sj-table">
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Purpose</th>
+                    <th>Naming</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { loc: 'app/pages/', purpose: 'Route-level containers. One page per route.', naming: 'PascalCase, e.g. DashboardPage.uix' },
+                    { loc: 'app/components/', purpose: 'Reusable UI building blocks shared across pages.', naming: 'PascalCase, e.g. Button.uix' },
+                    { loc: 'app/layouts/', purpose: 'Structural wrappers (nav + sidebar + main slot).', naming: 'PascalCase, e.g. AppLayout.uix' },
+                  ].map(row => (
+                    <tr key={row.loc}>
+                      <td><code class="sj-inline-code">{row.loc}</code></td>
+                      <td style="color: var(--text-secondary);">{row.purpose}</td>
+                      <td style="color: var(--text-muted);">{row.naming}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Larger app structure</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">As your app grows, organise pages into subdirectories by feature:</p>
+              <div class="sj-code-block">{"app/\n├── components/\n│   ├── Button.uix\n│   └── DataTable.uix\n├── layouts/\n│   └── AppLayout.uix\n├── pages/\n│   ├── HomePage.uix\n│   ├── dashboard/\n│   │   ├── DashboardPage.uix\n│   │   └── AnalyticsPage.uix\n│   └── settings/\n│       ├── SettingsPage.uix\n│       └── BillingPage.uix\n└── main.ui"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Static assets</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">
+                Place static files in <code class="sj-inline-code">app/public/</code>. Swite copies them verbatim to <code class="sj-inline-code">dist/</code> at build time. The required file is <code class="sj-inline-code">index.html</code> — the HTML shell that Swite injects the compiled bundle into.
+              </p>
+              <div class="sj-code-block">{"<!-- app/public/index.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>My App</title>\n  </head>\n  <body>\n    <div id=\"app\"></div>\n    <script type=\"module\" src=\"/main.js\"></script>\n  </body>\n</html>"}</div>
+            </div>
+
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

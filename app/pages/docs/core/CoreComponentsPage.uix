@@ -1,0 +1,52 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CoreComponentsPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/core/components">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Core Concepts</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">Components</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Components are the building blocks of a SwissJS application. They combine markup, state, and behaviour in a single <code class="sj-inline-code">.uix</code> file.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Component anatomy</h2>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomponent MyComponent {\n  // Props declared as an object type\n  props = {\n    label: string;\n    count: number;\n  };\n\n  // Reactive state\n  state {\n    let expanded: boolean = false;\n  }\n\n  // Helper method (not JSX-returning)\n  _formatLabel(): string {\n    return this.props.label.toUpperCase();\n  }\n\n  // Lifecycle hook\n  mounted() {\n    console.log('Component mounted');\n  }\n\n  // Required: JSX-returning render method\n  render() {\n    return (\n      <div>\n        <button onclick={() => { this.expanded = !this.expanded; }}>\n          {this._formatLabel()} ({this.props.count})\n        </button>\n        {this.expanded && <p>Content is visible</p>}\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Rules</h2>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                {[
+                  'Every .uix file must import SwissComponent from @kibologic/core.',
+                  'JSX may only appear inside the render() method — not in helper methods.',
+                  'Component declarations use the component keyword, not class or export class.',
+                  'Never use export before component — just component MyComponent.',
+                  'Module-level function declarations are not allowed. All helpers must be component methods.',
+                  'Files must not exceed 700 lines. Split into subdirectory sub-modules at 650.',
+                ].map((rule, i) => (
+                  <div key={String(i)} style="display: flex; gap: 12px; padding: 10px 14px; background: var(--bg-page); border: 1px solid var(--border); border-radius: 8px;">
+                    <span style="color: var(--sj-accent); font-weight: 800; font-size: 12px; min-width: 20px;">{String(i + 1)}</span>
+                    <span style="font-size: 13px; color: var(--text-secondary);">{rule}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Composing components</h2>
+              <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Import and use components just like HTML elements in JSX. Props are passed as attributes.</p>
+              <div class="sj-code-block">{"import { Button } from './Button.uix';\nimport { Badge } from './Badge.uix';\n\ncomponent Card {\n  props = { title: string; count: number };\n\n  render() {\n    return (\n      <div style=\"border: 1px solid #ccc; padding: 16px; border-radius: 8px;\">\n        <div style=\"display: flex; justify-content: space-between;\">\n          <h3>{this.props.title}</h3>\n          <Badge value={this.props.count} />\n        </div>\n        <Button label=\"View details\" />\n      </div>\n    );\n  }\n}"}</div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

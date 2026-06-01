@@ -1,0 +1,58 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component VsSolidPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/comparisons/vs-solid">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">Comparisons</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">SwissJS vs Solid</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              Solid and SwissJS are the closest architectural cousins in this space — both use fine-grained reactivity, both avoid virtual DOM diffing, and both compile JSX. The differences are in API surface and component model.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 28px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 700;">Feature comparison</h2>
+              <table class="sj-table">
+                <thead><tr><th>Feature</th><th>SwissJS</th><th>Solid 1.x</th></tr></thead>
+                <tbody>
+                  {[
+                    { f: 'Component model', s: 'Class-like with state block', n: 'Function-based with hooks-like primitives' },
+                    { f: 'Reactivity', s: 'state block (component) + Signal (global)', n: 'createSignal, createStore, createEffect' },
+                    { f: 'Runtime size', s: '4.2 kB', n: '6.4 kB' },
+                    { f: 'JSX', s: 'Standard JSX — JSX transform only', n: 'Non-standard JSX — compiled to DOM ops' },
+                    { f: 'TypeScript', s: 'First-class in .uix', n: 'First-class' },
+                    { f: 'Component re-runs', s: 'render() re-runs on state change', n: 'Functions run once — only reactive expressions re-evaluate' },
+                    { f: 'File format', s: '.uix (custom extension)', n: '.tsx / .jsx' },
+                    { f: 'SSR', s: 'No (CSR only)', n: 'Yes via SolidStart' },
+                  ].map(row => (
+                    <tr key={row.f}>
+                      <td style="color:var(--text-secondary);">{row.f}</td>
+                      <td style="color:#22c55e;font-size:12px;">{row.s}</td>
+                      <td style="color:var(--text-muted);font-size:12px;">{row.n}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Reactivity model contrast</h2>
+              <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">Solid:</p>
+              <div class="sj-code-block">{"import { createSignal } from 'solid-js';\n\nfunction Counter() {\n  const [count, setCount] = createSignal(0);\n  return <button onClick={() => setCount(c => c + 1)}>{count()}</button>;\n  // Function runs ONCE. Only count() expression re-evaluates.\n}"}</div>
+              <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">SwissJS:</p>
+              <div class="sj-code-block">{"component Counter {\n  state { let count: number = 0; }\n\n  render() {\n    // render() re-runs on state change (fast — no vDOM diff)\n    return <button onclick={() => { this.count++; }}>{this.count}</button>;\n  }\n}"}</div>
+              <div class="sj-doc-note" style="margin-top: 14px;">
+                Solid's model is technically more fine-grained (only expressions re-evaluate, not render functions). SwissJS re-runs render() but avoids the vDOM — the practical performance difference is negligible for most applications.
+              </div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}

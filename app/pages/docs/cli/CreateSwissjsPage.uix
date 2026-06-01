@@ -1,0 +1,50 @@
+import { SwissComponent } from '@kibologic/core';
+import { Shell } from '../../../components/Shell.uix';
+
+component CreateSwissjsPage {
+  render() {
+    return (
+      <Shell activeRoute="/docs/cli/create-swissjs">
+        <div style="max-width: 860px;">
+          <div style="margin-bottom: 32px;">
+            <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px;">CLI</div>
+            <h1 style="margin: 0 0 12px; font-size: 42px; letter-spacing: -0.05em;">create-swissjs</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 16px; line-height: 1.7; max-width: 680px;">
+              The official project scaffolder. Creates a fully wired SwissJS project with a dev server, sample components, and routing in seconds.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 32px;">
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Usage</h2>
+              <div class="sj-code-block">{"# With npm (no install required)\nnpm create swissjs@latest my-app\n\n# With pnpm\npnpm create swissjs my-app\n\n# With yarn\nyarn create swissjs my-app\n\n# Current directory\nnpm create swissjs@latest ."}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">What gets scaffolded</h2>
+              <div class="sj-code-block">{"my-app/\n├── app/\n│   ├── components/\n│   │   ├── Navbar.uix      # Navigation bar with logo and links\n│   │   ├── Footer.uix      # Site footer\n│   │   └── Button.uix      # Reusable button with variants\n│   ├── pages/\n│   │   ├── HomePage.uix    # Home page with hero section\n│   │   └── AboutPage.uix   # About page\n│   ├── public/\n│   │   └── index.html      # HTML shell\n│   └── main.ui             # Entry point + router\n├── dev.mjs                  # Swite dev server\n├── package.json\n└── README.md"}</div>
+            </div>
+
+            <div class="sj-doc-card">
+              <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Next steps after scaffolding</h2>
+              <div class="sj-code-block">{"cd my-app\npnpm install\npnpm dev\n# Open http://localhost:5000"}</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+                {[
+                  'Edit app/pages/HomePage.uix to change the landing page',
+                  'Add new pages in app/pages/ and register routes in app/main.ui',
+                  'Create reusable components in app/components/',
+                  'Run pnpm build when ready for production',
+                ].map((tip, i) => (
+                  <div key={String(i)} style="display:flex;gap:10px;align-items:flex-start;font-size:13px;">
+                    <span style="color:var(--sj-accent);font-weight:800;">{String(i + 1)}.</span>
+                    <span style="color:var(--text-secondary);">{tip}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+}
