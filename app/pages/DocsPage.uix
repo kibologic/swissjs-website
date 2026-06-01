@@ -1,13 +1,25 @@
 import { SwissComponent } from '@kibologic/core';
 import { Shell } from '../components/Shell.uix';
+import { DocsRouter } from './docs/DocsRouter.uix';
 
 component DocsPage {
   props = {
     route: string
   };
 
+  _isLegacyRoute(r: string): boolean {
+    const legacy = ['/docs', '/docs/', '/docs/model', '/docs/files', '/docs/runtime',
+      '/docs/compiler', '/docs/signals', '/docs/router', '/docs/packages',
+      '/docs/swite', '/docs/applications'];
+    return legacy.includes(r);
+  }
+
   render() {
     const r = this.props.route || '/docs';
+
+    if (!this._isLegacyRoute(r)) {
+      return <DocsRouter route={r} />;
+    }
 
     const hd = (s: string) => <div style="margin-bottom: 10px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.14em;">{s}</div>;
     const h1 = (s: string) => <h1 style="margin: 0 0 10px; font-size: 42px; letter-spacing: -0.05em;">{s}</h1>;
