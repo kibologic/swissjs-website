@@ -45,7 +45,7 @@ component VsNuxtPage {
               <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">Nuxt (Vue SFC):</p>
               <div class="sj-code-block">{"<template>\n  <div>\n    <button @click=\"count++\">{{ count }}</button>\n    <p v-if=\"count > 5\">High count!</p>\n    <ul>\n      <li v-for=\"item in items\" :key=\"item.id\">{{ item.name }}</li>\n    </ul>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nconst count = ref(0);\nconst items = ref<Item[]>([]);\n</script>"}</div>
               <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">SwissJS (.uix):</p>
-              <div class="sj-code-block">{"component MyComp {\n  state { let count: number = 0; let items: any[] = []; }\n\n  render() {\n    return (\n      <div>\n        <button onclick={() => { this.count++; }}>{this.count}</button>\n        {this.count > 5 && <p>High count!</p>}\n        <ul>\n          {this.items.map((item: any) => (\n            <li key={item.id}>{item.name}</li>\n          ))}\n        </ul>\n      </div>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent MyComp {\n  sta" + "te { let count: number = 0; let items: any[] = []; }\n\n  render() {\n    return (\n      <div>\n        <button onclick={() => { this.count++; }}>{this.count}</button>\n        {this.count > 5 && <p>High count!</p>}\n        <ul>\n          {this.items.map((item: any) => (\n            <li key={item.id}>{item.name}</li>\n          ))}\n        </ul>\n      </div>\n    );\n  }\n}"}</div>
             </div>
           </div>
         </div>

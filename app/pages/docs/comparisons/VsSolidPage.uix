@@ -45,7 +45,7 @@ component VsSolidPage {
               <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">Solid:</p>
               <div class="sj-code-block">{"import { createSignal } from 'solid-js';\n\nfunction Counter() {\n  const [count, setCount] = createSignal(0);\n  return <button onClick={() => setCount(c => c + 1)}>{count()}</button>;\n  // Function runs ONCE. Only count() expression re-evaluates.\n}"}</div>
               <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">SwissJS:</p>
-              <div class="sj-code-block">{"component Counter {\n  state { let count: number = 0; }\n\n  render() {\n    // render() re-runs on state change (fast — no vDOM diff)\n    return <button onclick={() => { this.count++; }}>{this.count}</button>;\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent Counter {\n  sta" + "te { let count: number = 0; }\n\n  render() {\n    // render() re-runs on state change (fast — no vDOM diff)\n    return <button onclick={() => { this.count++; }}>{this.count}</button>;\n  }\n}"}</div>
               <div class="sj-doc-note" style="margin-top: 14px;">
                 Solid's model is technically more fine-grained (only expressions re-evaluate, not render functions). SwissJS re-runs render() but avoids the vDOM — the practical performance difference is negligible for most applications.
               </div>

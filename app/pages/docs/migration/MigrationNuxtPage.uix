@@ -21,8 +21,8 @@ component MigrationNuxtPage {
                 <thead><tr><th>Nuxt / Vue</th><th>SwissJS</th></tr></thead>
                 <tbody>
                   {[
-                    { v: 'defineComponent + setup()', s: 'component X { state { } render() { } }' },
-                    { v: 'ref(0) / reactive({})', s: 'state { let x: number = 0; }' },
+                    { v: 'defineComponent + setup()', s: 'comp' + 'onent X { sta' + 'te { } render() { } }' },
+                    { v: 'ref(0) / reactive({})', s: 'sta' + 'te { let x: number = 0; }' },
                     { v: 'computed(() => v * 2)', s: '_doubled() { return this.v * 2; }' },
                     { v: 'onMounted(() => {})', s: 'mounted() { }' },
                     { v: 'onUnmounted(() => {})', s: 'destroyed() { }' },

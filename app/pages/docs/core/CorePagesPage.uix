@@ -35,7 +35,7 @@ component CorePagesPage {
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Page-level state</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Pages can hold their own reactive state. State is local to the component instance and does not persist across navigations unless stored in a global signal.</p>
-              <div class="sj-code-block">{"component ProductsPage {\n  state {\n    let items: any[] = [];\n    let loading: boolean = true;\n  }\n\n  async mounted() {\n    const res = await fetch('/api/products');\n    this.items = await res.json();\n    this.loading = false;\n  }\n\n  render() {\n    if (this.loading) return <p>Loading...</p>;\n    return (\n      <div>\n        {this.items.map((item: any) => (\n          <p key={item.id}>{item.name}</p>\n        ))}\n      </div>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent ProductsPage {\n  sta" + "te {\n    let items: any[] = [];\n    let loading: boolean = true;\n  }\n\n  async mounted() {\n    const res = await fetch('/api/products');\n    this.items = await res.json();\n    this.loading = false;\n  }\n\n  render() {\n    if (this.loading) return <p>Loading...</p>;\n    return (\n      <div>\n        {this.items.map((item: any) => (\n          <p key={item.id}>{item.name}</p>\n        ))}\n      </div>\n    );\n  }\n}"}</div>
             </div>
           </div>
         </div>

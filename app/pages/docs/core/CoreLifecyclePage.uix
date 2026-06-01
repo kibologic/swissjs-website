@@ -42,7 +42,7 @@ component CoreLifecyclePage {
 
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Cleanup with destroyed</h2>
-              <div class="sj-code-block">{"component LiveFeed {\n  state { let messages: string[] = []; }\n  _ws: WebSocket | null = null;\n\n  mounted() {\n    this._ws = new WebSocket('wss://api.example.com/feed');\n    this._ws.onmessage = (e: any) => {\n      this.messages = [...this.messages, e.data];\n    };\n  }\n\n  destroyed() {\n    this._ws?.close();\n  }\n\n  render() {\n    return (\n      <div>\n        {this.messages.map((m: string, i: number) => (\n          <p key={String(i)}>{m}</p>\n        ))}\n      </div>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent LiveFeed {\n  sta" + "te { let messages: string[] = []; }\n  _ws: WebSocket | null = null;\n\n  mounted() {\n    this._ws = new WebSocket('wss://api.example.com/feed');\n    this._ws.onmessage = (e: any) => {\n      this.messages = [...this.messages, e.data];\n    };\n  }\n\n  destroyed() {\n    this._ws?.close();\n  }\n\n  render() {\n    return (\n      <div>\n        {this.messages.map((m: string, i: number) => (\n          <p key={String(i)}>{m}</p>\n        ))}\n      </div>\n    );\n  }\n}"}</div>
             </div>
           </div>
         </div>

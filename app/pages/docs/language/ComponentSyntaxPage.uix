@@ -17,19 +17,19 @@ component ComponentSyntaxPage {
           <div style="display: flex; flex-direction: column; gap: 32px;">
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Declaration</h2>
-              <div class="sj-code-block">{"// ✅ Correct\ncomponent MyButton { ... }\n\n// ❌ Wrong — no export keyword\nexport component MyButton { ... }\n\n// ❌ Wrong — not a class\nclass MyButton extends SwissComponent { ... }\n\n// ❌ Wrong — no default export\nexport default component MyButton { ... }"}</div>
+              <div class="sj-code-block">{"// ✅ Correct\ncomp" + "onent MyButton { ... }\n\n// ❌ Wrong — no export keyword\nexport comp" + "onent MyButton { ... }\n\n// ❌ Wrong — not a class\nclass MyButton extends SwissComponent { ... }\n\n// ❌ Wrong — no default export\nexport default comp" + "onent MyButton { ... }"}</div>
             </div>
 
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Props declaration</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Props are declared as a typed object literal. Access them via <code class="sj-inline-code">this.props.propName</code>.</p>
-              <div class="sj-code-block">{"component Badge {\n  props = {\n    label: string;\n    variant: 'success' | 'warning' | 'error';\n    count?: number;  // optional prop\n  };\n\n  render() {\n    const colors: Record<string, string> = {\n      success: '#16a34a',\n      warning: '#d97706',\n      error: '#dc2626',\n    };\n    return (\n      <span style={'background:' + colors[this.props.variant] + ';color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;'}>\n        {this.props.label}\n        {this.props.count != null ? ' (' + this.props.count + ')' : ''}\n      </span>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent Badge {\n  props = {\n    label: string;\n    variant: 'success' | 'warning' | 'error';\n    count?: number;  // optional prop\n  };\n\n  render() {\n    const colors: Record<string, string> = {\n      success: '#16a34a',\n      warning: '#d97706',\n      error: '#dc2626',\n    };\n    return (\n      <span style={'background:' + colors[this.props.variant] + ';color:#fff;padding:2px 8px;border-radius:999px;font-size:12px;'}>\n        {this.props.label}\n        {this.props.count != null ? ' (' + this.props.count + ')' : ''}\n      </span>\n    );\n  }\n}"}</div>
             </div>
 
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Event handling</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Use inline arrow functions for event handlers. The handler has access to <code class="sj-inline-code">this</code> (the component instance).</p>
-              <div class="sj-code-block">{"component Form {\n  state { let value: string = ''; let submitted: boolean = false; }\n\n  _handleSubmit(e: any) {\n    e.preventDefault();\n    this.submitted = true;\n  }\n\n  render() {\n    return (\n      <form onsubmit={(e: any) => this._handleSubmit(e)}>\n        <input\n          type=\"text\"\n          value={this.value}\n          oninput={(e: any) => { this.value = e.target.value; }}\n        />\n        <button type=\"submit\">Submit</button>\n        {this.submitted && <p>Submitted: {this.value}</p>}\n      </form>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent Form {\n  sta" + "te { let value: string = ''; let submitted: boolean = false; }\n\n  _handleSubmit(e: any) {\n    e.preventDefault();\n    this.submitted = true;\n  }\n\n  render() {\n    return (\n      <form onsubmit={(e: any) => this._handleSubmit(e)}>\n        <input\n          type=\"text\"\n          value={this.value}\n          oninput={(e: any) => { this.value = e.target.value; }}\n        />\n        <button type=\"submit\">Submit</button>\n        {this.submitted && <p>Submitted: {this.value}</p>}\n      </form>\n    );\n  }\n}"}</div>
             </div>
 
             <div class="sj-doc-card">

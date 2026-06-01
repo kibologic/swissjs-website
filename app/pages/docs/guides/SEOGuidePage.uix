@@ -18,7 +18,7 @@ component SEOGuidePage {
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Dynamic page titles</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Update <code class="sj-inline-code">document.title</code> in <code class="sj-inline-code">mounted()</code> for each page component:</p>
-              <div class="sj-code-block">{"component ProductPage {\n  props = { slug: string };\n  state { let product: any = null; }\n\n  async mounted() {\n    this.product = await fetch('/api/products/' + this.props.slug).then(r => r.json());\n    if (this.product) {\n      document.title = this.product.name + ' — My Store';\n    }\n  }\n\n  render() {\n    if (!this.product) return <p>Loading...</p>;\n    return <h1>{this.product.name}</h1>;\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent ProductPage {\n  props = { slug: string };\n  sta" + "te { let product: any = null; }\n\n  async mounted() {\n    this.product = await fetch('/api/products/' + this.props.slug).then(r => r.json());\n    if (this.product) {\n      document.title = this.product.name + ' — My Store';\n    }\n  }\n\n  render() {\n    if (!this.product) return <p>Loading...</p>;\n    return <h1>{this.product.name}</h1>;\n  }\n}"}</div>
             </div>
 
             <div class="sj-doc-card">

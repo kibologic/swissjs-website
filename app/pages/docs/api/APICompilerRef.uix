@@ -36,7 +36,7 @@ component APICompilerRef {
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Compiled output example</h2>
               <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">Input (.uix):</p>
-              <div class="sj-code-block">{"component Counter {\n  state { let count: number = 0; }\n  render() {\n    return <button onclick={() => this.count++}>{this.count}</button>;\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent Counter {\n  sta" + "te { let count: number = 0; }\n  render() {\n    return <button onclick={() => this.count++}>{this.count}</button>;\n  }\n}"}</div>
               <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">Output (compiled JS):</p>
               <div class="sj-code-block">{"class Counter extends SwissComponent {\n  get count() { return this._state.count; }\n  set count(v) { this._state.count = v; this.scheduleUpdate(); }\n  constructor() { super(); this._state = { count: 0 }; }\n  render() {\n    return createElement('button', { onclick: () => this.count++ }, this.count);\n  }\n}"}</div>
             </div>

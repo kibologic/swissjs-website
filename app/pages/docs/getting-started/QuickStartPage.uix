@@ -31,7 +31,7 @@ component QuickStartPage {
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;">Step 3 — Your first component</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Create <code class="sj-inline-code">app/pages/CounterPage.uix</code>:</p>
-              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomponent CounterPage {\n  state { let count: number = 0; }\n\n  render() {\n    return (\n      <div style=\"padding: 40px;\">\n        <h1>Count: {this.count}</h1>\n        <button onclick={() => this.count++}>Increment</button>\n        <button onclick={() => this.count--}>Decrement</button>\n      </div>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomp" + "onent CounterPage {\n  sta" + "te { let count: number = 0; }\n\n  render() {\n    return (\n      <div style=\"padding: 40px;\">\n        <h1>Count: {this.count}</h1>\n        <button onclick={() => this.count++}>Increment</button>\n        <button onclick={() => this.count--}>Decrement</button>\n      </div>\n    );\n  }\n}"}</div>
               <div class="sj-doc-note" style="margin-top: 16px;">The <code class="sj-inline-code">state</code> block is compiled to reactive properties. Mutating <code class="sj-inline-code">this.count</code> directly triggers a re-render — no setter required.</div>
             </div>
 

@@ -29,13 +29,13 @@ component PerformancePage {
 
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Debounce user input</h2>
-              <div class="sj-code-block">{"component SearchInput {\n  state { let query: string = ''; }\n  _timer: number | null = null;\n\n  _onInput(value: string) {\n    this.query = value;\n    if (this._timer !== null) window.clearTimeout(this._timer);\n    this._timer = window.setTimeout(() => this._search(value), 300);\n  }\n\n  async _search(q: string) { /* fetch */ }\n\n  render() {\n    return (\n      <input\n        value={this.query}\n        oninput={(e: any) => this._onInput(e.target.value)}\n        placeholder=\"Search...\"\n      />\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent SearchInput {\n  sta" + "te { let query: string = ''; }\n  _timer: number | null = null;\n\n  _onInput(value: string) {\n    this.query = value;\n    if (this._timer !== null) window.clearTimeout(this._timer);\n    this._timer = window.setTimeout(() => this._search(value), 300);\n  }\n\n  async _search(q: string) { /* fetch */ }\n\n  render() {\n    return (\n      <input\n        value={this.query}\n        oninput={(e: any) => this._onInput(e.target.value)}\n        placeholder=\"Search...\"\n      />\n    );\n  }\n}"}</div>
             </div>
 
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Lazy-load large components</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Import heavy components only when they are needed using dynamic import in <code class="sj-inline-code">mounted()</code>.</p>
-              <div class="sj-code-block">{"component ReportsPage {\n  state { let ChartComponent: any = null; }\n\n  async mounted() {\n    const mod = await import('../components/HeavyChart.uix');\n    this.ChartComponent = mod.HeavyChart;\n  }\n\n  render() {\n    if (!this.ChartComponent) return <p>Loading chart...</p>;\n    const Chart = this.ChartComponent;\n    return <Chart data={this.data} />;\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent ReportsPage {\n  sta" + "te { let ChartComponent: any = null; }\n\n  async mounted() {\n    const mod = await import('../components/HeavyChart.uix');\n    this.ChartComponent = mod.HeavyChart;\n  }\n\n  render() {\n    if (!this.ChartComponent) return <p>Loading chart...</p>;\n    const Chart = this.ChartComponent;\n    return <Chart data={this.data} />;\n  }\n}"}</div>
             </div>
           </div>
         </div>

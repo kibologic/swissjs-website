@@ -21,8 +21,8 @@ component MigrationReactPage {
                 <thead><tr><th>React</th><th>SwissJS</th></tr></thead>
                 <tbody>
                   {[
-                    { r: 'function Component() { return <jsx />; }', s: 'component X { render() { return <jsx />; } }' },
-                    { r: 'const [v, setV] = useState(0)', s: 'state { let v: number = 0; }  then  this.v = 1' },
+                    { r: 'function Component() { return <jsx />; }', s: 'comp' + 'onent X { render() { return <jsx />; } }' },
+                    { r: 'const [v, setV] = useState(0)', s: 'sta' + 'te { let v: number = 0; }  then  this.v = 1' },
                     { r: 'useEffect(() => {}, [])', s: 'mounted() { ... }' },
                     { r: 'useEffect(() => () => cleanup(), [])', s: 'mounted() + destroyed()' },
                     { r: 'useMemo(() => compute(), [dep])', s: '_compute() { return compute(); } called in render()' },
@@ -45,7 +45,7 @@ component MigrationReactPage {
               <p style="margin: 0 0 10px; color: var(--text-muted); font-size: 12px;">React:</p>
               <div class="sj-code-block">{"function Counter() {\n  const [count, setCount] = useState(0);\n  return (\n    <button onClick={() => setCount(c => c + 1)}>\n      Count: {count}\n    </button>\n  );\n}"}</div>
               <p style="margin: 14px 0 10px; color: var(--text-muted); font-size: 12px;">SwissJS:</p>
-              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomponent Counter {\n  state { let count: number = 0; }\n\n  render() {\n    return (\n      <button onclick={() => { this.count++; }}>\n        Count: {this.count}\n      </button>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"import { SwissComponent } from '@kibologic/core';\n\ncomp" + "onent Counter {\n  sta" + "te { let count: number = 0; }\n\n  render() {\n    return (\n      <button onclick={() => { this.count++; }}>\n        Count: {this.count}\n      </button>\n    );\n  }\n}"}</div>
             </div>
 
             <div class="sj-doc-card">

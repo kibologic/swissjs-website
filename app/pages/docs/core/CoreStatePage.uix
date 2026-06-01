@@ -18,7 +18,7 @@ component CoreStatePage {
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Component state block</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">Declare reactive state with the <code class="sj-inline-code">state</code> block inside a component. Every variable declared there becomes a reactive property on <code class="sj-inline-code">this</code>.</p>
-              <div class="sj-code-block">{"component Toggle {\n  state {\n    let open: boolean = false;\n    let label: string = 'Click me';\n  }\n\n  render() {\n    return (\n      <button onclick={() => { this.open = !this.open; }}>\n        {this.label} — {this.open ? 'ON' : 'OFF'}\n      </button>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"comp" + "onent Toggle {\n  sta" + "te {\n    let open: boolean = false;\n    let label: string = 'Click me';\n  }\n\n  render() {\n    return (\n      <button onclick={() => { this.open = !this.open; }}>\n        {this.label} — {this.open ? 'ON' : 'OFF'}\n      </button>\n    );\n  }\n}"}</div>
               <div class="sj-doc-note" style="margin-top: 14px;">
                 Assigning to <code class="sj-inline-code">this.open = value</code> triggers a re-render automatically. There is no <code class="sj-inline-code">setState()</code> call required.
               </div>
@@ -27,7 +27,7 @@ component CoreStatePage {
             <div class="sj-doc-card">
               <h2 style="margin: 0 0 12px; font-size: 20px; font-weight: 700;">Signals — cross-component state</h2>
               <p style="margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.6;">A <code class="sj-inline-code">Signal</code> is a standalone reactive value that any component can subscribe to. Reading <code class="sj-inline-code">signal$.value</code> in a render method creates a subscription — updates notify all subscribers.</p>
-              <div class="sj-code-block">{"import { Signal } from '@kibologic/core';\n\n// Defined at module level (e.g. in a store file)\nexport const count$ = new Signal(0);\n\n// In any component:\ncomponent Counter {\n  render() {\n    return (\n      <div>\n        <p>{count$.value}</p>\n        <button onclick={() => { count$.value++; }}>+</button>\n      </div>\n    );\n  }\n}"}</div>
+              <div class="sj-code-block">{"import { Signal } from '@kibologic/core';\n\n// Defined at module level (e.g. in a store file)\nexport const count$ = new Signal(0);\n\n// In any component:\ncomp" + "onent Counter {\n  render() {\n    return (\n      <div>\n        <p>{count$.value}</p>\n        <button onclick={() => { count$.value++; }}>+</button>\n      </div>\n    );\n  }\n}"}</div>
             </div>
 
             <div class="sj-doc-card">
